@@ -30,7 +30,7 @@ const userCtrl = {
       
       // Fixed: Direct frontend URL to avoid redirect issues
       const url = `http://localhost:3000/user/activate/${activationToken}`
-
+       
       await sendMail(email, url, "Verify your email address")
 
       res.json({ msg: "Register Success! Please activate your email." })
@@ -42,26 +42,76 @@ const userCtrl = {
   },
 
   // 📌 Activate Email
-  activateEmail: async (req, res) => {
-    try {
-      const { activation_token } = req.body
-      const user = jwt.verify(activation_token, ACTIVATION_TOKEN_SECRET)
-      const { name, email, password } = user
+  // Replace the activateEmail function in userCtrl.js with this improved version:
 
-      const exists = await Users.findOne({ email })
-      if (exists)
-        return res.status(400).json({ msg: "Email already registered." })
-
-      const newUser = new Users({ name, email, password })
-      await newUser.save()
-
-      res.json({ msg: "Account activated successfully!" })
-
-    } catch (err) {
-      console.error(err)
-      res.status(500).json({ msg: "Invalid or expired activation link." })
+activateEmail: async (req, res) => {
+  try {
+    console.log("=== ACTIVATION START ===")
+    const { activation_token } = req.body
+    console.log("Received token:", activation_token ? "Token present" : "No token")
+    
+    if (!activation_token) {
+      console.log("❌ No activation token provided")
+      return res.status(400).json({ msg: "No activation token provided." })
     }
-  },
+
+    // Verify the JWT token
+    console.log("🔍 Verifying JWT token...")
+    const user = jwt.verify(activation_token, ACTIVATION_TOKEN_SECRET)
+    console.log("✅ Token verified successfully")
+    console.log("Token payload:", { name: user.name, email: user.email })
+    
+    const { name, email, password } = user
+
+    // Check if user already exists
+    console.log("🔍 Checking if user already exists...")
+    const exists = await Users.findOne({ email })
+    
+    if (exists) {
+      console.log("✅ User already exists and is activated:", email)
+      // User already exists - this means they've already been activated
+      return res.json({ msg: "Account already activated! You can now login." })
+    }
+
+    console.log("✅ User doesn't exist, creating new user...")
+    
+    // Create new user
+    const newUser = new Users({ name, email, password })
+    console.log("🔍 Saving user to database...")
+    
+    await newUser.save()
+    console.log("✅ User saved successfully!")
+    console.log("=== ACTIVATION SUCCESS ===")
+
+    res.json({ msg: "Account activated successfully!" })
+
+  } catch (err) {
+    console.log("=== ACTIVATION ERROR ===")
+    console.error("Full error object:", err)
+    console.error("Error name:", err.name)
+    console.error("Error message:", err.message)
+    
+    // Handle specific JWT errors
+    if (err.name === 'TokenExpiredError') {
+      console.log("❌ Token expired")
+      return res.status(400).json({ msg: "Activation link has expired. Please register again." })
+    }
+    
+    if (err.name === 'JsonWebTokenError') {
+      console.log("❌ Invalid token")
+      return res.status(400).json({ msg: "Invalid activation token." })
+    }
+    
+    // Handle MongoDB duplicate key error
+    if (err.code === 11000) {
+      console.log("✅ User already exists (duplicate key error) - treating as successful activation")
+      return res.json({ msg: "Account already activated! You can now login." })
+    }
+    
+    console.log("❌ Unknown error during activation")
+    res.status(500).json({ msg: "Activation failed. Please try again." })
+  }
+},
 
   // 📌 Login
   login: async (req, res) => {
