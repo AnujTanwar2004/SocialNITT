@@ -27,10 +27,12 @@ const userCtrl = {
 
       const newUser = { name, email, password: passwordHash }
       const activationToken = createActivationToken(newUser)
-      const url = `${CLIENT_URL}/user/activate/${activationToken}`
+      
+      // Fixed: Direct frontend URL to avoid redirect issues
+      const url = `http://localhost:3000/user/activate/${activationToken}`
 
       await sendMail(email, url, "Verify your email address")
-      console.log(res)
+
       res.json({ msg: "Register Success! Please activate your email." })
 
     } catch (err) {
@@ -43,7 +45,6 @@ const userCtrl = {
   activateEmail: async (req, res) => {
     try {
       const { activation_token } = req.body
-      console.log(activation_token)
       const user = jwt.verify(activation_token, ACTIVATION_TOKEN_SECRET)
       const { name, email, password } = user
 
@@ -63,38 +64,39 @@ const userCtrl = {
   },
 
   // 📌 Login
- login: async (req, res) => {
-  try {
-    const { email, password } = req.body
-    const user = await Users.findOne({ email })
+  login: async (req, res) => {
+    try {
+      const { email, password } = req.body
+      const user = await Users.findOne({ email })
 
-    if (!user)
-      return res.status(400).json({ msg: "Email not registered." })
+      if (!user)
+        return res.status(400).json({ msg: "Email not registered." })
 
-    const isMatch = await bcrypt.compare(password, user.password)
-    if (!isMatch)
-      return res.status(400).json({ msg: "Incorrect password." })
+      const isMatch = await bcrypt.compare(password, user.password)
+      if (!isMatch)
+        return res.status(400).json({ msg: "Incorrect password." })
 
-    const refreshToken = createRefreshToken({ id: user._id })
+      const refreshToken = createRefreshToken({ id: user._id })
 
-    res.cookie('refreshtoken', refreshToken, {
-      httpOnly: true,
-      path: '/user/refresh_token',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-    })
+      res.cookie('refreshtoken', refreshToken, {
+        httpOnly: true,
+        path: '/user/refresh_token',
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      })
 
-    const accessToken = createAccessToken({ id: user._id })
+      const accessToken = createAccessToken({ id: user._id })
 
-    res.json({
-      msg: "Login successful.",
-      access_token: accessToken
-    })
+      res.json({
+        msg: "Login successful.",
+        access_token: accessToken
+      })
 
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({ msg: "Server Error. Please try again." })
-  }
-},
+    } catch (err) {
+      console.error(err)
+      res.status(500).json({ msg: "Server Error. Please try again." })
+    }
+  },
+
   // 📌 Get Access Token
   getAccessToken: (req, res) => {
     try {
@@ -107,8 +109,7 @@ const userCtrl = {
           return res.status(403).json({ msg: "Invalid or expired token." })
 
         const accessToken = createAccessToken({ id: user.id })
-     res.json({ access_token: accessToken })
-
+        res.json({ access_token: accessToken })
       })
 
     } catch (err) {
@@ -127,7 +128,9 @@ const userCtrl = {
         return res.status(400).json({ msg: "Email not registered." })
 
       const accessToken = createAccessToken({ id: user._id })
-      const url = `${CLIENT_URL}/user/reset/${accessToken}`
+      
+      // Fixed: Direct frontend URL for password reset
+      const url = `http://localhost:3000/user/reset/${accessToken}`
 
       await sendMail(email, url, "Reset your password")
       res.json({ msg: "Password reset email sent." })
@@ -213,6 +216,5 @@ const createAccessToken = (payload) =>
 
 const createRefreshToken = (payload) =>
   jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' })
-
 
 module.exports = userCtrl
