@@ -6,13 +6,19 @@ export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axiosClient.get('/api/products')
+      const token = localStorage.getItem('token')
+      const res = await axiosClient.get('/api/products', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       return res.data
     } catch (err) {
-      return rejectWithValue(err.response?.data?.msg || err.message)
+      return rejectWithValue(err.response?.data?.msg || "Failed to fetch products")
     }
   }
 )
+
 
 const productSlice = createSlice({
   name: 'products',

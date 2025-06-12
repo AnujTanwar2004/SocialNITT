@@ -13,7 +13,7 @@ function ActivationEmail() {
         if(activation_token){
             const activationEmail = async () => {
                 try {
-                    // console.log("inside activation")
+                     console.log("inside activation")
                     const res = await axios.post('/user/activation', {activation_token})
                     setSuccess(res.data.msg)
                 } catch (err) {

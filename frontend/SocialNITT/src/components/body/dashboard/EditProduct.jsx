@@ -36,11 +36,11 @@ const token = useSelector(state => state.auth.token)
     useEffect(() => {
         if(products.length !== 0){
             products.forEach(product => {
-                // console.log(product)
+                 console.log(product)
                 if(product._id === id){
                     setOldProduct(product)
                     setProduct(product)
-                    // console.log({oldProduct})
+                    console.log({oldProduct})
                 }
             })
         }else{
@@ -62,15 +62,15 @@ const token = useSelector(state => state.auth.token)
             return setProduct({...editProduct, err: "Price must be greater than or equal to 0", success: ''})
   
         try {
-            // console.log({oldProduct})
-            // console.log({title: title ? title : oldProduct.title, 
-            //     description: description ? description : oldProduct.description,
-            //     price: price ? price : oldProduct.price,
-            //     location: location ? location : oldProduct.price,
-            //     category: category ? category : oldProduct.category,
-            //     phone: phone ? phone : oldProduct.phone,
-            //     isArchived, 
-            //     image: avatar ? avatar : image})
+             console.log({oldProduct})
+             console.log({title: title ? title : oldProduct.title, 
+                 description: description ? description : oldProduct.description,
+                 price: price ? price : oldProduct.price,
+                 location: location ? location : oldProduct.price,
+                category: category ? category : oldProduct.category,
+                phone: phone ? phone : oldProduct.phone,
+                 isArchived, 
+                 image: avatar ? avatar : image})
             axios.patch(`/api/product/${id}`, {
               title: title ? title : oldProduct.title, 
               description: description ? description : oldProduct.description,
@@ -107,7 +107,7 @@ const token = useSelector(state => state.auth.token)
             formData.append('file', file)
   
             setLoading(true)
-            const res = await axios.post('/api/upload_avatar', formData, {
+            const res = await axios.post('/api/upload/avatar', formData, {
                 headers: {'content-type': 'multipart/form-data', Authorization: token}
             })
   

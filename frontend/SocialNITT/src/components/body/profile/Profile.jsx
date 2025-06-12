@@ -17,7 +17,8 @@ const initialState = {
 function Profile() {
   const auth = useSelector((state) => state.auth);
   const token = useSelector((state) => state.token);
-const { items: products } = useSelector(state => state.products)
+const { items: products = [] } = useSelector(state => state.products || { items: [] });
+
 
   const { user, isLogged } = auth;
   const [data, setData] = useState(initialState);
@@ -96,20 +97,25 @@ const { items: products } = useSelector(state => state.products)
     if (password) updatePassword();
   };
 
-  const handleDelete = async (id) => {
-    try {
-      if (user._id !== id && window.confirm('Delete this product permanently?')) {
-        setLoading(true);
-        await axios.delete(`/api/product/${id}`, {
-          headers: { Authorization: token },
-        });
-        setLoading(false);
-        setCallback(!callback);
-      }
-    } catch (err) {
-      setData({ ...data, err: err.response.data.msg, success: '' });
+  const handleDelete = async (productId, ownerId) => {
+  try {
+    if (user._id !== ownerId) {
+      alert("You are not authorized to delete this product.");
+      return;
     }
-  };
+
+    if (window.confirm("Delete this product permanently?")) {
+      setLoading(true);
+      await axios.delete(`/api/product/${productId}`, {
+        headers: { Authorization: token },
+      });
+      setLoading(false);
+      setCallback(!callback);
+    }
+  } catch (err) {
+    setData({ ...data, err: err.response.data.msg, success: "" });
+  }
+};
 
   const formatDate = (dateStr) => dateStr.substring(0, 10);
 
@@ -182,7 +188,7 @@ const { items: products } = useSelector(state => state.products)
                       <Link to={`/edit_product/${item._id}`}>
                         <i className="fas fa-edit"> Edit</i>
                       </Link>
-                      <i className="fas fa-trash-alt" onClick={() => handleDelete(item._id)}> Delete</i>
+                       <button onClick={() => handleDelete(item._id, item.user)}>Delete</button>
                     </div>
                   </article>
                 ) : null

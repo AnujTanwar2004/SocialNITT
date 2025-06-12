@@ -1,41 +1,55 @@
 const Products = require('../models/productModel');
 
 const productCtrl = {
-  createProduct: async (req, res) => {
-    try {
-      const {
-        title, description, price, location, category, phone, image, user
-      } = req.body;
+createProduct: async (req, res) => {
+  try {
+    const {
+      title, description, price, location, category, phone, image
+    } = req.body;
 
-      console.log({ title, description, price, location, category, phone, image, user });
+    // Securely get user ID from auth middleware
+    const userId = req.user.id;
 
-      if (!title || !description || !price || !location || !category || !phone)
-        return res.status(400).json({ msg: "Please fill in all fields." });
+    console.log({ title, description, price, location, category, phone, image, userId });
 
-      if (!image || image.length === 0)
-        return res.status(400).json({ msg: "Please upload image." });
+    // Validations
+    if (!title || !description || price === undefined || !location || !category || !phone)
+      return res.status(400).json({ msg: "Please fill in all fields." });
 
-      if (title.length < 5)
-        return res.status(400).json({ msg: "Title must be at least 5 characters." });
+    if (!image || image.length === 0)
+      return res.status(400).json({ msg: "Please upload image." });
 
-      if (description.length < 10)
-        return res.status(400).json({ msg: "Description must be at least 10 characters." });
+    if (title.length < 5)
+      return res.status(400).json({ msg: "Title must be at least 5 characters." });
 
-      if (price < 0)
-        return res.status(400).json({ msg: "Price must be a positive number." });
+    if (description.length < 10)
+      return res.status(400).json({ msg: "Description must be at least 10 characters." });
 
-      const newProduct = new Products({
-        title, description, price, location, category, phone, image, user
-      });
+    if (price < 0)
+      return res.status(400).json({ msg: "Price must be a positive number." });
 
-      await newProduct.save();
+    // Create new product, now attaching user via token
+    const newProduct = new Products({
+      title,
+      description,
+      price,
+      location,
+      category,
+      phone,
+      image,
+      user: userId
+    });
 
-      res.json({ msg: "Product has been created!" });
+    await newProduct.save();
 
-    } catch (err) {
-      return res.status(500).json({ msg: err.message });
-    }
-  },
+    res.json({ msg: "Product has been created!" });
+
+  } catch (err) {
+    console.error("Product creation error:", err);
+    return res.status(500).json({ msg: err.message });
+  }
+}
+,
 
   getProducts: async (req, res) => {
     try {
@@ -82,18 +96,25 @@ const productCtrl = {
     }
   },
 
-  deleteProduct: async (req, res) => {
-    try {
-      const deletedProduct = await Products.findByIdAndDelete(req.params.id);
+deleteProduct: async (req, res) => {
+  try {
+    const product = await Products.findById(req.params.id);
 
-      if (!deletedProduct)
-        return res.status(404).json({ msg: "Product not found." });
+    if (!product)
+      return res.status(404).json({ msg: "Product not found." });
 
-      res.json({ msg: "Deleted Successfully!" });
-    } catch (err) {
-      return res.status(500).json({ msg: err.message });
-    }
-  },
+    // check ownership
+    if (product.user.toString() !== req.user.id)
+      return res.status(403).json({ msg: "Unauthorized: Cannot delete others' product." });
+
+    await product.deleteOne();
+
+    res.json({ msg: "Deleted Successfully!" });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+}
+,
 
   archiveProduct: async (req, res) => {
     try {
