@@ -106,14 +106,17 @@ const { items: products = [] } = useSelector(state => state.products || { items:
 
     if (window.confirm("Delete this product permanently?")) {
       setLoading(true);
-      await axios.delete(`/api/product/${productId}`, {
-        headers: { Authorization: token },
+      await axios.delete(`/api/products/${productId}`, {  // Changed to /api/products/
+        headers: { 
+          Authorization: `Bearer ${auth.token}`,  // Added Bearer prefix and used correct token
+        },
       });
       setLoading(false);
       setCallback(!callback);
     }
   } catch (err) {
     setData({ ...data, err: err.response.data.msg, success: "" });
+    setLoading(false);  // Make sure to stop loading on error
   }
 };
 
