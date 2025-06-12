@@ -7,15 +7,20 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET
 });
 
+// Define your default image URL
+const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/demo/image/upload/v1717689400/default-avatar.png";  // replace with your actual URL
+
 const uploadCtrl = {
   uploadAvatar: async (req, res) => {
     try {
-      const file = req.files.file;
-
-      if (!file) {
-        return res.status(400).json({ msg: "No file uploaded." });
+      if (!req.files || !req.files.file) {
+        // No file uploaded → return default avatar URL
+        return res.json({ url: DEFAULT_AVATAR_URL });
       }
 
+      const file = req.files.file;
+
+      // Upload to Cloudinary
       const result = await cloudinary.uploader.upload(file.tempFilePath, {
         folder: 'avatar',
         width: 480,

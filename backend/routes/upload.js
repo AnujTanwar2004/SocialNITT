@@ -6,6 +6,6 @@ const uploadImage = require('../middleware/uploadImage')
 const uploadCtrl = require('../controllers/uploadCtrl')
 
 // POST: Upload Avatar
-router.post('/upload_avatar', auth, uploadImage, uploadCtrl.uploadAvatar)
+router.post('/avatar', auth, uploadImage, uploadCtrl.uploadAvatar)
 
 module.exports = router
