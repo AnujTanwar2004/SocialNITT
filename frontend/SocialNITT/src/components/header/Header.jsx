@@ -44,7 +44,7 @@ function Header() {
                     <img src={favicon} alt="logo" />
                 </Link>
                 <Link to="/">
-                    <h1>Product Listing</h1>
+                    <h1>Social NITT</h1>
                 </Link>
             </div>
 

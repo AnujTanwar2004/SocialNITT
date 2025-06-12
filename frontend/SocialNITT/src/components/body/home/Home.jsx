@@ -4,20 +4,20 @@ import FaqsCard from './FaqsCard'
 import heroImage from './hero.png';
 function Home() {
 
-    const currentYear = (new Date().getFullYear())
-    const yearTxt = currentYear === 2022 ? "2022" : "2022 - "+currentYear
+    
 
     return (
         <>
             <div className="hero-dark-container">
                 <section className="hero-dark">
                     <div className="hero-details">
-                        <h1>
-                            Get started with us and
-                            <span> List your Products</span>
+                    <h1>
+                        Empowering NITT Students <br></br>
+                            <span>to Help Each Other And Build a Better Campus Life.</span>
                         </h1>
                         <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus suscipit rutrum mauris ut faucibus. Suspendisse potenti. Nunc sollicitudin lacus quis dui tempor, vel pharetra lacus efficitur.
+                        This is more than a platform — it’s a student-powered network. Buy or sell what you need, offer your skills, raise your voice for campus improvements, or simply lend a hand. Every post, every service, and every complaint makes NITT stronger, together.
+
                         </p>
                         <div className="hero-btns">
                             <a href="/login" className="btn-primary">
@@ -32,7 +32,7 @@ function Home() {
             </div>
             <FaqsCard />
             <footer>
-                © { yearTxt } Product Listing
+                © Created by mentees of Janet Ma'am
             </footer>
         </>
     )
