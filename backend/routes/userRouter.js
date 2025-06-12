@@ -18,7 +18,7 @@ router.post('/forgot', userCtrl.forgotPassword)
 router.post('/reset', auth, userCtrl.resetPassword)
 
 // User Profile
-router.get('/infor', auth, userCtrl.getUserInfor)
+router.get('/infor', auth, userCtrl.getUserInfo)
 router.patch('/update', auth, userCtrl.updateUser)
 
 module.exports = router

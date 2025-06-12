@@ -19,8 +19,8 @@ const initialState = {
 
 function EditProduct() {
     const {id} = useParams()
-    const products = useSelector(state => state.products)
-    const token = useSelector(state => state.token)
+const products = useSelector(state => state.products.products)
+const token = useSelector(state => state.auth.token)
     const [editProduct, setProduct] = useState(initialState)
     const { title, price, description, location, category, phone, isArchived, image, err, success } = editProduct
 

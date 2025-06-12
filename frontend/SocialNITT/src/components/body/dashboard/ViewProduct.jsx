@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux'
 
 function ViewProduct() {
   const {id} = useParams()
-  const products = useSelector(state => state.products)
+const products = useSelector(state => state.products.products)
 
   return (
     <section className="cta-secondary">

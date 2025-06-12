@@ -1,50 +1,45 @@
-import React, {useEffect} from 'react';
-import {BrowserRouter as Router} from 'react-router-dom'
-import {useDispatch, useSelector} from 'react-redux'
-import {dispatchLogin, fetchUser, dispatchGetUser} from './redux/actions/authAction'
-import {fetchAllProducts, dispatchGetAllProducts} from './redux/actions/productsAction'
+import React, { useEffect } from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchUser, setToken } from './redux/slices/authSlice'
+import { fetchProducts } from './redux/slices/productSlice'
 
 import Header from './components/header/Header'
 import Body from './components/body/Body'
-import axios from 'axios';
+import axios from 'axios'
 
 function App() {
   const dispatch = useDispatch()
-  const token = useSelector(state => state.token)
-  const auth = useSelector(state => state.auth)
-  //const products = useSelector(state => state.products)
 
+  const { token, user } = useSelector((state) => state.auth)
+
+  // Refresh Token on App Load
   useEffect(() => {
     const firstLogin = localStorage.getItem('firstLogin')
-    if(firstLogin){
+    if (firstLogin) {
       const getToken = async () => {
         const res = await axios.post('/user/refresh_token', null)
-        dispatch({type: 'GET_TOKEN', payload: res.data.access_token})
+         console.log("✅ Got token:", res.data.access_token)
+
+        dispatch(setToken(res.data.access_token))
       }
       getToken()
     }
-  },[auth.isLogged, dispatch])
-
+  }, [dispatch])
+ 
+  // Fetch User Info when token available
   useEffect(() => {
-    if(token){
-      const getUser = () => {
-        dispatch(dispatchLogin())
-
-        return fetchUser(token).then(res => {
-          dispatch(dispatchGetUser(res))
-        })
-      }
-      getUser()
+    if (token) {
+      dispatch(fetchUser(token))
     }
-  },[token, dispatch])
+  }, [token, dispatch])
 
+  // Fetch Products when logged in
   useEffect(() => {
-    if(auth.isLogged){
-        fetchAllProducts(token).then(res =>{
-            dispatch(dispatchGetAllProducts(res))
-        })
+    if (token && user) {
+      dispatch(fetchProducts())   // ✅ no token needed here
     }
-},[token, auth.isLogged, dispatch])
+  }, [token, user, dispatch])
 
   return (
     <Router>
@@ -53,7 +48,7 @@ function App() {
         <Body />
       </div>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

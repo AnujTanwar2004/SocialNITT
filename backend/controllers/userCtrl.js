@@ -102,7 +102,8 @@ const userCtrl = {
           return res.status(403).json({ msg: "Invalid or expired token." })
 
         const accessToken = createAccessToken({ id: user.id })
-        res.json({ accessToken })
+     res.json({ access_token: accessToken })
+
       })
 
     } catch (err) {

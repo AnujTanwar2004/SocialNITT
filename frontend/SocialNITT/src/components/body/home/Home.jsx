@@ -1,6 +1,7 @@
 import React from 'react'
 import FaqsCard from './FaqsCard'
 
+import heroImage from './hero.png';
 function Home() {
 
     const currentYear = (new Date().getFullYear())
@@ -25,7 +26,7 @@ function Home() {
                         </div>
                     </div>
                     <div className="hero-img">
-                        <img src= {require('./hero.png')} alt=""/>
+                        <img src= {heroImage} alt=""/>
                     </div>
                 </section>
             </div>
