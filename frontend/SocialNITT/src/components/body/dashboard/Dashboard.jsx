@@ -49,7 +49,7 @@ function Dashboard() {
       <section className="cards-primary">
         <div className="cards-header">
           <h1>Products</h1>
-          <p>Products listed by users all over the world.</p>
+          <p>A place where NITT Exchanges</p>
         </div>
 
         <form onSubmit={(e) => e.preventDefault()} className="search-form-primary">

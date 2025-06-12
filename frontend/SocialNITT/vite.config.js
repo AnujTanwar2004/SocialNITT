@@ -11,7 +11,8 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
-      '/user': {
+      // Proxy /user routes to backend, but exclude /user/activate and /user/reset
+      '^/user/(?!activate|reset).*': {
         target: 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
