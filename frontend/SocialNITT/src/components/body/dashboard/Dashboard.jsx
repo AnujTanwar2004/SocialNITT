@@ -29,11 +29,9 @@ function Dashboard() {
           <div className="cta-container">
             <div className="cta-details">
               <h3>
-                Start Listing your Products for <span>higher reach</span>
+              🌿 Discover. Connect. Trade. <span></span>
               </h3>
-              <p>
-                Get noticed by customers worldwide. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              </p>
+             <span>Buy and sell with your fellow students at NIT Trichy. Whether it's books, cycles, gadgets, or furniture , find everything you need within your campus community.</span>
             </div>
             <div className="cta-btn">
               <p><Link to="/create_product">List Product</Link></p>
