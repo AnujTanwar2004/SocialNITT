@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import axiosClient from '../../utils/axiosClient'   // ✅ using your client
+import axiosClient from '../../utils/axiosClient'   
 import { isEmpty, priceValidate, validatePhone } from '../../utils/validation/Validation'
 import { showSuccessMsg, showErrMsg } from '../../utils/notification/Notification'
 import { useNavigate } from 'react-router-dom'
@@ -16,7 +16,7 @@ const initialState = {
   err: '',
   success: ''
 }
-
+// create the product 
 function CreateProduct() {
   const [product, setProduct] = useState(initialState)
   const { title, price, description, location, category, phone, image, err, success } = product
@@ -31,68 +31,95 @@ function CreateProduct() {
     const { name, value } = e.target
     setProduct({ ...product, [name]: value, err: '', success: '' })
   }
+const changeAvatar = async e => {
+  e.preventDefault()
+  try {
+    const file = e.target.files[0]
+    if (!file)
+      return setProduct({ ...product, err: "No files were uploaded.", success: '' })
 
-  const changeAvatar = async e => {
-    e.preventDefault()
-    try {
-      const file = e.target.files[0]
-      if (file)/*  return setProduct({ ...product, err: "No files were uploaded.", success: '' }) */
+    if (file.size > 1024 * 1024)
+      return setProduct({ ...product, err: "Size too large. Max 1MB", success: '' })
 
-      if (file.size > 1024 * 1024)
-        return setProduct({ ...product, err: "Size too large.", success: '' })
+    if (file.type !== 'image/jpeg' && file.type !== 'image/png')
+      return setProduct({ ...product, err: "File format is incorrect. Use JPG/PNG", success: '' })
 
-      if (file.type !== 'image/jpeg' && file.type !== 'image/png')
-        return setProduct({ ...product, err: "File format is incorrect.", success: '' })
+    const formData = new FormData()
+    formData.append('file', file)
 
-      let formData = new FormData()
-      formData.append('file', file)
+    setLoading(true)
 
-      setLoading(true)
+    const token = localStorage.getItem('token')
 
-      const res = await axiosClient.post('/api/upload_avatar', formData, {
-        headers: { 'content-type': 'multipart/form-data' }
-      })
+    const res = await axiosClient.post('/api/upload/avatar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
+      }
+    })
 
-      setLoading(false)
-      console.log("Upload Response: ", res.data.url)
-      setProduct({ ...product, image: res.data.url, err: '', success: '' })
+    setLoading(false)
+    console.log("Upload Response: ", res.data)
 
-    } catch (err) {
-      console.error("Upload Error:", err)
-      setProduct({ ...product, err: err.response?.data?.msg || "Upload failed", success: '' })
-      setLoading(false)
-    }
+    setProduct({ ...product, image: res.data.url, err: '', success: 'Image uploaded successfully' })
+
+  } catch (err) {
+    console.error("Upload Error:", err)
+    setProduct({
+      ...product,
+      err: err.response?.data?.msg || "Upload failed",
+      success: ''
+    })
+    setLoading(false)
   }
+}
+
+
 
   const handleSubmit = async e => {
-    e.preventDefault()
+  e.preventDefault()
 
-    if (isEmpty(title) || isEmpty(price) || isEmpty(description) || isEmpty(location) || isEmpty(category) || isEmpty(phone))
-      return setProduct({ ...product, err: "Please fill in all fields", success: '' })
+  if (isEmpty(title) || isEmpty(price) || isEmpty(description) || isEmpty(location) || isEmpty(category) || isEmpty(phone))
+    return setProduct({ ...product, err: "Please fill in all fields", success: '' })
 
-    if (priceValidate(price))
-      return setProduct({ ...product, err: "Price must be greater than or equal to 0", success: '' })
+  if (priceValidate(price))
+    return setProduct({ ...product, err: "Price must be greater than or equal to 0", success: '' })
 
-    if (!validatePhone(phone))
-      return setProduct({ ...product, err: "Enter a valid phone number", success: '' })
+  if (!validatePhone(phone))
+    return setProduct({ ...product, err: "Enter a valid phone number", success: '' })
 
-    if (!image)
-      return setProduct({ ...product, err: "Please upload an image", success: '' })
+  if (!image)
+    return setProduct({ ...product, err: "Please upload an image", success: '' })
 
-    try {
-      console.log({ title, description, price, location, category, phone, image, userId })
+  try {
+    console.log({ title, description, price, location, category, phone, image, userId })
 
-      const res = await axiosClient.post('/api/products', {
-        title, description, price, location, category, phone, image, user: userId
-      })
+    const token = localStorage.getItem('token')
 
-      setProduct({ ...initialState, success: res.data.msg })
-
-    } catch (err) {
-      console.error("Create Product Error:", err)
-      setProduct({ ...product, err: err.response?.data?.msg || "Submit failed", success: '' })
-    }
+    const res = await axiosClient.post('/api/products', {
+  title,
+  description,
+  price: Number(price),
+  location,
+  category,
+  phone: Number(phone),
+  image
+}, {
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
   }
+})
+
+
+    setProduct({ ...initialState, success: res.data.msg })
+
+  } catch (err) {
+    console.error("Create Product Error:", err)
+    setProduct({ ...product, err: err.response?.data?.msg || "Submit failed", success: '' })
+  }
+}
+
 
   return (
     <>

@@ -24,22 +24,24 @@ function Login() {
     setUser({ ...user, [name]: value, err: '', success: '' })
   }
 
-  const handleSubmit = async e => {
-    e.preventDefault()
-    try {
-      const res = await axios.post('/user/login', { email, password })
-      setUser({ ...user, err: '', success: res.data.msg })
+ const handleSubmit = async e => {
+  e.preventDefault()
+  try {
+    const res = await axios.post('http://localhost:5000/user/login', { email, password }, { withCredentials: true })
 
-      localStorage.setItem('firstLogin', true)
+     localStorage.setItem('accessToken', res.data.access_token)
+    localStorage.setItem('firstLogin', true)
 
-      dispatch(login())
-      history("/")
+    setUser({ ...user, err: '', success: res.data.msg })
 
-    } catch (err) {
-      err.response.data.msg &&
-        setUser({ ...user, err: err.response.data.msg, success: '' })
-    }
+    dispatch(login())
+    history("/")
+
+  } catch (err) {
+    err.response.data.msg &&
+      setUser({ ...user, err: err.response.data.msg, success: '' })
   }
+}
 
   return (
     <div className="login_page">

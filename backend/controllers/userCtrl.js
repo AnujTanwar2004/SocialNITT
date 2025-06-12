@@ -63,34 +63,38 @@ const userCtrl = {
   },
 
   // 📌 Login
-  login: async (req, res) => {
-    try {
-      const { email, password } = req.body
-      const user = await Users.findOne({ email })
+ login: async (req, res) => {
+  try {
+    const { email, password } = req.body
+    const user = await Users.findOne({ email })
 
-      if (!user)
-        return res.status(400).json({ msg: "Email not registered." })
+    if (!user)
+      return res.status(400).json({ msg: "Email not registered." })
 
-      const isMatch = await bcrypt.compare(password, user.password)
-      if (!isMatch)
-        return res.status(400).json({ msg: "Incorrect password." })
+    const isMatch = await bcrypt.compare(password, user.password)
+    if (!isMatch)
+      return res.status(400).json({ msg: "Incorrect password." })
 
-      const refreshToken = createRefreshToken({ id: user._id })
+    const refreshToken = createRefreshToken({ id: user._id })
 
-      res.cookie('refreshtoken', refreshToken, {
-        httpOnly: true,
-        path: '/user/refresh_token',
-        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-      })
+    res.cookie('refreshtoken', refreshToken, {
+      httpOnly: true,
+      path: '/user/refresh_token',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    })
 
-      res.json({ msg: "Login successful." })
+    const accessToken = createAccessToken({ id: user._id })
 
-    } catch (err) {
-      console.error(err)
-      res.status(500).json({ msg: "Server Error. Please try again." })
-    }
-  },
+    res.json({
+      msg: "Login successful.",
+      access_token: accessToken
+    })
 
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ msg: "Server Error. Please try again." })
+  }
+},
   // 📌 Get Access Token
   getAccessToken: (req, res) => {
     try {
@@ -205,9 +209,10 @@ const createActivationToken = (payload) =>
   jwt.sign(payload, ACTIVATION_TOKEN_SECRET, { expiresIn: '5m' })
 
 const createAccessToken = (payload) =>
-  jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
+  jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
 
 const createRefreshToken = (payload) =>
-  jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: '7d' })
+  jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' })
+
 
 module.exports = userCtrl
