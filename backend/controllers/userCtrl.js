@@ -30,7 +30,7 @@ const userCtrl = {
       const url = `${CLIENT_URL}/user/activate/${activationToken}`
 
       await sendMail(email, url, "Verify your email address")
-
+      console.log(res)
       res.json({ msg: "Register Success! Please activate your email." })
 
     } catch (err) {
@@ -43,6 +43,7 @@ const userCtrl = {
   activateEmail: async (req, res) => {
     try {
       const { activation_token } = req.body
+      console.log(activation_token)
       const user = jwt.verify(activation_token, ACTIVATION_TOKEN_SECRET)
       const { name, email, password } = user
 
