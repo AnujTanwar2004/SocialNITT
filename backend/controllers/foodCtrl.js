@@ -1,4 +1,4 @@
-const foods = require('../models/foodModel')
+const Food = require('../models/foodModel')
 
 const foodCtrl = {
   createFood: async (req, res) => {
