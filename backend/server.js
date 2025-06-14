@@ -10,37 +10,39 @@ const app = express()
 
 app.use(express.json())
 app.use(cors({
-  origin: 'http://localhost:3000',     
-  credentials: true                   
+  origin: [
+    'http://localhost:3000',
+    'http://192.168.1.35:3000',  
+    /^http:\/\/192\.168\.1\.\d+:3000$/, //  
+  ],
+  credentials: true
 }))
-
 app.use(cookieParser())
 app.use(fileUpload({
     useTempFiles: true
 }))
 
-// Routes
-app.use('/user', require('./routes/userRouter'))
-app.use('/api/upload', require('./routes/upload')) // now routes like /api/upload/upload_avatar
+ app.use('/user', require('./routes/userRouter'))
+app.use('/api/upload', require('./routes/upload'))  
 app.use('/api/products', require('./routes/productRouter'))
-
+app.use('/api/services', require('./routes/serviceRouter'))
+app.use('/api/foods',require('./routes/foodRouter'))
 
 app.get('/', (req, res) => {
     res.send("APP IS RUNNING.")
 })
 
-// ✅ Mongoose v7+ compatible connection
-mongoose.connect(process.env.MONGODB_URL)
+ mongoose.connect(process.env.MONGODB_URL)
 
 .then(() => {
   console.log("✅ Connected to MongoDB.")
 
-  // Start server only after DB connection success
-  const PORT = process.env.PORT || 5000
-  app.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`)
-  })
-
+   const PORT = process.env.PORT || 5000
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server is running on port ${PORT}`)
+    console.log(`📱 Local: http://localhost:${PORT}`)
+    console.log(`🌐 Network: http://192.168.1.35:${PORT}`) // Your IP
+})
 })
 .catch(err => {
   console.error("❌ MongoDB connection error:", err)

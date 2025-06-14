@@ -4,17 +4,15 @@ import {useSelector} from 'react-redux'
 import axios from 'axios'
 import favicon from '../assets/favicon.png'
 
-
 function Header() {
     const auth = useSelector(state => state.auth)
-
     const {user, isLogged} = auth
-
 
     const handleLogout = async () => {
         try {
             await axios.get('/user/logout')
             localStorage.removeItem('firstLogin')
+            localStorage.removeItem('accessToken')
             window.location.href = "/";
         } catch (err) {
             window.location.href = "/";
@@ -33,7 +31,22 @@ function Header() {
         </li>
     }
 
-    const transForm = {
+    const loggedInNavigation = () => {
+        return (
+            <>
+                <li><Link to="/">🏠 Products</Link></li>
+                <li><Link to="/services">🔧 Services</Link></li>
+                <li><Link to="/foods">🤤 Food</Link></li>
+                {userLink()}
+            </>
+        )
+    }
+
+    const loggedOutNavigation = () => {
+        return <li><Link to="/login"><i className="fas fa-user"></i> Sign in</Link></li>
+    }
+
+    const transform = {
         transform: isLogged ? "translateY(-5px)" : 0
     }
 
@@ -44,18 +57,12 @@ function Header() {
                     <img src={favicon} alt="logo" />
                 </Link>
                 <Link to="/">
-                    <h1>Social NITT</h1>
+                    <h1>SocialNITT</h1>
                 </Link>
             </div>
 
-            <ul style={transForm}>
-                {/* <li><Link to="/"> Test</Link></li> */}
-                {
-                    isLogged
-                    ? userLink()
-                    :<li><Link to="/login"><i className="fas fa-user"></i> Sign in</Link></li>
-                }
-                
+            <ul style={transform}>
+                {isLogged ? loggedInNavigation() : loggedOutNavigation()}
             </ul>
         </header>
     )

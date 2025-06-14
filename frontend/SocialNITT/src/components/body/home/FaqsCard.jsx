@@ -49,38 +49,37 @@ const FaqsCard = (props) => {
 
 // eslint-disable-next-line
 export default () => {
-
-    const faqsList = [
-        {
-            q: "What are some random questions to ask?",
-            a: "That's exactly the reason we created this random question generator. There are hundreds of random questions to choose from so you're able to find the perfect random question."
-        },
-        {
-            q: "Do you include common questions?",
-            a: "This generator doesn't include most common questions. The thought is that you can come up with common questions on your own so most of the questions in this generator."
-        },
-        {
-            q: "What are some random questions to ask?",
-            a: "That's exactly the reason we created this random question generator. There are hundreds of random questions to choose from so you're able to find the perfect random question."
-        },
-        {
-            q: "What are some random questions to ask?",
-            a: "That's exactly the reason we created this random question generator. There are hundreds of random questions to choose from so you're able to find the perfect random question."
-        },
-        {
-            q: "What are some random questions to ask?",
-            a: "That's exactly the reason we created this random question generator. There are hundreds of random questions to choose from so you're able to find the perfect random question."
-        }
-    ]
+const faqsList = [
+    {
+        q: "What’s unique about NITT’s computer center?",
+        a: "The Octagon Computer Centre operates 24x7 and has over 1600 computers connected to the LAN—it’s been running round the clock since 1990!"
+    },
+    {
+        q: "Is there a fun tradition at NITT?",
+        a: "Yes! Festember and Pragyan are two of the biggest student-run fests in India, drawing participants from all over the country."
+    },
+    {
+        q: "Does NITT have a cool library?",
+        a: "Definitely. The library has over 1 lakh volumes and access to 2000+ e-journals. It even stays open till 9 PM for late-night learners."
+    },
+    {
+        q: "What’s something surprising about NITT’s campus?",
+        a: "It’s home to a deer park! You might just spot a few deer wandering near the hostels—nature and tech in harmony."
+    },
+    {
+        q: "Any fun fact about NITT’s alumni?",
+        a: "NITT alumni have gone on to become CEOs, startup founders, and even space scientists—talk about launching careers into orbit!"
+    }
+];
   
     return (
         <section className="faqs-secondary">
             <div className="faqs-header">
                 <h1>
-                    Frequently Asked Questions
+                    Random Facts About NITT
                 </h1>
                 <p>
-                    Answered all frequently asked questions, Still confused? feel free to contact us.
+                    ...This are some random facts about NITT...
                 </p>
             </div>
             <div className="faqs-container">

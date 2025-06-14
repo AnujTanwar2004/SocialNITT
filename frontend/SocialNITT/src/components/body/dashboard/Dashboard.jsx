@@ -11,15 +11,16 @@ function Dashboard() {
   const auth = useSelector(state => state.auth)
   const { isLogged } = auth
 
-  const products = useSelector(state => state.products.items) // this should match your slice state
+  const products = useSelector(state => state.products.items)  
   const status = useSelector(state => state.products.status)
 
   const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
     if (isLogged && status === 'idle') {
-      dispatch(fetchProducts())  // ✅ No need to pass token now
-    }
+      dispatch(fetchProducts())  //  current mental state needs a hard reset 
+    }                            // ctrl +sleep
+                                 // npm run wake up early 
   }, [isLogged, dispatch, status])
 
   return (
@@ -27,22 +28,11 @@ function Dashboard() {
       <section>
         <div className="cta-primary">
           <div className="cta-container">
-            <div className="cta-details">
-              <h3>
-              🌿 Discover. Connect. Trade. <span></span>
-              </h3>
-             <span>Buy and sell with your fellow students at NIT Trichy. Whether it's books, cycles, gadgets, or furniture , find everything you need within your campus community.</span>
-            </div>
-            <div className="cta-btn">
+             <div className="cta-btn">
               <p><Link to="/create_product">List Product</Link></p>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </div>
+             </div>
           </div>
-          <div className="cta-image">
-            <img src={dashImage} alt="dashboard" />
-          </div>
+           
         </div>
       </section>
 

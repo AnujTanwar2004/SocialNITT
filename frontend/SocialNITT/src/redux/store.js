@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
-import productReducer from './slices/productSlice'
-import authReducer from './slices/authSlice'
+import authSlice from './slices/authSlice'
+import productSlice from './slices/productSlice'
+import serviceSlice from './slices/serviceSlice' // Add this import
+import foodSlice from './slices/foodSlice'
 
 const store = configureStore({
   reducer: {
-    products: productReducer,  // <-- correct key
-    auth: authReducer
+    auth: authSlice,
+    products: productSlice,
+    services: serviceSlice, // Add this line
+    foods : foodSlice
   }
 })
 

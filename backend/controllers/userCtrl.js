@@ -6,8 +6,8 @@ const sendMail = require('./sendMail')
 const { CLIENT_URL, ACTIVATION_TOKEN_SECRET, ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env
 
 const userCtrl = {
-  // 📌 Register
-  register: async (req, res) => {
+
+   register: async (req, res) => {
     try {
       const { name, email, password } = req.body
       if (!name || !email || !password)
@@ -28,8 +28,7 @@ const userCtrl = {
       const newUser = { name, email, password: passwordHash }
       const activationToken = createActivationToken(newUser)
       
-      // Fixed: Direct frontend URL to avoid redirect issues
-      const url = `http://localhost:3000/user/activate/${activationToken}`
+       const url = `http://localhost:3000/user/activate/${activationToken}`
        
       await sendMail(email, url, "Verify your email address")
 
@@ -40,9 +39,7 @@ const userCtrl = {
       res.status(500).json({ msg: "Server Error. Please try again." })
     }
   },
-
-  // 📌 Activate Email
-  // Replace the activateEmail function in userCtrl.js with this improved version:
+ 
 
 activateEmail: async (req, res) => {
   try {
@@ -55,28 +52,25 @@ activateEmail: async (req, res) => {
       return res.status(400).json({ msg: "No activation token provided." })
     }
 
-    // Verify the JWT token
-    console.log("🔍 Verifying JWT token...")
+     console.log("🔍 Verifying JWT token...")
     const user = jwt.verify(activation_token, ACTIVATION_TOKEN_SECRET)
     console.log("✅ Token verified successfully")
     console.log("Token payload:", { name: user.name, email: user.email })
     
     const { name, email, password } = user
 
-    // Check if user already exists
-    console.log("🔍 Checking if user already exists...")
+     console.log("🔍 Checking if user already exists...")
     const exists = await Users.findOne({ email })
     
     if (exists) {
       console.log("✅ User already exists and is activated:", email)
-      // User already exists - this means they've already been activated
-      return res.json({ msg: "Account already activated! You can now login." })
+
+       return res.json({ msg: "Account already activated! You can now login." })
     }
 
     console.log("✅ User doesn't exist, creating new user...")
     
-    // Create new user
-    const newUser = new Users({ name, email, password })
+     const newUser = new Users({ name, email, password })
     console.log("🔍 Saving user to database...")
     
     await newUser.save()
@@ -91,8 +85,7 @@ activateEmail: async (req, res) => {
     console.error("Error name:", err.name)
     console.error("Error message:", err.message)
     
-    // Handle specific JWT errors
-    if (err.name === 'TokenExpiredError') {
+     if (err.name === 'TokenExpiredError') {
       console.log("❌ Token expired")
       return res.status(400).json({ msg: "Activation link has expired. Please register again." })
     }
@@ -102,8 +95,7 @@ activateEmail: async (req, res) => {
       return res.status(400).json({ msg: "Invalid activation token." })
     }
     
-    // Handle MongoDB duplicate key error
-    if (err.code === 11000) {
+     if (err.code === 11000) {
       console.log("✅ User already exists (duplicate key error) - treating as successful activation")
       return res.json({ msg: "Account already activated! You can now login." })
     }
@@ -113,8 +105,7 @@ activateEmail: async (req, res) => {
   }
 },
 
-  // 📌 Login
-  login: async (req, res) => {
+   login: async (req, res) => {
     try {
       const { email, password } = req.body
       const user = await Users.findOne({ email })
@@ -147,8 +138,7 @@ activateEmail: async (req, res) => {
     }
   },
 
-  // 📌 Get Access Token
-  getAccessToken: (req, res) => {
+   getAccessToken: (req, res) => {
     try {
       const rf_token = req.cookies.refreshtoken
       if (!rf_token)
@@ -168,8 +158,7 @@ activateEmail: async (req, res) => {
     }
   },
 
-  // 📌 Forgot Password
-  forgotPassword: async (req, res) => {
+   forgotPassword: async (req, res) => {
     try {
       const { email } = req.body
       const user = await Users.findOne({ email })
@@ -179,8 +168,7 @@ activateEmail: async (req, res) => {
 
       const accessToken = createAccessToken({ id: user._id })
       
-      // Fixed: Direct frontend URL for password reset
-      const url = `http://localhost:3000/user/reset/${accessToken}`
+       const url = `http://localhost:3000/user/reset/${accessToken}`
 
       await sendMail(email, url, "Reset your password")
       res.json({ msg: "Password reset email sent." })
@@ -191,8 +179,7 @@ activateEmail: async (req, res) => {
     }
   },
 
-  // 📌 Reset Password
-  resetPassword: async (req, res) => {
+   resetPassword: async (req, res) => {
     try {
       const { password } = req.body
 
@@ -213,8 +200,7 @@ activateEmail: async (req, res) => {
     }
   },
 
-  // 📌 Get User Info
-  getUserInfo: async (req, res) => {
+   getUserInfo: async (req, res) => {
     try {
       const user = await Users.findById(req.user.id).select('-password')
       res.json(user)
@@ -225,8 +211,7 @@ activateEmail: async (req, res) => {
     }
   },
 
-  // 📌 Logout
-  logout: (req, res) => {
+   logout: (req, res) => {
     try {
       res.clearCookie('refreshtoken', { path: '/user/refresh_token' })
       res.json({ msg: "Logged out successfully." })
@@ -237,8 +222,7 @@ activateEmail: async (req, res) => {
     }
   },
 
-  // 📌 Update User
-  updateUser: async (req, res) => {
+   updateUser: async (req, res) => {
     try {
       const { name, avatar } = req.body
       await Users.findOneAndUpdate({ _id: req.user.id }, { name, avatar })
@@ -251,14 +235,12 @@ activateEmail: async (req, res) => {
   }
 }
 
-// 📌 Email Validator
-function validateEmail(email) {
+ function validateEmail(email) {
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(email)
 }
-
-// 📌 JWT Token Generators
-const createActivationToken = (payload) =>
+// i am tired i want to sleep
+ const createActivationToken = (payload) =>
   jwt.sign(payload, ACTIVATION_TOKEN_SECRET, { expiresIn: '5m' })
 
 const createAccessToken = (payload) =>
