@@ -3,11 +3,13 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUser, setToken } from './redux/slices/authSlice'
 import { fetchProducts } from './redux/slices/productSlice'
+import { fetchServices } from './redux/slices/serviceSlice' // Add this import
+import { fetchFoods } from './redux/slices/foodSlice'
 
 import Header from './components/header/Header'
 import Body from './components/body/Body'
 import axios from 'axios'
-
+ 
 function App() {
   const dispatch = useDispatch()
 
@@ -19,8 +21,6 @@ function App() {
     if (firstLogin) {
       const getToken = async () => {
         const res = await axios.post('/user/refresh_token', null)
-         console.log("✅ Got token:", res.data.access_token)
-
         dispatch(setToken(res.data.access_token))
       }
       getToken()
@@ -34,10 +34,12 @@ function App() {
     }
   }, [token, dispatch])
 
-  // Fetch Products when logged in
+  // Fetch Products and Services when logged in
   useEffect(() => {
     if (token && user) {
-      dispatch(fetchProducts())   // ✅ no token needed here
+      dispatch(fetchProducts())
+      dispatch(fetchServices()) // Add this line
+      dispatch(fetchFoods())
     }
   }, [token, user, dispatch])
 
