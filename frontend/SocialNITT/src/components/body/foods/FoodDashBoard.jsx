@@ -57,7 +57,7 @@ function FoodsDashboard() {
           <div className="cta-container">
             <div className="cta-btn">
               <p>
-                <Link to="/create_service">Post Food Request</Link>
+                <Link to="/create_food">Post Food Request</Link>
               </p>
               </div>
           </div>
@@ -116,7 +116,7 @@ function FoodsDashboard() {
               .map((item, key) =>
                 !item.isArchived ? (
                   <article className="card" key={item._id}>
-                    <Link to={`/view_service/${item._id}`}>
+                    <Link to={`/view_food/${item._id}`}>
                       <div className="service-card-header">
                         <div className="service-info">
                           <span className="service-budget">
