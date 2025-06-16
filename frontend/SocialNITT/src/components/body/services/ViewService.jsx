@@ -64,7 +64,7 @@ function ViewService() {
               <span>📋 Category: {service.category}</span>
               <span>🔄 Type: {service.serviceType}</span>
             </div>
-
+ 
             <div className="info-row">
               <span>📍 Location: {service.location}</span>
               <span>
@@ -97,6 +97,7 @@ function ViewService() {
             target="_blank"
             rel="noreferrer"
           >
+            
             Contact for Service
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +112,7 @@ function ViewService() {
                 d="M13 7l5 5m0 0l-5 5m5-5H6"
               />
             </svg>
-          </a>
+           </a>
         </div>
       </div>
     </section>

@@ -33,8 +33,9 @@ function Header() {
 
     const loggedInNavigation = () => {
         return (
-            <>
-                <li><Link to="/">🏠 Products</Link></li>
+            <>  
+                <li><Link to="/" >Home</Link></li>
+                <li><Link to="/products">🏠 Products</Link></li>
                 <li><Link to="/services">🔧 Services</Link></li>
                 <li><Link to="/foods">🤤 Food</Link></li>
                 {userLink()}

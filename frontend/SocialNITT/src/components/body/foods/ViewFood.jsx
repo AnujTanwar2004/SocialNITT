@@ -16,7 +16,7 @@ function ViewFood() {
     }
   }, [dispatch, status]);
 
-  const food = foodss.find((s) => s._id === id);
+  const food = foods.find((s) => s._id === id);
 
   if (!food)
     return (
@@ -70,7 +70,7 @@ function ViewFood() {
             </div>
 
             <div className="info-row">
-              <span>👤 Posted by: {service.user?.name || "Anonymous"}</span>
+              <span>👤 Posted by: {food.user?.name || "Anonymous"}</span>
               <span
                 className="service-status"
                 style={{

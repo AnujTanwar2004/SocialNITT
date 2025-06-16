@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchProducts } from "../../../redux/slices/productSlice"
 
-import dashImage from '../../assets/dashboard.png'
-
+ 
 function Dashboard() {
   const dispatch = useDispatch()
 

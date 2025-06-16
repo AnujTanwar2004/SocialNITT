@@ -116,7 +116,7 @@ function FoodsDashboard() {
               .map((item, key) =>
                 !item.isArchived ? (
                   <article className="card" key={item._id}>
-                    <Link to={`/view_food/${item._id}`}>
+        {/* this line helps to go to food */}            <Link to={`/view_food/${item._id}`}>
                       <div className="service-card-header">
                         <div className="service-info">
                           <span className="service-budget">
