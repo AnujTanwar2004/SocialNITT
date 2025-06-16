@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { isPassword, isMatch } from '../../utils/validation/Validation';
 import { showSuccessMsg, showErrMsg } from '../../utils/notification/Notification';
 import { fetchProducts } from "../../../redux/slices/productSlice";
+import { fetchServices } from "../../../redux/slices/serviceSlice";
+import { fetchFoods } from "../../../redux/slices/foodSlice";
 
 const initialState = {
   name: '',
@@ -17,8 +19,9 @@ const initialState = {
 function Profile() {
   const auth = useSelector((state) => state.auth);
   const token = useSelector((state) => state.token);
-const { items: products = [] } = useSelector(state => state.products || { items: [] });
-
+  const { items: products = [] } = useSelector(state => state.products || { items: [] });
+  const { items: services = [] } = useSelector(state => state.services || { items: [] });
+  const { items: foods = [] } = useSelector(state => state.foods || { items: [] });
 
   const { user, isLogged } = auth;
   const [data, setData] = useState(initialState);
@@ -31,10 +34,12 @@ const { items: products = [] } = useSelector(state => state.products || { items:
   const dispatch = useDispatch();
 
   useEffect(() => {
-  if (isLogged) {
-    dispatch(fetchProducts())
-  }
-}, [isLogged, dispatch, callback])
+    if (isLogged) {
+      dispatch(fetchProducts());
+      dispatch(fetchServices());
+      dispatch(fetchFoods());
+    }
+  }, [isLogged, dispatch, callback]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -97,30 +102,37 @@ const { items: products = [] } = useSelector(state => state.products || { items:
     if (password) updatePassword();
   };
 
-  const handleDelete = async (productId, ownerId) => {
-  try {
-    if (user._id !== ownerId) {
-      alert("You are not authorized to delete this product.");
-      return;
-    }
+  const handleDelete = async (itemId, ownerId, type) => {
+    try {
+      if (user._id !== ownerId) {
+        alert(`You are not authorized to delete this ${type}.`);
+        return;
+      }
 
-    if (window.confirm("Delete this product permanently?")) {
-      setLoading(true);
-      await axios.delete(`/api/products/${productId}`, {  // Changed to /api/products/
-        headers: { 
-          Authorization: `Bearer ${auth.token}`,  // Added Bearer prefix and used correct token
-        },
-      });
+      if (window.confirm(`Delete this ${type} permanently?`)) {
+        setLoading(true);
+        await axios.delete(`/api/${type}s/${itemId}`, {
+          headers: { 
+            Authorization: `Bearer ${auth.token}`,
+          },
+        });
+        setLoading(false);
+        setCallback(!callback);
+      }
+    } catch (err) {
+      setData({ ...data, err: err.response.data.msg, success: "" });
       setLoading(false);
-      setCallback(!callback);
     }
-  } catch (err) {
-    setData({ ...data, err: err.response.data.msg, success: "" });
-    setLoading(false);  // Make sure to stop loading on error
-  }
-};
+  };
 
-  const formatDate = (dateStr) => dateStr.substring(0, 10);
+  const formatDate = (dateStr) => dateStr ? dateStr.substring(0, 10) : '';
+
+  // Helper function to get user ID from different field types
+  const getUserId = (item) => {
+    if (typeof item.user === 'string') return item.user;
+    if (typeof item.user === 'object' && item.user._id) return item.user._id;
+    return null;
+  };
 
   return (
     <>
@@ -161,6 +173,7 @@ const { items: products = [] } = useSelector(state => state.products || { items:
         </div>
 
         <div className="col-right">
+          {/* Products Section */}
           <div className="cards-primary">
             <div className="cards-header">
               <h2>MY PRODUCTS</h2>
@@ -191,11 +204,91 @@ const { items: products = [] } = useSelector(state => state.products || { items:
                       <Link to={`/edit_product/${item._id}`}>
                         <i className="fas fa-edit"> Edit</i>
                       </Link>
-                       <button onClick={() => handleDelete(item._id, item.user)}>Delete</button>
+                      <button onClick={() => handleDelete(item._id, item.user, 'product')}>Delete</button>
                     </div>
                   </article>
                 ) : null
               )}
+            </div>
+          </div>
+
+          {/* Services Section */}
+          <div className="cards-primary">
+            <div className="cards-header">
+              <h2>MY SERVICES</h2>
+            </div>
+            <div className="card-container">
+              {services.map((item) => {
+                const itemUserId = getUserId(item);
+                return itemUserId === user._id ? (
+                  <article className="card" key={item._id}>
+                    <Link to={`/view_service/${item._id}`}>
+                      <img src={item.image || '/default-service.jpg'} loading="lazy" alt={item.title} className="w-full h-48 rounded-tl-md rounded-tr-md" />
+                      <div className="card-header">
+                        <div className="info">
+                          <span className="cost">₹ {item.budget}</span>
+                          <span className="date">{formatDate(item.updatedAt)}</span>
+                        </div>
+                      </div>
+                      <div className="card-footer">
+                        <h3>{item.title}</h3>
+                        <p>{item.description}</p>
+                      </div>
+                    </Link>
+                    <div className="card-archive">
+                      <p>ARCHIVED:&nbsp;
+                        {item.isArchived === 1 ? <i className="fas fa-check"></i> : <i className="fas fa-times"></i>}
+                      </p>
+                    </div>
+                    <div className="card-actions">
+                      <Link to={`/edit_service/${item._id}`}>
+                        <i className="fas fa-edit"> Edit</i>
+                      </Link>
+                      <button onClick={() => handleDelete(item._id, itemUserId, 'service')}>Delete</button>
+                    </div>
+                  </article>
+                ) : null;
+              })}
+            </div>
+          </div>
+
+          {/* Foods Section */}
+          <div className="cards-primary">
+            <div className="cards-header">
+              <h2>MY FOODS</h2>
+            </div>
+            <div className="card-container">
+              {foods.map((item) => {
+                const itemUserId = getUserId(item);
+                return itemUserId === user._id ? (
+                  <article className="card" key={item._id}>
+                    <Link to={`/view_food/${item._id}`}>
+                      <img src={item.image || '/default-food.jpg'} loading="lazy" alt={item.title} className="w-full h-48 rounded-tl-md rounded-tr-md" />
+                      <div className="card-header">
+                        <div className="info">
+                          <span className="cost">₹ {item.budget}</span>
+                          <span className="date">{formatDate(item.updatedAt)}</span>
+                        </div>
+                      </div>
+                      <div className="card-footer">
+                        <h3>{item.title}</h3>
+                        <p>{item.description}</p>
+                      </div>
+                    </Link>
+                    <div className="card-archive">
+                      <p>ARCHIVED:&nbsp;
+                        {item.isArchived === 1 ? <i className="fas fa-check"></i> : <i className="fas fa-times"></i>}
+                      </p>
+                    </div>
+                    <div className="card-actions">
+                      <Link to={`/edit_food/${item._id}`}>
+                        <i className="fas fa-edit"> Edit</i>
+                      </Link>
+                      <button onClick={() => handleDelete(item._id, itemUserId, 'food')}>Delete</button>
+                    </div>
+                  </article>
+                ) : null;
+              })}
             </div>
           </div>
         </div>

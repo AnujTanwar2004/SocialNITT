@@ -29,6 +29,7 @@ import ViewFood from "./foods/ViewFood";
 import EditFood from "./foods/EditFood";
 
 import NotFound from "../utils/NotFound/NotFound";
+import Hero from "./hero/Hero";
 
 function Body() {
   const auth = useSelector((state) => state.auth);
@@ -38,7 +39,7 @@ function Body() {
     <section>
       <Routes>
         {/* Home Route - Products by default */}
-        <Route path="/" element={isLogged ? <Dashboard /> : <Home />} />
+        <Route path="/" element={isLogged ? <Hero /> : <Home />} />
 
         {/* Authentication Routes */}
         <Route path="/login" element={isLogged ? <NotFound /> : <Login />} />
@@ -66,6 +67,10 @@ function Body() {
         />
 
         {/* Product Routes */}
+        <Route
+  path="/products"
+  element={isLogged ? <Dashboard /> : <NotFound />}
+/>
         <Route
           path="/create_product"
           element={isLogged ? <CreateProduct /> : <NotFound />}

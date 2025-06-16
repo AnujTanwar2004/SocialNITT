@@ -3,19 +3,17 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUser, setToken } from './redux/slices/authSlice'
 import { fetchProducts } from './redux/slices/productSlice'
-import { fetchServices } from './redux/slices/serviceSlice' // Add this import
+import { fetchServices } from './redux/slices/serviceSlice'
 import { fetchFoods } from './redux/slices/foodSlice'
-
 import Header from './components/header/Header'
 import Body from './components/body/Body'
 import axios from 'axios'
- 
+import Chatbot from './components/ai/Chatbot'
+
 function App() {
   const dispatch = useDispatch()
-
   const { token, user } = useSelector((state) => state.auth)
 
-  // Refresh Token on App Load
   useEffect(() => {
     const firstLogin = localStorage.getItem('firstLogin')
     if (firstLogin) {
@@ -26,19 +24,17 @@ function App() {
       getToken()
     }
   }, [dispatch])
- 
-  // Fetch User Info when token available
+
   useEffect(() => {
     if (token) {
       dispatch(fetchUser(token))
     }
   }, [token, dispatch])
 
-  // Fetch Products and Services when logged in
   useEffect(() => {
     if (token && user) {
       dispatch(fetchProducts())
-      dispatch(fetchServices()) // Add this line
+      dispatch(fetchServices())
       dispatch(fetchFoods())
     }
   }, [token, user, dispatch])
@@ -48,6 +44,7 @@ function App() {
       <div className="App">
         <Header />
         <Body />
+        <Chatbot /> {/* <-- Add the chatbot here so it appears on every page */}
       </div>
     </Router>
   )
