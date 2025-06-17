@@ -31,6 +31,8 @@ function CreateProduct() {
     const { name, value } = e.target
     setProduct({ ...product, [name]: value, err: '', success: '' })
   }
+// Update your changeAvatar function in CreateProduct.jsx
+
 const changeAvatar = async e => {
   e.preventDefault()
   try {
@@ -49,7 +51,7 @@ const changeAvatar = async e => {
 
     setLoading(true)
 
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('accessToken') // Use your existing token method
 
     const res = await axiosClient.post('/api/upload/avatar', formData, {
       headers: {
@@ -61,6 +63,7 @@ const changeAvatar = async e => {
     setLoading(false)
     console.log("Upload Response: ", res.data)
 
+    // The response will now contain a local URL like "/uploads/filename.jpg"
     setProduct({ ...product, image: res.data.url, err: '', success: 'Image uploaded successfully' })
 
   } catch (err) {
@@ -73,7 +76,6 @@ const changeAvatar = async e => {
     setLoading(false)
   }
 }
-
 
 
   const handleSubmit = async e => {

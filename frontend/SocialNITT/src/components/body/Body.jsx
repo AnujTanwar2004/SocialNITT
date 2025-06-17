@@ -20,10 +20,11 @@ import EditProduct from "./dashboard/EditProduct";
 
 import ServicesDashboard from "./services/ServicesDashboard";
 import CreateService from "./services/CreateService";
-import ViewService from "./services/ViewService";
+import ViewService from "./services/ViewService";//every route is correct then why are you red
 import EditService from "./services/EditService";
 
-import FoodDashboard from "./foods/FoodDashboard";
+import FoodDashboard from "./foods/FoodDashboard";//every route is correct then why are you red
+
 import CreateFood from "./foods/CreateFood";
 import ViewFood from "./foods/ViewFood";
 import EditFood from "./foods/EditFood";
@@ -119,6 +120,7 @@ function Body() {
           element={isLogged ? <EditFood /> : <NotFound />}
         />
       </Routes>
+      {/*  */}
     </section>
   );
 }

@@ -22,7 +22,11 @@ app.use(fileUpload({
     useTempFiles: true
 }))
 
- app.use('/user', require('./routes/userRouter'))
+// Serve static files from uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+
+// Routes
+app.use('/user', require('./routes/userRouter'))
 app.use('/api/upload', require('./routes/upload'))  
 app.use('/api/products', require('./routes/productRouter'))
 app.use('/api/services', require('./routes/serviceRouter'))
@@ -32,17 +36,17 @@ app.get('/', (req, res) => {
     res.send("APP IS RUNNING.")
 })
 
- mongoose.connect(process.env.MONGODB_URL)
-
+mongoose.connect(process.env.MONGODB_URL)
 .then(() => {
   console.log("✅ Connected to MongoDB.")
 
-   const PORT = process.env.PORT || 5000
-app.listen(PORT, '0.0.0.0', () => {
+  const PORT = process.env.PORT || 5000
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Server is running on port ${PORT}`)
     console.log(`📱 Local: http://localhost:${PORT}`)
     console.log(`🌐 Network: http://192.168.1.35:${PORT}`) // Your IP
-})
+    console.log(`📁 Uploads accessible at: http://localhost:${PORT}/uploads/`)
+  })
 })
 .catch(err => {
   console.error("❌ MongoDB connection error:", err)

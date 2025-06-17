@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchFoods } from "../../../redux/slices/foodSlice";
+import { getImageUrl } from '../../utils/axiosClient';
 
 function FoodsDashboard() {
   const dispatch = useDispatch();
@@ -94,7 +95,7 @@ function FoodsDashboard() {
             </svg>
             <input
               type="text"
-              placeholder="Search services..."
+              placeholder="Search foods..."
               className="search-input"
               onChange={(event) => {
                 setSearchTerm(event.target.value);
@@ -116,7 +117,19 @@ function FoodsDashboard() {
               .map((item, key) =>
                 !item.isArchived ? (
                   <article className="card" key={item._id}>
-        {/* this line helps to go to food */}            <Link to={`/view_food/${item._id}`}>
+                    <Link to={`/view_food/${item._id}`}>
+                      {/* Add image display for foods */}
+                      {item.image && (
+                        <img 
+                          src={getImageUrl(item.image)} 
+                          loading="lazy" 
+                          alt={item.title} 
+                          className="w-full h-48 rounded-tl-md rounded-tr-md"
+                          onError={(e) => {
+                            e.target.src = 'http://localhost:5000/uploads/default-avatar.png'
+                          }}
+                        />
+                      )}
                       <div className="service-card-header">
                         <div className="service-info">
                           <span className="service-budget">

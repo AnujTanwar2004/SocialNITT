@@ -1,14 +1,8 @@
-const cloudinary = require('cloudinary').v2;
 const fs = require('fs/promises');
-
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET
-});
+const path = require('path');
 
 // Define your default image URL
-const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/demo/image/upload/v1717689400/default-avatar.png";  // replace with your actual URL
+const DEFAULT_AVATAR_URL = "/uploads/default-avatar.png";
 
 const uploadCtrl = {
   uploadAvatar: async (req, res) => {
@@ -20,17 +14,34 @@ const uploadCtrl = {
 
       const file = req.files.file;
 
-      // Upload to Cloudinary
-      const result = await cloudinary.uploader.upload(file.tempFilePath, {
-        folder: 'avatar',
-        width: 480,
-        height: 320,
-        crop: "fill"
-      });
+      // Create uploads directory if it doesn't exist
+      const uploadsDir = path.join(__dirname, '../uploads');
+      try {
+        await fs.access(uploadsDir);
+      } catch {
+        await fs.mkdir(uploadsDir, { recursive: true });
+      }
 
-      await removeTmp(file.tempFilePath);
+      // Generate unique filename
+      const timestamp = Date.now();
+      const randomString = Math.random().toString(36).substring(2, 15);
+      const fileExtension = path.extname(file.name);
+      const fileName = `${timestamp}_${randomString}${fileExtension}`;
+      
+      // Define file path
+      const filePath = path.join(uploadsDir, fileName);
 
-      res.json({ url: result.secure_url });
+      // Move file to uploads directory
+      await file.mv(filePath);
+
+      // Remove temp file if it exists
+      if (file.tempFilePath) {
+        await removeTmp(file.tempFilePath);
+      }
+
+      // Return the local URL
+      const fileUrl = `/uploads/${fileName}`;
+      res.json({ url: fileUrl });
 
     } catch (err) {
       console.error("Upload Error:", err);

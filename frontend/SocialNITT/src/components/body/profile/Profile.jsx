@@ -7,6 +7,7 @@ import { showSuccessMsg, showErrMsg } from '../../utils/notification/Notificatio
 import { fetchProducts } from "../../../redux/slices/productSlice";
 import { fetchServices } from "../../../redux/slices/serviceSlice";
 import { fetchFoods } from "../../../redux/slices/foodSlice";
+import { getImageUrl } from '../../utils/axiosClient';
 
 const initialState = {
   name: '',
@@ -58,13 +59,17 @@ function Profile() {
       formData.append('file', file);
 
       setLoading(true);
-      const res = await axios.post('/api/upload_avatar', formData, {
-        headers: { 'content-type': 'multipart/form-data', Authorization: token },
+      const res = await axios.post('/api/upload/avatar', formData, {
+        headers: { 
+          'content-type': 'multipart/form-data', 
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}` 
+        },
       });
       setLoading(false);
       setAvatar(res.data.url);
     } catch (err) {
-      setData({ ...data, err: err.response.data.msg, success: '' });
+      setData({ ...data, err: err.response?.data?.msg || 'Upload failed', success: '' });
+      setLoading(false);
     }
   };
 
@@ -74,11 +79,11 @@ function Profile() {
         name: name || user.name,
         avatar: avatar || user.avatar,
       }, {
-        headers: { Authorization: token },
+        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
       });
       setData({ ...data, err: '', success: 'Updated successfully!' });
     } catch (err) {
-      setData({ ...data, err: err.response.data.msg, success: '' });
+      setData({ ...data, err: err.response?.data?.msg || 'Update failed', success: '' });
     }
   };
 
@@ -90,10 +95,12 @@ function Profile() {
       return setData({ ...data, err: 'Passwords did not match.', success: '' });
 
     try {
-      await axios.post('/user/reset', { password }, { headers: { Authorization: token } });
+      await axios.post('/user/reset', { password }, { 
+        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } 
+      });
       setData({ ...data, err: '', success: 'Password updated successfully!' });
     } catch (err) {
-      setData({ ...data, err: err.response.data.msg, success: '' });
+      setData({ ...data, err: err.response?.data?.msg || 'Password update failed', success: '' });
     }
   };
 
@@ -113,14 +120,14 @@ function Profile() {
         setLoading(true);
         await axios.delete(`/api/${type}s/${itemId}`, {
           headers: { 
-            Authorization: `Bearer ${auth.token}`,
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
         });
         setLoading(false);
         setCallback(!callback);
       }
     } catch (err) {
-      setData({ ...data, err: err.response.data.msg, success: "" });
+      setData({ ...data, err: err.response?.data?.msg || 'Delete failed', success: "" });
       setLoading(false);
     }
   };
@@ -146,7 +153,13 @@ function Profile() {
         <div className="col-left">
           <h2>User Profile</h2>
           <div className="avatar">
-            <img src={avatar || user.avatar} alt="" />
+            <img 
+              src={getImageUrl(avatar || user.avatar)} 
+              alt="Profile Avatar" 
+              onError={(e) => {
+                e.target.src = 'http://localhost:5000/uploads/default-avatar.png'
+              }}
+            />
             <span>
               <i className="fas fa-camera"></i>
               <p>Change</p>
@@ -183,7 +196,15 @@ function Profile() {
                 item.user === user._id ? (
                   <article className="card" key={item._id}>
                     <Link to={`/view_product/${item._id}`}>
-                      <img src={item.image} loading="lazy" alt={item.title} className="w-full h-48 rounded-tl-md rounded-tr-md" />
+                      <img 
+                        src={getImageUrl(item.image)} 
+                        loading="lazy" 
+                        alt={item.title} 
+                        className="w-full h-48 rounded-tl-md rounded-tr-md"
+                        onError={(e) => {
+                          e.target.src = 'http://localhost:5000/uploads/default-avatar.png'
+                        }}
+                      />
                       <div className="card-header">
                         <div className="info">
                           <span className="cost">₹ {item.price}</span>
@@ -223,7 +244,15 @@ function Profile() {
                 return itemUserId === user._id ? (
                   <article className="card" key={item._id}>
                     <Link to={`/view_service/${item._id}`}>
-                      <img src={item.image || '/default-service.jpg'} loading="lazy" alt={item.title} className="w-full h-48 rounded-tl-md rounded-tr-md" />
+                      <img 
+                        src={getImageUrl(item.image) || 'http://localhost:5000/uploads/default-avatar.png'} 
+                        loading="lazy" 
+                        alt={item.title} 
+                        className="w-full h-48 rounded-tl-md rounded-tr-md"
+                        onError={(e) => {
+                          e.target.src = 'http://localhost:5000/uploads/default-avatar.png'
+                        }}
+                      />
                       <div className="card-header">
                         <div className="info">
                           <span className="cost">₹ {item.budget}</span>
@@ -263,7 +292,15 @@ function Profile() {
                 return itemUserId === user._id ? (
                   <article className="card" key={item._id}>
                     <Link to={`/view_food/${item._id}`}>
-                      <img src={item.image || '/default-food.jpg'} loading="lazy" alt={item.title} className="w-full h-48 rounded-tl-md rounded-tr-md" />
+                      <img 
+                        src={getImageUrl(item.image) || 'http://localhost:5000/uploads/default-avatar.png'} 
+                        loading="lazy" 
+                        alt={item.title} 
+                        className="w-full h-48 rounded-tl-md rounded-tr-md"
+                        onError={(e) => {
+                          e.target.src = 'http://localhost:5000/uploads/default-avatar.png'
+                        }}
+                      />
                       <div className="card-header">
                         <div className="info">
                           <span className="cost">₹ {item.budget}</span>

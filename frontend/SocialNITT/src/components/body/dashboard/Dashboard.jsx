@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchProducts } from "../../../redux/slices/productSlice"
+import { getImageUrl } from '../../utils/axiosClient'
 
- 
 function Dashboard() {
   const dispatch = useDispatch()
 
@@ -68,7 +68,15 @@ function Dashboard() {
                 <article className="card" key={key}>
                   <p className="card-details">
                     <Link to={`/view_product/${item._id}`}>
-                      <img src={item.image} loading="lazy" alt={item.title} className="w-full h-48 rounded-tl-md rounded-tr-md" />
+                      <img 
+                        src={getImageUrl(item.image)} 
+                        loading="lazy" 
+                        alt={item.title} 
+                        className="w-full h-48 rounded-tl-md rounded-tr-md"
+                        onError={(e) => {
+                          e.target.src = 'http://localhost:5000/uploads/default-avatar.png'
+                        }}
+                      />
                       <div className="card-header">
                         <div className="info">
                           <span className="cost">₹ {item.price}</span>
