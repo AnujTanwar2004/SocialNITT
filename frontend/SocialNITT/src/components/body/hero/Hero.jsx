@@ -1,44 +1,47 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import "./hero.css" 
+
+
   function Hero() {
   const products = useSelector((state) => state.products.items || []).slice(0, 3);
   const services = useSelector((state) => state.services.items || []).slice(0, 3);
   const foods = useSelector((state) => state.foods.items || []).slice(0, 3);
+  
 
   // Card rendering helper
-  const renderCards = (items, type) =>
-    <div className="card-container" style={{ display: "flex", gap: "1rem" }}>
+  const renderCards = (items, type) => (
+    <div className="card-container" style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
       {items.map((item) =>
         !item.isArchived ? (
-          <article className="card" key={item._id} style={{ width: "250px" }}>
-            <p className="card-details">
-              <Link to={`/view_${type}/${item._id}`}>
+          <article className="custom-card" key={item._id}>
+            <Link to={`/view_${type}/${item._id}`} className="card-link">
+              <div className="card-image-wrapper">
                 <img
                   src={item.image}
-                  loading="lazy"
                   alt={item.title}
-                  className="w-full h-48 rounded-tl-md rounded-tr-md"
-                  style={{ width: "100%", height: "150px", objectFit: "cover" }}
+                  loading="lazy"
+                  className="card-image"
                 />
-                <div className="card-header">
-                  <div className="info">
-                    {item.price && <span className="cost">₹ {item.price}</span>}
-                    <span className="date">
-                      {item.updatedAt ? item.updatedAt.slice(0, 10) : ""}
-                    </span>
-                  </div>
+                {item.isOnSale && <span className="badge">Sale</span>}
+              </div>
+              <div className="card-body">
+                <h3 className="card-title">{item.title}</h3>
+                <p className="card-description">{item.description}</p>
+                <div className="card-price-date">
+                  <span className="card-price">₹ {item.price}</span>
+                  <span className="card-date">{item.updatedAt?.slice(0, 10)}</span>
                 </div>
-                <div className="card-footer">
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                </div>
-              </Link>
-            </p>
+                <button className="card-button">Contact</button>
+              </div>
+            </Link>
           </article>
         ) : null
       )}
-    </div>;
+    </div>
+  );
+  
 
   return (
     <section className="hero" style={{ padding: "2rem" }}>
