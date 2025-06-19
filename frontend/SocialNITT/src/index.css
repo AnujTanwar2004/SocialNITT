@@ -48,4 +48,10 @@ button{
   outline: none;
   cursor: pointer;
 }
-
+*{
+scroll-snap-type: y mandatory;
+        scrollbar-width: none;
+        &::-webkit-scrollbar{
+            display: none;
+        }
+}

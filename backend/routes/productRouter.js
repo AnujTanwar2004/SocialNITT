@@ -18,4 +18,6 @@ router.route('/:id')
 router.route('/archive_product/:id')
     .patch(auth, productCtrl.archiveProduct)
 
+    router.post('/contact/:id', auth, productCtrl.contactOwner);
+    
  module.exports = router

@@ -1,55 +1,51 @@
 const Products = require('../models/productModel');
+const Notification = require('../models/notificationModel');
 
 const productCtrl = {
-createProduct: async (req, res) => {
-  try {
-    const {
-      title, description, price, location, category, phone, image
-    } = req.body;
+  createProduct: async (req, res) => {
+    try {
+      const {
+        title, description, price, location, category, phone, image
+      } = req.body;
 
-    // Securely get user ID from auth middleware
-    const userId = req.user.id;
+      const userId = req.user.id;
 
-    console.log({ title, description, price, location, category, phone, image, userId });
+      // Validations
+      if (!title || !description || price === undefined || !location || !category || !phone)
+        return res.status(400).json({ msg: "Please fill in all fields." });
 
-    // Validations
-    if (!title || !description || price === undefined || !location || !category || !phone)
-      return res.status(400).json({ msg: "Please fill in all fields." });
+      if (!image || image.length === 0)
+        return res.status(400).json({ msg: "Please upload image." });
 
-    if (!image || image.length === 0)
-      return res.status(400).json({ msg: "Please upload image." });
+      if (title.length < 5)
+        return res.status(400).json({ msg: "Title must be at least 5 characters." });
 
-    if (title.length < 5)
-      return res.status(400).json({ msg: "Title must be at least 5 characters." });
+      if (description.length < 10)
+        return res.status(400).json({ msg: "Description must be at least 10 characters." });
 
-    if (description.length < 10)
-      return res.status(400).json({ msg: "Description must be at least 10 characters." });
+      if (price < 0)
+        return res.status(400).json({ msg: "Price must be a positive number." });
 
-    if (price < 0)
-      return res.status(400).json({ msg: "Price must be a positive number." });
+      const newProduct = new Products({
+        title,
+        description,
+        price,
+        location,
+        category,
+        phone,
+        image,
+        user: userId
+      });
 
-    // Create new product, now attaching user via token
-    const newProduct = new Products({
-      title,
-      description,
-      price,
-      location,
-      category,
-      phone,
-      image,
-      user: userId
-    });
+      await newProduct.save();
 
-    await newProduct.save();
+      res.json({ msg: "Product has been created!" });
 
-    res.json({ msg: "Product has been created!" });
-
-  } catch (err) {
-    console.error("Product creation error:", err);
-    return res.status(500).json({ msg: err.message });
-  }
-}
-,
+    } catch (err) {
+      console.error("Product creation error:", err);
+      return res.status(500).json({ msg: err.message });
+    }
+  },
 
   getProducts: async (req, res) => {
     try {
@@ -71,7 +67,7 @@ createProduct: async (req, res) => {
         {
           title, description, price, location, category, phone, isArchived, image
         },
-        { new: true } // Important if you need the updated doc returned
+        { new: true }
       );
 
       if (!updatedProduct)
@@ -96,25 +92,23 @@ createProduct: async (req, res) => {
     }
   },
 
-deleteProduct: async (req, res) => {
-  try {
-    const product = await Products.findById(req.params.id);
+  deleteProduct: async (req, res) => {
+    try {
+      const product = await Products.findById(req.params.id);
 
-    if (!product)
-      return res.status(404).json({ msg: "Product not found." });
+      if (!product)
+        return res.status(404).json({ msg: "Product not found." });
 
-    // check ownership
-    if (product.user.toString() !== req.user.id)
-      return res.status(403).json({ msg: "Unauthorized: Cannot delete others' product." });
+      if (product.user.toString() !== req.user.id)
+        return res.status(403).json({ msg: "Unauthorized: Cannot delete others' product." });
 
-    await product.deleteOne();
+      await product.deleteOne();
 
-    res.json({ msg: "Deleted Successfully!" });
-  } catch (err) {
-    return res.status(500).json({ msg: err.message });
-  }
-}
-,
+      res.json({ msg: "Deleted Successfully!" });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
 
   archiveProduct: async (req, res) => {
     try {
@@ -130,6 +124,30 @@ deleteProduct: async (req, res) => {
         return res.status(404).json({ msg: "Product not found." });
 
       res.json({ msg: "Update Success!" });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
+  // 3. Contact Owner and Create Notification
+  contactOwner: async (req, res) => {
+    try {
+      const product = await Products.findById(req.params.id);
+      if (!product) return res.status(404).json({ msg: "Product not found." });
+
+      // Prevent notifying self
+      if (product.user.toString() === req.user.id) {
+        return res.status(400).json({ msg: "You cannot contact yourself." });
+      }
+
+      await Notification.create({
+        user: product.user,
+        itemType: 'Product',
+        itemId: product._id,
+        message: `Someone has contacted your product "${product.title}". Do you want to delete it now?`
+      });
+
+      res.json({ msg: "Product owner notified." });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }

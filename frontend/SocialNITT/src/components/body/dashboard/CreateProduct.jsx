@@ -16,6 +16,16 @@ const initialState = {
   err: '',
   success: ''
 }
+const categories = [
+                   'Sports',
+                   'Fashion',
+                   'Electronics',
+                   'Utility',
+                   'Instruments',
+                   'IT & Technical',
+                   'Stationary',
+                   'Others(Contact admin to add category)'
+  ];
 // create the product 
 function CreateProduct() {
   const [product, setProduct] = useState(initialState)
@@ -152,9 +162,23 @@ const changeAvatar = async e => {
           <div><label htmlFor="location">Location</label>
             <input type="text" name="location" value={location} onChange={handleChangeInput} required />
           </div>
-          <div><label htmlFor="category">Category</label>
-            <input type="text" name="category" value={category} onChange={handleChangeInput} required />
-          </div>
+        <div>
+                  <label htmlFor="category">Food Category*</label>
+                  <select
+                    id="category"
+                    value={category}
+                    name="category"
+                    onChange={handleChangeInput}
+                    required
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
           <div><label htmlFor="phone">Phone no.</label>
             <input type="text" name="phone" value={phone} onChange={handleChangeInput} required />
           </div>

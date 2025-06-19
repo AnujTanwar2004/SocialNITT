@@ -239,3 +239,8 @@
 .hero-details .Quote{
   font-size: .5rem;
 }
+@media   (max-width: 1023px) {
+  .hero-img{
+display: none;
+  }
+}

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchProducts } from '../../../redux/slices/productSlice'
 import { getImageUrl } from '../../utils/axiosClient'
+import axiosClient from '../../utils/axiosClient'
 
 function ViewProduct() {
   const { id } = useParams()
@@ -266,6 +267,17 @@ function ViewProduct() {
     }
   }
 
+  // --- Contact Button Handler ---
+  const handleContact = async () => {
+    try {
+      await axiosClient.post(`/api/products/contact/${product._id}`);
+    } catch (err) {
+      // Optionally show an error or ignore
+      console.error("Notification error:", err);
+    }
+    window.open(`https://wa.me/${product.phone}`, '_blank');
+  };
+
   if (!product) return <h2 style={{ textAlign: 'center', margin: '50px 0' }}>Product not found.</h2>
 
   return (
@@ -283,17 +295,16 @@ function ViewProduct() {
             <p><i className="fa fa-calendar" title="Posted at"></i> {product.updatedAt.slice(0, 10)}</p>
           </div>
           <p>{product.description}</p>
-          <a
+          <button
             className="cta-btn"
-            href={`https://wa.me/${product.phone}`}
-            target="_blank"
-            rel="noreferrer"
+            onClick={handleContact}
+            type="button"
           >
             Contact
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
-          </a>
+          </button>
         </div>
         <div className="cta-image">
           <img 

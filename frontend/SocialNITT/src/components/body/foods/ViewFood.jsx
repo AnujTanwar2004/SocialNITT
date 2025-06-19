@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchFoods } from "../../../redux/slices/foodSlice";
 import { getImageUrl } from '../../utils/axiosClient';
+import axiosClient from '../../utils/axiosClient';
 
 function ViewFood() {
   const { id } = useParams();
@@ -24,7 +25,6 @@ function ViewFood() {
 
   // Load Leaflet CSS and JS
   useEffect(() => {
-    // Load Leaflet CSS
     if (!document.querySelector('link[href*="leaflet"]')) {
       const leafletCSS = document.createElement('link')
       leafletCSS.rel = 'stylesheet'
@@ -32,8 +32,6 @@ function ViewFood() {
       leafletCSS.integrity = 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY='
       leafletCSS.crossOrigin = ''
       document.head.appendChild(leafletCSS)
-      
-      // Add custom CSS to fix blurred map
       const customCSS = document.createElement('style')
       customCSS.textContent = `
         .leaflet-container {
@@ -56,15 +54,12 @@ function ViewFood() {
       `
       document.head.appendChild(customCSS)
     }
-
-    // Load Leaflet JS
     if (!window.L && !document.querySelector('script[src*="leaflet"]')) {
       const leafletJS = document.createElement('script')
       leafletJS.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
       leafletJS.integrity = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo='
       leafletJS.crossOrigin = ''
       leafletJS.onload = () => {
-        // Small delay to ensure CSS is loaded
         setTimeout(() => setMapLoaded(true), 100)
       }
       leafletJS.onerror = () => setMapError(true)
@@ -74,67 +69,48 @@ function ViewFood() {
     }
   }, [])
 
-  // Geocode location using free Nominatim API with NIT Trichy bounds
   const geocodeLocation = async (locationName) => {
     try {
-      // NIT Trichy coordinates and bounds
       const nitTrichyCenter = { lat: 10.7672, lng: 78.8172 }
-      const searchRadius = 0.02 // About 2km radius
-      
-      // First try: Search with NIT Trichy + location name
+      const searchRadius = 0.02
       let response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationName + ' NIT Trichy Tiruchirappalli Tamil Nadu India')}&limit=1&countrycodes=in`
       )
       let data = await response.json()
-      
-      // Second try: Search with broader Trichy area if first search fails
       if (!data || data.length === 0) {
         response = await fetch(
           `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationName + ' Tiruchirappalli Tamil Nadu India')}&limit=5&countrycodes=in`
         )
         data = await response.json()
       }
-      
-      // Third try: Search with just the location name but bounded to Tamil Nadu
       if (!data || data.length === 0) {
         response = await fetch(
           `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationName + ' Tamil Nadu India')}&limit=5&countrycodes=in`
         )
         data = await response.json()
       }
-      
       if (data && data.length > 0) {
-        // Find the result closest to NIT Trichy
         let bestResult = data[0]
         let minDistance = Infinity
-        
         for (let result of data) {
           const lat = parseFloat(result.lat)
           const lng = parseFloat(result.lon)
-          
-          // Calculate distance from NIT Trichy center
           const distance = Math.sqrt(
             Math.pow(lat - nitTrichyCenter.lat, 2) + 
             Math.pow(lng - nitTrichyCenter.lng, 2)
           )
-          
           if (distance < minDistance) {
             minDistance = distance
             bestResult = result
           }
         }
-        
         const resultLat = parseFloat(bestResult.lat)
         const resultLng = parseFloat(bestResult.lon)
-        
-        // If result is too far from NIT Trichy, use NIT Trichy center as fallback
         const distanceFromNIT = Math.sqrt(
           Math.pow(resultLat - nitTrichyCenter.lat, 2) + 
           Math.pow(resultLng - nitTrichyCenter.lng, 2)
         )
-        
         if (distanceFromNIT > searchRadius) {
-          console.log(`Location "${locationName}" not found near NIT Trichy, using campus center`)
           return {
             lat: nitTrichyCenter.lat,
             lng: nitTrichyCenter.lng,
@@ -142,7 +118,6 @@ function ViewFood() {
             isApproximate: true
           }
         }
-        
         return {
           lat: resultLat,
           lng: resultLng,
@@ -150,19 +125,13 @@ function ViewFood() {
           isApproximate: false
         }
       }
-      
-      // Fallback to NIT Trichy center if nothing found
-      console.log(`No results found for "${locationName}", using NIT Trichy center`)
       return {
         lat: nitTrichyCenter.lat,
         lng: nitTrichyCenter.lng,
         displayName: `${locationName} (NIT Trichy Campus)`,
         isApproximate: true
       }
-      
     } catch (error) {
-      console.error('Geocoding error:', error)
-      // Final fallback to NIT Trichy
       return {
         lat: 10.7672,
         lng: 78.8172,
@@ -172,32 +141,25 @@ function ViewFood() {
     }
   }
 
-  // Initialize map when everything is ready
   useEffect(() => {
     if (mapLoaded && food && food.location && !coordinates) {
       initializeMap()
     }
+    // eslint-disable-next-line
   }, [mapLoaded, food, coordinates])
 
   const initializeMap = async () => {
     const coords = await geocodeLocation(food.location)
-    
     if (coords) {
       setCoordinates(coords)
-      
-      // Clear any existing map
       const mapContainer = document.getElementById('leaflet-map-food')
       if (mapContainer) {
         mapContainer.innerHTML = ''
       }
-
-      // Create the map with specific options to prevent blurring
       const map = window.L.map('leaflet-map-food', {
         preferCanvas: false,
         renderer: window.L.svg()
-      }).setView([coords.lat, coords.lng], coords.isApproximate ? 16 : 17) // Zoom closer for campus locations
-
-      // Add OpenStreetMap tiles with better quality settings
+      }).setView([coords.lat, coords.lng], coords.isApproximate ? 16 : 17)
       window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -205,13 +167,9 @@ function ViewFood() {
         zoomOffset: 0,
         detectRetina: true
       }).addTo(map)
-
-      // Force map to refresh after a short delay
       setTimeout(() => {
         map.invalidateSize()
       }, 100)
-
-      // Custom marker icon with different color for food (green/orange based on urgency)
       const getMarkerColor = (urgency) => {
         switch (urgency) {
           case "Urgent": return "#FF4444"
@@ -221,7 +179,6 @@ function ViewFood() {
           default: return "#666"
         }
       }
-
       const markerColor = coords.isApproximate ? '#ffc107' : getMarkerColor(food.urgency)
       const customIcon = window.L.divIcon({
         html: `
@@ -250,10 +207,6 @@ function ViewFood() {
         iconAnchor: [15, 30],
         popupAnchor: [0, -30]
       })
-
-      // Add marker with popup
-      const marker = window.L.marker([coords.lat, coords.lng], { icon: customIcon }).addTo(map)
-      
       const popupContent = `
         <div style="padding: 10px; min-width: 200px;">
           <h4 style="margin: 0 0 8px 0; color: #333; font-size: 16px;">🍽️ ${food.title}</h4>
@@ -270,9 +223,7 @@ function ViewFood() {
           <p style="margin: 0; color: #007bff; font-weight: bold; font-size: 16px;">💰 Budget: ₹${food.budget}</p>
         </div>
       `
-      
       marker.bindPopup(popupContent).openPopup()
-
     } else {
       setMapError(true)
     }
@@ -293,6 +244,22 @@ function ViewFood() {
     }
   };
 
+  // --- Notification Trigger for Contact ---
+  const getWhatsappNumber = (phone) => {
+    if (!phone) return '';
+    return phone.replace(/[^0-9]/g, '');
+  };
+
+  const handleContact = async () => {
+    try {
+      await axiosClient.post(`/api/foods/contact/${food._id}`);
+    } catch (err) {
+      console.error("Notification error:", err);
+    }
+    const whatsappNumber = getWhatsappNumber(food.phone);
+    window.open(`https://wa.me/${whatsappNumber}`, '_blank');
+  };
+
   if (!food)
     return (
       <h2 style={{ textAlign: "center", margin: "50px 0" }}>
@@ -306,7 +273,6 @@ function ViewFood() {
       <div className="cta-container">
         <div className="cta-details">
           <h3>{food.title}</h3>
-
           <div className="service-view-info">
             <div className="info-row">
               <span className="service-budget">
@@ -319,14 +285,12 @@ function ViewFood() {
                 🚨 {food.urgency} Priority
               </span>
             </div>
-
             <div className="info-row">
               <span>📍 Location: {food.location}</span>
               <span>
                 📅 Posted: {new Date(food.createdAt).toLocaleDateString()}
               </span>
             </div>
-
             <div className="info-row">
               <span>👤 Posted by: {food.user?.name || "Anonymous"}</span>
               <span
@@ -340,17 +304,14 @@ function ViewFood() {
               </span>
             </div>
           </div>
-
           <div className="service-description">
             <h4>Description:</h4>
             <p>{food.description}</p>
           </div>
-
-          <a
+          <button
             className="cta-btn"
-            href={`https://wa.me/${food.phone}`}
-            target="_blank"
-            rel="noreferrer"
+            type="button"
+            onClick={handleContact}
           >
             Contact for Food
             <svg
@@ -366,9 +327,8 @@ function ViewFood() {
                 d="M13 7l5 5m0 0l-5 5m5-5H6"
               />
             </svg>
-          </a>
+          </button>
         </div>
-        {/* Add image section for foods if they have images */}
         {food.image && (
           <div className="cta-image">
             <img
@@ -381,8 +341,6 @@ function ViewFood() {
           </div>
         )}
       </div>
-
-      {/* OpenStreetMap Section for Food */}
       {food.location && (
         <div className="map-section" style={{ 
           margin: '40px 0', 
@@ -399,7 +357,6 @@ function ViewFood() {
           }}>
             🍽️ Food Location
           </h4>
-          
           {!mapLoaded && !mapError && (
             <div style={{
               height: '400px',
@@ -413,7 +370,6 @@ function ViewFood() {
               <p>Loading map...</p>
             </div>
           )}
-          
           {mapError && (
             <div style={{
               height: '400px',
@@ -432,7 +388,6 @@ function ViewFood() {
               </p>
             </div>
           )}
-          
           <div
             id="leaflet-map-food"
             style={{
@@ -446,7 +401,6 @@ function ViewFood() {
               WebkitImageRendering: '-webkit-optimize-contrast'
             }}
           ></div>
-          
           {coordinates && (
             <div style={{
               marginTop: '15px',
@@ -477,7 +431,7 @@ function ViewFood() {
           )}
         </div>
       )}
-    </section>
+       </section>
   );
 }
 

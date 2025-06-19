@@ -31,7 +31,7 @@ app.use('/api/upload', require('./routes/upload'))
 app.use('/api/products', require('./routes/productRouter'))
 app.use('/api/services', require('./routes/serviceRouter'))
 app.use('/api/foods',require('./routes/foodRouter'))
-
+app.use('/api/notifications', require('./routes/notificationRouter'));
 app.get('/', (req, res) => {
     res.send("APP IS RUNNING.")
 })

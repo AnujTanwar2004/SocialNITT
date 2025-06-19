@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 
 const HF_API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-small";
-// For demo, no API key needed for public models, but you can add one if you have it.
 
 function Chatbot() {
   const [open, setOpen] = useState(false);
@@ -12,12 +11,32 @@ function Chatbot() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const panelRef = useRef(null);
+  const chatbotRef = useRef(null);
 
   useEffect(() => {
     if (open && panelRef.current) {
       panelRef.current.scrollTop = panelRef.current.scrollHeight;
     }
   }, [messages, open]);
+
+  // Close chatbot when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        chatbotRef.current &&
+        !chatbotRef.current.contains(event.target) &&
+        open
+      ) {
+        setOpen(false);
+      }
+    }
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -26,13 +45,11 @@ function Chatbot() {
     setLoading(true);
 
     try {
-      // Hugging Face Inference API call
       const res = await axios.post(
         HF_API_URL,
         { inputs: input },
         {
           headers: {
-            // If you have a HF API key, add: Authorization: `Bearer YOUR_KEY`
             "Content-Type": "application/json"
           }
         }
@@ -82,6 +99,7 @@ function Chatbot() {
       {/* Chatbot Panel */}
       {open && (
         <div
+          ref={chatbotRef}
           style={{
             position: "fixed",
             bottom: "100px",

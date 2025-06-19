@@ -31,17 +31,8 @@ function Dashboard() {
               <p><Link to="/create_product">List Product</Link></p>
              </div>
           </div>
-           
-        </div>
-      </section>
-
-      <section className="cards-primary">
-        <div className="cards-header">
-          <h1>Products</h1>
-          <p>A place where NITT Exchanges</p>
-        </div>
-
-        <form onSubmit={(e) => e.preventDefault()} className="search-form-primary">
+           {/* chanhing the search postion temorrarily */}
+           <form onSubmit={(e) => e.preventDefault()} className="search-form-primary">
           <div className="search-form-container">
             <svg xmlns="http://www.w3.org/2000/svg" className="search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -56,6 +47,16 @@ function Dashboard() {
             />
           </div>
         </form>
+        </div>
+      </section>
+
+      <section className="cards-primary">
+        <div className="cards-header">
+          <h1>Products</h1>
+          <p>A place where NITT Exchanges</p>
+        </div>
+
+        
 
         <div className="card-container">
           {products && products

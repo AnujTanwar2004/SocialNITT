@@ -68,8 +68,8 @@ function EditProduct() {
       if (!file)
         return setProduct({ ...editProduct, err: "No files were uploaded.", success: '' })
 
-      if (file.size > 1024 * 1024)
-        return setProduct({ ...editProduct, err: "Size too large. Max 1MB", success: '' })
+      if (file.size > 2*1024 * 1024)
+        return setProduct({ ...editProduct, err: "Size too large. Max 2MB", success: '' })
 
       if (file.type !== 'image/jpeg' && file.type !== 'image/png')
         return setProduct({ ...editProduct, err: "File format is incorrect. Use JPG/PNG", success: '' })
@@ -79,7 +79,7 @@ function EditProduct() {
 
       setLoading(true)
 
-      const res = await axios.post('/api/upload/upload_avatar', formData, {
+      const res = await axios.post('/api/upload/upload/avatar', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}` // Added Bearer prefix
