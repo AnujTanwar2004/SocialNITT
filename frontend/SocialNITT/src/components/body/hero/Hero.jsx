@@ -157,7 +157,6 @@ const getStatusColor = (status) => {
   );
   
 
-
   return (
     <section className="hero" style={{ padding: "2rem" }}>
       <h1 style={{ textAlign: "center" }}>Welcome to SocialNITT</h1>

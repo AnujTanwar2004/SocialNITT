@@ -165,17 +165,7 @@ header ul li a {
   gap: 10px;
 }
 
-.profile-icon-container {
-  display: flex;
-  align-items: center;
-}
-
-.profile-icon {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  object-fit: cover;
-}
+ 
 
 .username {
   color: white;

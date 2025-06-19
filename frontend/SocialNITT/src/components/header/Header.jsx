@@ -64,17 +64,12 @@ function Header() {
       </ul>
 
       <div className="menu-controls">
-        {isLogged && (
-          <div className="profile-icon-container">
-            <img src={user.avatar} alt="Profile" className="profile-icon" />
-            <span className="username">{user.name}</span> {/* ✅ Added username */}
-          </div>
-        )}
+        
         <img
           src={burgerBar}
           alt="Menu"
           className="burger-icon"
-          onClick={() => setMenuOpen(!menuOpen)}
+          onMouseEnter={() => setMenuOpen(!menuOpen)}
         />
       </div>
     </header>
