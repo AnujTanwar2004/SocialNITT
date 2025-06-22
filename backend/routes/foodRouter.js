@@ -14,4 +14,5 @@ router.route('/:id')
     .patch(auth, foodCtrl.updateFood)
     .delete(auth, foodCtrl.deleteFood)
 
+router.post('/contact/:id', auth, foodCtrl.contactOwner);
 module.exports = router

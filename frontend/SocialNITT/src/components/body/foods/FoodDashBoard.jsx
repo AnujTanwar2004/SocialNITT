@@ -60,21 +60,11 @@ function FoodsDashboard() {
               <p>
                 <Link to="/create_food">Post Food Request</Link>
               </p>
+              
               </div>
+              
           </div>
-        </div>
-      </section>
-
-      <section className="cards-primary">
-        <div className="cards-header">
-          <h1>Food Requests</h1>
-          <p>
-            Help others by providing Food or find professionals for your
-            needs.
-          </p>
-        </div>
-
-        <form
+           <form
           onSubmit={(e) => e.preventDefault()}
           className="search-form-primary"
         >
@@ -103,6 +93,19 @@ function FoodsDashboard() {
             />
           </div>
         </form>
+        </div>
+      </section>
+
+      <section className="cards-primary">
+        <div className="cards-header">
+          <h1>Food Requests</h1>
+          <p>
+            Help others by providing Food or find professionals for your
+            needs.
+          </p>
+        </div>
+
+       
 
         <div className="card-container">
           {foods &&

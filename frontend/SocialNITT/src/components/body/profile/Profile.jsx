@@ -8,6 +8,7 @@ import { fetchProducts } from "../../../redux/slices/productSlice";
 import { fetchServices } from "../../../redux/slices/serviceSlice";
 import { fetchFoods } from "../../../redux/slices/foodSlice";
 import { getImageUrl } from '../../utils/axiosClient';
+import "./profile.css"
 
 const initialState = {
   name: '',

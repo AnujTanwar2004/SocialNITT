@@ -28,7 +28,7 @@ function Dashboard() {
         <div className="cta-primary">
           <div className="cta-container">
              <div className="cta-btn">
-              <p><Link to="/create_product">List Product</Link></p>
+              <p><Link to="/create_product">List Product ----</Link></p>
              </div>
           </div>
            {/* chanhing the search postion temorrarily */}

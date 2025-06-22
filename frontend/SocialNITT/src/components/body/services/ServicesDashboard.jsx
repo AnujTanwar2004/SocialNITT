@@ -13,7 +13,7 @@ function ServicesDashboard() {
   const status = useSelector((state) => state.services.status);
 
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [showPreview, setShowPreview] = useState(false);
   useEffect(() => {
     if (isLogged && status === "idle") {
       dispatch(fetchServices());
@@ -61,19 +61,7 @@ function ServicesDashboard() {
               </p>
               </div>
           </div>
-        </div>
-      </section>
-
-      <section className="cards-primary">
-        <div className="cards-header">
-          <h1>Service Requests</h1>
-          <p>
-            Help others by providing services or find professionals for your
-            needs.
-          </p>
-        </div>
-
-        <form
+           <form
           onSubmit={(e) => e.preventDefault()}
           className="search-form-primary"
         >
@@ -102,8 +90,18 @@ function ServicesDashboard() {
             />
           </div>
         </form>
+        </div>
+      </section>
 
-        <div className="card-container">
+      <section className="cards-primary">
+        <div className="cards-header">
+          <h1>Service Requests</h1>
+          <p>
+            Help others by providing services or find professionals for your
+            needs.
+          </p>
+        </div>
+           <div className="card-container">
           {services &&
             services
               .filter((item) => {

@@ -1,4 +1,5 @@
 const Services = require('../models/serviceModel')
+const Users = require('../models/userModel')
 
 const serviceCtrl = {
   createService: async (req, res) => {
@@ -35,6 +36,10 @@ const serviceCtrl = {
       })
 
       await newService.save()
+      await Users.findByIdAndUpdate(userId, {
+  $inc: { points: 2 },
+  $push: { pointsHistory: { points: 2, reason: 'upload_product', date: new Date() } }
+});
       res.json({ msg: "Service request created successfully!" })
 
     } catch (err) {
@@ -106,11 +111,34 @@ const serviceCtrl = {
         return res.status(403).json({ msg: "Unauthorized: Cannot delete others' service." })
 
       await service.deleteOne()
+       await Users.findByIdAndUpdate(req.user.id, {
+  $inc: { points: 1 },
+  $push: { pointsHistory: { points: 1, reason: 'delete_product', date: new Date() } }
+});
       res.json({ msg: "Service deleted successfully!" })
     } catch (err) {
       return res.status(500).json({ msg: err.message })
     }
-  }
+  },
+
+  contactOwner: async (req, res) => {
+    const service = await Services.findById(req.params.id);
+    if (!service) return res.status(404).json({ msg: "Service not found." });
+    if (service.user.toString() === req.user.id) {
+      return res.status(400).json({ msg: "You cannot contact yourself." });
+    }
+    await Notification.create({
+      user: service.user,
+      itemType: 'Service',
+      itemId: service._id,
+      message: `Someone has contacted your service "${service.title}".`
+    });
+    await Users.findByIdAndUpdate(product.user, {
+  $inc: { points: 1 },
+  $push: { pointsHistory: { points: 1, reason: 'contacted', date: new Date() } }
+});
+    res.json({ msg: "Service owner notified." });
+  },
 }
 
 module.exports = serviceCtrl

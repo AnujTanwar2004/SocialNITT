@@ -1,5 +1,7 @@
 const Products = require('../models/productModel');
 const Notification = require('../models/notificationModel');
+const Users = require('../models/userModel');
+const logToFile = require('../utils/logger');
 
 const productCtrl = {
   createProduct: async (req, res) => {
@@ -38,7 +40,10 @@ const productCtrl = {
       });
 
       await newProduct.save();
-
+      await Users.findByIdAndUpdate(userId, {
+        $inc: { points: 2 },
+        $push: { pointsHistory: { points: 2, reason: 'upload_product', date: new Date() } }
+      }); 
       res.json({ msg: "Product has been created!" });
 
     } catch (err) {
@@ -73,6 +78,9 @@ const productCtrl = {
       if (!updatedProduct)
         return res.status(404).json({ msg: "Product not found." });
 
+      // Log edit
+      logToFile('edit.log', `User ${req.user.id} edited product ${req.params.id}`);
+
       res.json({ msg: "Product Updated Successfully!" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
@@ -103,6 +111,9 @@ const productCtrl = {
         return res.status(403).json({ msg: "Unauthorized: Cannot delete others' product." });
 
       await product.deleteOne();
+
+      // Award 1 point for deleting a product
+      await Users.findByIdAndUpdate(req.user.id, { $inc: { points: 1 } });
 
       res.json({ msg: "Deleted Successfully!" });
     } catch (err) {
@@ -146,6 +157,9 @@ const productCtrl = {
         itemId: product._id,
         message: `Someone has contacted your product "${product.title}". Do you want to delete it now?`
       });
+
+      // Award 1 point to the owner when contacted
+      await Users.findByIdAndUpdate(product.user, { $inc: { points: 1 } });
 
       res.json({ msg: "Product owner notified." });
     } catch (err) {

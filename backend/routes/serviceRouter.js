@@ -14,4 +14,6 @@ router.route('/:id')
     .patch(auth, serviceCtrl.updateService)
     .delete(auth, serviceCtrl.deleteService)
 
+router.post('/contact/:id', auth, serviceCtrl.contactOwner);
+
 module.exports = router

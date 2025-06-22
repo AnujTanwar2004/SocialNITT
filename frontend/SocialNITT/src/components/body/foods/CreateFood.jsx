@@ -32,7 +32,7 @@ function CreateFood() {
     budget,
     location,
     category,
-     urgency,
+    urgency,
     phone,
     err,
     success,
@@ -40,25 +40,34 @@ function CreateFood() {
 
   const { user } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [image, setImage] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const navigate = useNavigate();
 
   const categories = [
-    "Construction & Renovation",
-    "Plumbing & Water",
-    "Electrical",
-    "Cleaning & Maintenance",
-    "Transportation & Logistics",
-    "IT & Technical",
-    "Professional Services",
+    "Wafours",
+    "Dry-Fruits",
+    "South-Indian Cousine",
+    "North-Indian Cousine",
+    "Breakfast",
+    "Snacks",
+    "Extra Food",
     "Others",
   ];
 
-  const FoodTypes = ["One-time", "Recurring", "Project-based"];
   const urgencyLevels = ["Low", "Medium", "High", "Urgent"];
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
     setFood({ ...food, [name]: value, err: "", success: "" });
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+      setImagePreviewUrl(URL.createObjectURL(e.target.files[0]));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -69,7 +78,7 @@ function CreateFood() {
       isEmpty(description) ||
       isEmpty(location) ||
       isEmpty(category) ||
-       isEmpty(phone)
+      isEmpty(phone)
     )
       return setFood({
         ...food,
@@ -95,23 +104,22 @@ function CreateFood() {
       setLoading(true);
 
       const token = localStorage.getItem("accessToken");
-      await axios.post(
-        "/api/foods",
-        {
-          title,
-          description,
-          budget,
-          location,
-          category,
-          urgency,
-          phone,
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("budget", budget);
+      formData.append("location", location);
+      formData.append("category", category);
+      formData.append("urgency", urgency);
+      formData.append("phone", phone);
+      if (image) formData.append("image", image);
+
+      await axios.post("/api/foods", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      });
 
       setFood({
         ...food,
@@ -137,10 +145,45 @@ function CreateFood() {
     <div className="create_product">
       <h2>Post Food Request</h2>
 
+      {showPreview && (
+        <div
+          className="preview-card custom-card"
+          style={{ marginBottom: "2rem" }}
+        >
+          <div className="card-image-wrapper">
+            {imagePreviewUrl && (
+              <img
+                src={imagePreviewUrl}
+                alt="Preview"
+                className="card-image"
+                style={{
+                  width: "100%",
+                  height: "160px",
+                  objectFit: "cover",
+                  borderRadius: "12px 12px 0 0",
+                }}
+              />
+            )}
+          </div>
+          <div className="card-body">
+            <h3 className="card-title">{title}</h3>
+            <p className="card-description">{description}</p>
+            <div className="card-price-date">
+              <span className="card-price">₹ {budget}</span>
+              <span className="card-date">{location}</span>
+            </div>
+            <div style={{ fontSize: "13px", color: "#888" }}>
+              <span>{category}</span> | <span>{phone}</span> |{" "}
+              <span>{urgency}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {err && showErrMsg(err)}
       {success && showSuccessMsg(success)}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div>
           <label htmlFor="title">Food Title*</label>
           <input
@@ -185,13 +228,11 @@ function CreateFood() {
           </select>
         </div>
 
-         
-
         <div>
           <label htmlFor="budget">Budget (₹)*</label>
           <input
             type="number"
-            placeholder="Your budget for this service"
+            placeholder="Food Price"
             id="budget"
             value={budget}
             name="budget"
@@ -243,7 +284,24 @@ function CreateFood() {
           />
         </div>
 
-        <div className="row">
+        <div>
+          <label htmlFor="image">Image (optional)</label>
+          <input
+            type="file"
+            id="image"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </div>
+
+        <div className="row" style={{ display: "flex", gap: "1rem" }}>
+          <button
+            type="button"
+            className="card-button"
+            onClick={() => setShowPreview((prev) => !prev)}
+          >
+            {showPreview ? "Hide Preview" : "Preview"}
+          </button>
           <button type="submit" disabled={loading}>
             {loading ? "Creating..." : "Post Service Request"}
           </button>

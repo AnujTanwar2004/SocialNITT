@@ -9,8 +9,7 @@ import Header from './components/header/Header'
 import Body from './components/body/Body'
 import axios from 'axios'
 import Chatbot from './components/ai/Chatbot'
-
-function App() {
+ function App() {
   const dispatch = useDispatch()
   const { token, user } = useSelector((state) => state.auth)
 
@@ -43,9 +42,9 @@ function App() {
     <Router>
       <div className="App">
         <Header />
-        <Body />
+        <Body/>
         <Chatbot /> {/* <-- Add the chatbot here so it appears on every page */}
-      </div>
+       </div>
     </Router>
   )
 }

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +19,6 @@ const initialState = {
   budget: 0,
   location: "",
   category: "",
-  serviceType: "",
   urgency: "Medium",
   phone: "",
   err: "",
@@ -33,7 +33,6 @@ function CreateService() {
     budget,
     location,
     category,
-    serviceType,
     urgency,
     phone,
     err,
@@ -42,6 +41,9 @@ function CreateService() {
 
   const { user } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [image, setImage] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const navigate = useNavigate();
 
   const categories = [
@@ -55,12 +57,18 @@ function CreateService() {
     "Others",
   ];
 
-  const serviceTypes = ["One-time", "Recurring", "Project-based"];
   const urgencyLevels = ["Low", "Medium", "High", "Urgent"];
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
     setService({ ...service, [name]: value, err: "", success: "" });
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+      setImagePreviewUrl(URL.createObjectURL(e.target.files[0]));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -71,7 +79,6 @@ function CreateService() {
       isEmpty(description) ||
       isEmpty(location) ||
       isEmpty(category) ||
-      isEmpty(serviceType) ||
       isEmpty(phone)
     )
       return setService({
@@ -98,21 +105,23 @@ function CreateService() {
       setLoading(true);
 
       const token = localStorage.getItem("accessToken");
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("budget", budget);
+      formData.append("location", location);
+      formData.append("category", category);
+      formData.append("urgency", urgency);
+      formData.append("phone", phone);
+      if (image) formData.append("image", image);
+
       await axios.post(
         "/api/services",
-        {
-          title,
-          description,
-          budget,
-          location,
-          category,
-          serviceType,
-          urgency,
-          phone,
-        },
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -141,10 +150,41 @@ function CreateService() {
     <div className="create_product">
       <h2>Post Service Request</h2>
 
+      {showPreview && (
+        <div className="preview-card custom-card" style={{ marginBottom: "2rem" }}>
+          <div className="card-image-wrapper">
+            {imagePreviewUrl && (
+              <img
+                src={imagePreviewUrl}
+                alt="Preview"
+                className="card-image"
+                style={{
+                  width: "100%",
+                  height: "160px",
+                  objectFit: "cover",
+                  borderRadius: "12px 12px 0 0",
+                }}
+              />
+            )}
+          </div>
+          <div className="card-body">
+            <h3 className="card-title">{title}</h3>
+            <p className="card-description">{description}</p>
+            <div className="card-price-date">
+              <span className="card-price">₹ {budget}</span>
+              <span className="card-date">{location}</span>
+            </div>
+            <div style={{ fontSize: "13px", color: "#888" }}>
+              <span>{category}</span> | <span>{phone}</span> | <span>{urgency}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {err && showErrMsg(err)}
       {success && showSuccessMsg(success)}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div>
           <label htmlFor="title">Service Title*</label>
           <input
@@ -184,24 +224,6 @@ function CreateService() {
             {categories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="serviceType">Service Type*</label>
-          <select
-            id="serviceType"
-            value={serviceType}
-            name="serviceType"
-            onChange={handleChangeInput}
-            required
-          >
-            <option value="">Select Type</option>
-            {serviceTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
               </option>
             ))}
           </select>
@@ -263,7 +285,24 @@ function CreateService() {
           />
         </div>
 
-        <div className="row">
+        <div>
+          <label htmlFor="image">Image (optional)</label>
+          <input
+            type="file"
+            id="image"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </div>
+
+        <div className="row" style={{ display: "flex", gap: "1rem" }}>
+          <button
+            type="button"
+            className="card-button"
+            onClick={() => setShowPreview((prev) => !prev)}
+          >
+            {showPreview ? "Hide Preview" : "Preview"}
+          </button>
           <button type="submit" disabled={loading}>
             {loading ? "Creating..." : "Post Service Request"}
           </button>

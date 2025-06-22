@@ -1,5 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
+const logToFile = require('../utils/logger');
 
 // Define your default image URL
 const DEFAULT_AVATAR_URL = "/uploads/default-avatar.png";
@@ -43,6 +44,8 @@ const uploadCtrl = {
       const fileUrl = `/uploads/${fileName}`;
       res.json({ url: fileUrl });
 
+      // Log upload
+      logToFile('uploads.log', `User ${req.user?.id || 'unknown'} uploaded avatar: ${fileUrl}`);
     } catch (err) {
       console.error("Upload Error:", err);
       return res.status(500).json({ msg: err.message });

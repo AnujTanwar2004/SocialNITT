@@ -1,4 +1,5 @@
 const Food = require('../models/foodModel')
+const Users = require('../models/userModel')
 
 const foodCtrl = {
   createFood: async (req, res) => {
@@ -34,6 +35,10 @@ const foodCtrl = {
       })
 
       await newFood.save()
+      await Users.findByIdAndUpdate(userId, {
+  $inc: { points: 2 },
+  $push: { pointsHistory: { points: 2, reason: 'upload_product', date: new Date() } }
+});
       res.json({ msg: "Food request created successfully!" })
 
     } catch (err) {
@@ -105,11 +110,33 @@ const foodCtrl = {
         return res.status(403).json({ msg: "Unauthorized: Cannot delete others' food." })
 
       await food.deleteOne()
+      await Users.findByIdAndUpdate(req.user.id, {
+  $inc: { points: 1 },
+  $push: { pointsHistory: { points: 1, reason: 'delete_product', date: new Date() } }
+});
       res.json({ msg: "Food deleted successfully!" })
     } catch (err) {
       return res.status(500).json({ msg: err.message })
     }
-  }
+  },
+  contactOwner: async (req, res) => {
+    const food = await Food.findById(req.params.id);
+    if (!food) return res.status(404).json({ msg: "Food not found." });
+    if (food.user.toString() === req.user.id) {
+      return res.status(400).json({ msg: "You cannot contact yourself." });
+    }
+    await Notification.create({
+      user: food.user,
+      itemType: 'Food',
+      itemId: food._id,
+      message: `Someone has contacted your food request "${food.title}".`
+    });
+    await Users.findByIdAndUpdate(product.user, {
+  $inc: { points: 1 },
+  $push: { pointsHistory: { points: 1, reason: 'contacted', date: new Date() } }
+});
+    res.json({ msg: "Food owner notified." });
+  },
 }
 
 module.exports = foodCtrl
