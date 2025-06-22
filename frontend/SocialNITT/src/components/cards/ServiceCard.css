@@ -19,17 +19,20 @@
   
   .service-card-date {
     font-size: 13px;
-    color:  white;  /* Date text in white */
+    color:  white;  
   }
 
 
 
 .service-card-container {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    justify-content: flex-start;
-}
+    flex-wrap: nowrap;      
+    overflow-x: auto;        
+    gap: 1rem;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #850E35 #fffbe6;
+ }
 
 .service-card {
     width: 260px;

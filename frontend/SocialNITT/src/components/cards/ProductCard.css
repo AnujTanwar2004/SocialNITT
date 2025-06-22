@@ -1,10 +1,21 @@
-  
 .card-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;      /* <-- Change this from wrap to nowrap */
+    overflow-x: auto;       /* <-- Add this for horizontal scroll */
     gap: 1rem;
-    justify-content: flex-start;
-  }
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #850E35 #fffbe6;
+    width: 100%;
+    min-width: 0;
+    align-items: stretch;
+}
+
+.custom-card {
+    flex: 0 0 260px;        /* <-- Prevent shrinking, fixed width */
+    min-width: 260px;
+    max-width: 260px;
+}
 
 .custom-card {
     width: 260px;
