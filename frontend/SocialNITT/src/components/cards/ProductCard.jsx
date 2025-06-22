@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 import { getImageUrl } from "../utils/axiosClient";
 import './ProductCard.css';
 
-
-function ProductCard({ item }) {
+function ProductCard({ item, isProfileView = false, handleDelete, handleArchive }) {
   return (
     <article className="custom-card">
       <Link to={`/view_product/${item._id}`} className="card-link">
@@ -29,9 +28,43 @@ function ProductCard({ item }) {
             <span className="card-price">₹ {item.price}</span>
             <span className="card-date">{item.updatedAt?.slice(0, 10)}</span>
           </div>
-          <button className="card-button">Contact</button>
         </div>
       </Link>
+
+     
+    {/* ACTIONS: Edit / Delete / Archive for Profile */}
+{isProfileView ? (
+  <>
+    {/* Archive/Unarchive button in its own row */}
+    <div className="card-action">
+      <button
+        className="archive-card-button"
+        onClick={() => handleArchive(item._id, item.isArchived)}
+         
+      >
+        {item.isArchived === 1 ? 'Unarchive' : 'Archive'}
+      </button>
+    </div>
+
+    {/* Edit and Delete on the next row */}
+    <div className="edit-delete-card-action">
+      <Link to={`/edit_product/${item._id}`} className="card-edit"   style={{ textAlign: 'center' }}>
+        <i className=" card-edit"></i> Edit
+      </Link>
+      <button
+        className="   card-delete"
+        onClick={() => handleDelete(item._id, item.user, 'product')}
+      >
+        <i className="fas fa-trash"></i> Delete
+      </button>
+    </div>
+  </>
+) : (
+  <div className="card-action">
+    <button className="card-button">Contact</button>
+  </div>
+)}
+
     </article>
   );
 }

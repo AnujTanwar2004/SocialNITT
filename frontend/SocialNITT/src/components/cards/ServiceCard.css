@@ -98,18 +98,19 @@
  
 
 .service-card-description {
-    font-size: 14px;
-    color: #555;
-    line-height: 1.5;
-    font-style: italic;
+    font-size: 13px;
+    color: #444;
+    line-height: 1.4;
+    text-align: left;
+    font-style: normal;
+  
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 2.8em;
-    min-height: 2.8em;
-    max-height: 2.8em;
+    letter-spacing: 1.2;
+    min-height: calc(1.4em * 3); 
 }
 
 .service-card-info {
@@ -132,3 +133,16 @@
     font-size: 14px;
     color: #5b217c;
 }
+.card-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 1rem 1rem;
+    gap: 0.5rem;
+  }
+  
+  .action-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;}
