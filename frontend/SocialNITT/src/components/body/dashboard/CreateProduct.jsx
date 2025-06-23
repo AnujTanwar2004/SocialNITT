@@ -35,6 +35,7 @@ function CreateProduct() {
   const userId = user._id
 
   const [loading, setLoading] = useState(false)
+  const [showPreview, setShowPreview] = useState(false);
   const navigate = useNavigate()
 
   const handleChangeInput = e => {
@@ -191,6 +192,40 @@ const changeAvatar = async e => {
             <button type="submit" disabled={loading || !image}>Create</button>
           </div>
         </form>
+
+        {/* Preview Section */}
+      
+        <button
+  type="button"
+  className="card-button"
+  onClick={() => setShowPreview((prev) => !prev)}
+>
+  {showPreview ? "Hide Preview" : "Preview"}
+</button>
+{showPreview && (
+  <div className="preview-card custom-card" style={{ marginBottom: "2rem" }}>
+    <div className="card-image-wrapper">
+      {image && (
+        <img
+          src={typeof image === "string" && image.startsWith("http") ? image : URL.createObjectURL(image)}
+          alt="Preview"
+          className="card-image"
+        />
+      )}
+    </div>
+    <div className="card-body">
+      <h3 className="card-title">{title}</h3>
+      <p className="card-description">{description}</p>
+      <div className="card-price-date">
+        <span className="card-price">₹ {price}</span>
+        <span className="card-date">{location}</span>
+      </div>
+      <div style={{ fontSize: "13px", color: "#888" }}>
+        <span>{category}</span> | <span>{phone}</span>
+      </div>
+    </div>
+  </div>
+)}
       </div>
     </>
   )

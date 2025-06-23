@@ -9,7 +9,7 @@
   padding: 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-wrap: wrap;
 }
 
@@ -91,9 +91,8 @@
 
 /* Search Bar */
 .search-form-primary {
-  max-width: 28rem;
-  padding: 0px 1rem 0px 1rem;
-  margin: 3rem auto 0px auto;
+  max-width: 40rem;
+   align-self: center;
 }
 
 .search-form-primary .search-form-container {
@@ -129,14 +128,17 @@
 
 /* Cards Dashboard */
 .cards-primary {
-  margin: 3rem auto 0px auto;
-  padding: 0px 1rem 0px 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+   padding: 1rem 1rem 1rem 1rem;
   max-width: 1280px;
 }
 
 @media (min-width: 1024px) {
   .cards-primary {
-    padding: 0px 2rem 0px 2rem;
+    padding: 1rem 2rem 1rem 2rem;
+    margin-top: 0px;
   }
 }
 

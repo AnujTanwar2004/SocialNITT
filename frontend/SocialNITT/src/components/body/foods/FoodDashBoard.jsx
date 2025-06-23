@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchFoods } from "../../../redux/slices/foodSlice";
+import ServiceCard from "../../cards/ServiceCard"; // <-- Import ServiceCard
 import { getImageUrl } from '../../utils/axiosClient';
 
 function FoodsDashboard() {
@@ -60,8 +61,37 @@ function FoodsDashboard() {
               <p>
                 <Link to="/create_food">Post Food Request</Link>
               </p>
-              </div>
+            </div>
           </div>
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="search-form-primary"
+          >
+            <div className="search-form-container">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="search-icon"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                type="text"
+                placeholder="Search foods..."
+                className="search-input"
+                onChange={(event) => {
+                  setSearchTerm(event.target.value);
+                }}
+              />
+            </div>
+          </form>
         </div>
       </section>
 
@@ -73,37 +103,6 @@ function FoodsDashboard() {
             needs.
           </p>
         </div>
-
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="search-form-primary"
-        >
-          <div className="search-form-container">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="search-icon"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search foods..."
-              className="search-input"
-              onChange={(event) => {
-                setSearchTerm(event.target.value);
-              }}
-            />
-          </div>
-        </form>
-
         <div className="card-container">
           {foods &&
             foods
@@ -114,69 +113,15 @@ function FoodsDashboard() {
                   item.category.toLowerCase().includes(searchTerm.toLowerCase())
                 );
               })
-              .map((item, key) =>
+              .map((item) =>
                 !item.isArchived ? (
-                  <article className="card" key={item._id}>
-                    <Link to={`/view_food/${item._id}`}>
-                      {/* Add image display for foods */}
-                      {item.image && (
-                        <img 
-                          src={getImageUrl(item.image)} 
-                          loading="lazy" 
-                          alt={item.title} 
-                          className="w-full h-48 rounded-tl-md rounded-tr-md"
-                          onError={(e) => {
-                            e.target.src = 'http://localhost:5000/uploads/default-avatar.png'
-                          }}
-                        />
-                      )}
-                      <div className="service-card-header">
-                        <div className="service-info">
-                          <span className="service-budget">
-                            ₹ {item.budget}
-                          </span>
-                          <span className="service-date">
-                            {new Date(item.updatedAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <div className="service-badges">
-                          <span
-                            className="urgency-badge"
-                            style={{
-                              backgroundColor: getUrgencyColor(item.urgency),
-                            }}
-                          >
-                            {item.urgency}
-                          </span>
-                          <span
-                            className="status-badge"
-                            style={{
-                              backgroundColor: getStatusColor(item.status),
-                            }}
-                          >
-                            {item.status}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="service-content">
-                        <h3>{item.title}</h3>
-                        <p className="service-description">
-                          {item.description}
-                        </p>
-                        <div className="service-details">
-                          <span className="service-category">
-                            📋 {item.category}
-                          </span>
-                           <span className="service-location">
-                            📍 {item.location}
-                          </span>
-                        </div>
-                        <div className="service-contact">
-                          <span>👤 {item.user?.name || "Anonymous"}</span>
-                        </div>
-                      </div>
-                    </Link>
-                  </article>
+                  <ServiceCard
+                    key={item._id}
+                    item={item}
+                    type="food"
+                    getUrgencyColor={getUrgencyColor}
+                    getStatusColor={getStatusColor}
+                  />
                 ) : null
               )}
         </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchServices } from "../../../redux/slices/serviceSlice";
+import ServiceCard from "../../cards/ServiceCard"; // <-- Make sure this path is correct
 
 function ServicesDashboard() {
   const dispatch = useDispatch();
@@ -13,7 +14,6 @@ function ServicesDashboard() {
   const status = useSelector((state) => state.services.status);
 
   const [searchTerm, setSearchTerm] = useState("");
-
   useEffect(() => {
     if (isLogged && status === "idle") {
       dispatch(fetchServices());
@@ -59,8 +59,37 @@ function ServicesDashboard() {
               <p>
                 <Link to="/create_service">Post Service Request</Link>
               </p>
-              </div>
+            </div>
           </div>
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="search-form-primary"
+          >
+            <div className="search-form-container">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="search-icon"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                type="text"
+                placeholder="Search services..."
+                className="search-input"
+                onChange={(event) => {
+                  setSearchTerm(event.target.value);
+                }}
+              />
+            </div>
+          </form>
         </div>
       </section>
 
@@ -72,37 +101,6 @@ function ServicesDashboard() {
             needs.
           </p>
         </div>
-
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="search-form-primary"
-        >
-          <div className="search-form-container">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="search-icon"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search services..."
-              className="search-input"
-              onChange={(event) => {
-                setSearchTerm(event.target.value);
-              }}
-            />
-          </div>
-        </form>
-
         <div className="card-container">
           {services &&
             services
@@ -113,60 +111,14 @@ function ServicesDashboard() {
                   item.category.toLowerCase().includes(searchTerm.toLowerCase())
                 );
               })
-              .map((item, key) =>
+              .map((item) =>
                 !item.isArchived ? (
-                  <article className="card" key={item._id}>
-                    <Link to={`/view_service/${item._id}`}>
-                      <div className="service-card-header">
-                        <div className="service-info">
-                          <span className="service-budget">
-                            ₹ {item.budget}
-                          </span>
-                          <span className="service-date">
-                            {new Date(item.updatedAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <div className="service-badges">
-                          <span
-                            className="urgency-badge"
-                            style={{
-                              backgroundColor: getUrgencyColor(item.urgency),
-                            }}
-                          >
-                            {item.urgency}
-                          </span>
-                          <span
-                            className="status-badge"
-                            style={{
-                              backgroundColor: getStatusColor(item.status),
-                            }}
-                          >
-                            {item.status}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="service-content">
-                        <h3>{item.title}</h3>
-                        <p className="service-description">
-                          {item.description}
-                        </p>
-                        <div className="service-details">
-                          <span className="service-category">
-                            📋 {item.category}
-                          </span>
-                          <span className="service-type">
-                            🔄 {item.serviceType}
-                          </span>
-                          <span className="service-location">
-                            📍 {item.location}
-                          </span>
-                        </div>
-                        <div className="service-contact">
-                          <span>👤 {item.user?.name || "Anonymous"}</span>
-                        </div>
-                      </div>
-                    </Link>
-                  </article>
+                  <ServiceCard
+                    key={item._id}
+                    item={item}
+                    getUrgencyColor={getUrgencyColor}
+                    getStatusColor={getStatusColor}
+                  />
                 ) : null
               )}
         </div>
