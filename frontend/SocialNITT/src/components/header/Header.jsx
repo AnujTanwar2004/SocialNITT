@@ -40,7 +40,13 @@ function Header() {
       <li><Link to="/products">🛍️ Products</Link></li>
       <li><Link to="/services">🔧 Services</Link></li>
       <li><Link to="/foods">🤤 Food</Link></li>
-       <NotificationBell />
+      {/* Show Admin Dashboard link only for admin */}
+      {user?.role === 1 && (
+        <li>
+          <Link to="/admin">🛡️ Admin Dashboard</Link>
+        </li>
+      )}
+      <NotificationBell />
     </>
   );
 

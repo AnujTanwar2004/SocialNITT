@@ -139,6 +139,43 @@ const serviceCtrl = {
 });
     res.json({ msg: "Service owner notified." });
   },
+
+  // ADMIN: Delete any service (no ownership check)
+  adminDeleteService: async (req, res) => {
+    try {
+      const service = await Services.findById(req.params.id);
+
+      if (!service)
+        return res.status(404).json({ msg: "Service not found." });
+
+      await service.deleteOne();
+      res.json({ msg: "Service deleted successfully!" });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
+  // ADMIN: Update any service (no ownership check)
+  adminUpdateService: async (req, res) => {
+    try {
+      const {
+        title, description, budget, location, category, serviceType, urgency, phone, status, isArchived
+      } = req.body;
+
+      const updatedService = await Services.findByIdAndUpdate(
+        req.params.id,
+        { title, description, budget, location, category, serviceType, urgency, phone, status, isArchived },
+        { new: true }
+      );
+
+      if (!updatedService)
+        return res.status(404).json({ msg: "Service not found." });
+
+      res.json({ msg: "Service updated successfully!" });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
 }
 
 module.exports = serviceCtrl

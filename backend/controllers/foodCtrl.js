@@ -137,6 +137,43 @@ const foodCtrl = {
 });
     res.json({ msg: "Food owner notified." });
   },
+
+  // ADMIN: Delete any food (no ownership check)
+  adminDeleteFood: async (req, res) => {
+    try {
+      const food = await Food.findById(req.params.id);
+
+      if (!food)
+        return res.status(404).json({ msg: "Food not found." });
+
+      await food.deleteOne();
+      res.json({ msg: "Food deleted successfully!" });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
+  // ADMIN: Update any food (no ownership check)
+  adminUpdateFood: async (req, res) => {
+    try {
+      const {
+        title, description, budget, location, category, urgency, phone, status, isArchived
+      } = req.body;
+
+      const updatedFood = await Food.findByIdAndUpdate(
+        req.params.id,
+        { title, description, budget, location, category, urgency, phone, status, isArchived },
+        { new: true }
+      );
+
+      if (!updatedFood)
+        return res.status(404).json({ msg: "Food not found." });
+
+      res.json({ msg: "Food updated successfully!" });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
 }
 
 module.exports = foodCtrl
