@@ -60,15 +60,18 @@ function Hero() {
   };
 
   const renderProducts = (items) => (
-    <div className="card-container">
+    <div className="  card-slider-container">
+    <div className="  card-slider">
       {items.map((item) =>
         !item.isArchived ? <ProductCard key={item._id} item={item} /> : null
       )}
     </div>
+    </div>
   );
 
   const renderServicesOrFoods = (items, type) => (
-    <div className="card-container">
+    <div className="  card-slider-container">
+    <div className="  card-slider">
       {items.map((item) =>
         !item.isArchived ? (
           <ServiceCard
@@ -80,6 +83,7 @@ function Hero() {
           />
         ) : null
       )}
+    </div>
     </div>
   );
 
@@ -104,7 +108,7 @@ function Hero() {
       <div className="hero-section">
         <div className="hero-section-header">
           <h2>Services</h2>
-          <Link to="/services" className="cta-ctn">
+          <Link to="/services" className="cta-btn">
             See More Services
           </Link>
         </div>

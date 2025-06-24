@@ -4,3 +4,11 @@
     border-radius: 5px;
     height: 30px;
 }
+.hero-section-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cta-btn{
+  color: blue;
+}
