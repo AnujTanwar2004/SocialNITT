@@ -5,6 +5,118 @@ import ServiceCard from "../../cards/ServiceCard";
 import { Link, useNavigate } from "react-router-dom";
 import "./adminDashboard.css";
 
+// Move SearchBar component outside to prevent re-creation - FIXED VERSION
+const SearchBar = React.memo(({ searchTerm, setSearchTerm, placeholder, resultCount }) => {
+  return (
+    <div className="search-container">
+      <div className="search-input-wrapper">
+        <input
+          type="text"
+          placeholder={placeholder}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
+          autoComplete="off"
+        />
+        {searchTerm && (
+          <button 
+            className="clear-search-btn"
+            onClick={() => setSearchTerm('')}
+            title="Clear search"
+            type="button"
+          >
+            ✕
+          </button>
+        )}
+      </div>
+      {searchTerm && (
+        <div className="search-info">
+          <span className="search-results">
+            Found {resultCount} result{resultCount !== 1 ? 's' : ''}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+});
+
+// Move Pagination component outside to prevent re-creation - FIXED VERSION
+const Pagination = React.memo(({ totalItems, currentPage, setCurrentPage, itemsPerPage = 5 }) => {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1);
+        pages.push('...');
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(totalPages);
+      }
+    }
+    return pages;
+  };
+
+  const pageNumbers = getPageNumbers();
+
+  if (totalPages <= 1) return null;
+
+  return (
+    <div className="pagination-container">
+      <button 
+        className="pagination-btn prev-btn"
+        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+        disabled={currentPage === 1}
+      >
+        Prev
+      </button>
+      
+      {pageNumbers.map((page, index) => (
+        page === '...' ? (
+          <span key={index} className="pagination-ellipsis">...</span>
+        ) : (
+          <button
+            key={index}
+            className={`pagination-btn ${currentPage === page ? 'active' : ''}`}
+            onClick={() => setCurrentPage(page)}
+          >
+            {page}
+          </button>
+        )
+      ))}
+      
+      <button 
+        className="pagination-btn next-btn"
+        onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+        disabled={currentPage === totalPages}
+      >
+        Next
+      </button>
+    </div>
+  );
+});
+
 function AdminDashboard() {
   const [products, setProducts] = useState([]);
   const [services, setServices] = useState([]);
@@ -83,7 +195,7 @@ function AdminDashboard() {
     return data.slice(startIndex, endIndex);
   };
 
-  // Search handlers to prevent state issues
+  // Search handlers to prevent state issues - STABLE REFERENCES
   const handleUserSearch = useCallback((value) => {
     setUserSearch(value);
   }, []);
@@ -99,130 +211,6 @@ function AdminDashboard() {
   const handleFoodSearch = useCallback((value) => {
     setFoodSearch(value);
   }, []);
-
-  // Page numbers generator
-  const getPageNumbers = (totalItems, currentPage) => {
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const pages = [];
-    const maxVisiblePages = 5;
-    
-    if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      if (currentPage <= 3) {
-        for (let i = 1; i <= 4; i++) {
-          pages.push(i);
-        }
-        pages.push('...');
-        pages.push(totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        pages.push(1);
-        pages.push('...');
-        for (let i = totalPages - 3; i <= totalPages; i++) {
-          pages.push(i);
-        }
-      } else {
-        pages.push(1);
-        pages.push('...');
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-          pages.push(i);
-        }
-        pages.push('...');
-        pages.push(totalPages);
-      }
-    }
-    return pages;
-  };
-
-  // Search component with proper event handling
-  const SearchBar = ({ searchTerm, setSearchTerm, placeholder, resultCount }) => {
-    const handleSearchChange = (e) => {
-      e.preventDefault();
-      const value = e.target.value;
-      setSearchTerm(value);
-    };
-
-    const handleClearSearch = (e) => {
-      e.preventDefault();
-      setSearchTerm('');
-    };
-
-    return (
-      <div className="search-container">
-        <div className="search-input-wrapper">
-          <input
-            type="text"
-            placeholder={placeholder}
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="search-input"
-            autoComplete="off"
-          />
-          {searchTerm && (
-            <button 
-              className="clear-search-btn"
-              onClick={handleClearSearch}
-              title="Clear search"
-              type="button"
-            >
-              ✕
-            </button>
-          )}
-        </div>
-        {searchTerm && (
-          <div className="search-info">
-            <span className="search-results">
-              Found {resultCount} result{resultCount !== 1 ? 's' : ''}
-            </span>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  // Pagination component
-  const Pagination = ({ totalItems, currentPage, setCurrentPage }) => {
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const pageNumbers = getPageNumbers(totalItems, currentPage);
-
-    if (totalPages <= 1) return null;
-
-    return (
-      <div className="pagination-container">
-        <button 
-          className="pagination-btn prev-btn"
-          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-          disabled={currentPage === 1}
-        >
-          Prev
-        </button>
-        
-        {pageNumbers.map((page, index) => (
-          page === '...' ? (
-            <span key={index} className="pagination-ellipsis">...</span>
-          ) : (
-            <button
-              key={index}
-              className={`pagination-btn ${currentPage === page ? 'active' : ''}`}
-              onClick={() => setCurrentPage(page)}
-            >
-              {page}
-            </button>
-          )
-        ))}
-        
-        <button 
-          className="pagination-btn next-btn"
-          onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>
-    );
-  };
 
   // Delete handlers
   const handleDeleteProduct = (id) => {
@@ -323,6 +311,7 @@ function AdminDashboard() {
                 totalItems={filteredUsers.length}
                 currentPage={userPage}
                 setCurrentPage={setUserPage}
+                itemsPerPage={itemsPerPage}
               />
             </>
           )}
@@ -365,6 +354,7 @@ function AdminDashboard() {
                 totalItems={filteredProducts.length}
                 currentPage={productPage}
                 setCurrentPage={setProductPage}
+                itemsPerPage={itemsPerPage}
               />
             </>
           )}
@@ -407,6 +397,7 @@ function AdminDashboard() {
                 totalItems={filteredServices.length}
                 currentPage={servicePage}
                 setCurrentPage={setServicePage}
+                itemsPerPage={itemsPerPage}
               />
             </>
           )}
@@ -454,6 +445,7 @@ function AdminDashboard() {
                 totalItems={filteredFoods.length}
                 currentPage={foodPage}
                 setCurrentPage={setFoodPage}
+                itemsPerPage={itemsPerPage}
               />
             </>
           )}

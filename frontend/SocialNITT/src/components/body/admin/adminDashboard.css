@@ -2,17 +2,17 @@
 
 .admin-dashboard {
   padding: 2rem;
-  background: #f8f9fa;
+  background: #FFF5E4;
   min-height: 100vh;
 }
 
 .admin-title {
   text-align: center;
   margin-bottom: 2rem;
-  color: #2c3e50;
+  color: #850E35;
   font-size: 2.5rem;
   font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-shadow: 0 2px 4px rgba(133, 14, 53, 0.1);
 }
 
 .admin-section {
@@ -25,7 +25,7 @@
 }
 
 .adminHead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #850E35 0%, #EE6983 100%);
   color: white;
   margin: 0;
   padding: 1.5rem 2rem;
@@ -44,11 +44,11 @@
   border-radius: 2px;
 }
 
-/* Search Styles */
+/* Search Styles - Better version with clear button */
 .search-container {
   padding: 1.5rem 2rem 1rem;
   border-bottom: 1px solid #e9ecef;
-  background: #f8f9fa;
+  background: #FFF5E4;
 }
 
 .search-input-wrapper {
@@ -66,13 +66,13 @@
   font-size: 14px;
   background: white;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(133, 14, 53, 0.05);
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #850E35;
+  box-shadow: 0 0 0 3px rgba(133, 14, 53, 0.1);
   transform: translateY(-1px);
 }
 
@@ -86,7 +86,7 @@
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  background: #6c757d;
+  background: #850E35;
   color: white;
   border: none;
   width: 24px;
@@ -101,7 +101,7 @@
 }
 
 .clear-search-btn:hover {
-  background: #495057;
+  background: #6b0d2a;
   transform: translateY(-50%) scale(1.1);
 }
 
@@ -135,7 +135,7 @@
 }
 
 .admin-table th {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #850E35 0%, #EE6983 100%);
   color: white;
   padding: 16px;
   text-align: left;
@@ -363,18 +363,18 @@
 }
 
 .pagination-btn:hover:not(:disabled) {
-  background: #667eea;
-  border-color: #667eea;
+  background: #850E35;
+  border-color: #850E35;
   color: white;
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 8px rgba(133, 14, 53, 0.3);
 }
 
 .pagination-btn.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-color: #667eea;
+  background: linear-gradient(135deg, #850E35, #EE6983);
+  border-color: #850E35;
   color: white;
-  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 8px rgba(133, 14, 53, 0.4);
 }
 
 .pagination-btn:disabled {
@@ -402,18 +402,19 @@
 .no-results {
   text-align: center;
   padding: 3rem 2rem;
-  color: #6c757d;
+  color: #850E35;
   font-size: 16px;
   font-style: italic;
-  background: #f8f9fa;
+  background: #ffffff;
   border-radius: 8px;
-  border: 2px dashed #dee2e6;
+  border: 2px dashed rgba(133, 14, 53, 0.3);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .admin-dashboard {
     padding: 1rem;
+    background: #FFF5E4;
   }
   
   .admin-title {
@@ -422,6 +423,7 @@
   
   .search-container {
     padding: 1rem;
+    background: #FFF5E4;
   }
   
   .users-table-container,
