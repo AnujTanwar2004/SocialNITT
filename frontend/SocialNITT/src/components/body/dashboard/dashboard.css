@@ -3,8 +3,8 @@
 /* Enhanced CTA Primary Section */
 .cta-primary {
   max-width: 1280px;
-  margin: 30px auto;
-  padding: 2rem;
+  margin: 5px auto;
+  padding: 0.5rem;
   background: #FFF5E4;
   border-radius: 16px;
   box-shadow: 0 4px 15px rgba(133, 14, 53, 0.1);
@@ -79,7 +79,7 @@
 .cta-primary .cta-container .cta-btn p a {
   display: inline-flex;
   align-items: center;
-  padding: 12px 24px;
+  padding: 6px 12px;
   color: white;
   text-decoration: none;
   font-weight: 700;
@@ -116,7 +116,7 @@
 }
 
 .cta-primary .cta-image {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .cta-primary .cta-image img {
@@ -902,7 +902,7 @@ label {
   }
   
   .cta-primary .cta-image {
-    margin: 20px 0 0 0;
+    margin: 10px 0 0 0;
   }
   
   .cta-secondary {
@@ -947,7 +947,7 @@ label {
 
 @media (max-width: 480px) {
   .cta-primary {
-    margin: 20px auto;
+    margin: 10px auto;
     padding: 1rem;
   }
   
@@ -1114,8 +1114,8 @@ label {
 /* Enhanced CTA Primary Section */
 .cta-primary {
   max-width: 1280px;
-  margin: 30px auto;
-  padding: 2rem;
+  margin: 15px auto;
+  padding: 1.4rem;
   background: #FFF5E4;
   border-radius: 16px;
   box-shadow: 0 4px 15px rgba(133, 14, 53, 0.1);
