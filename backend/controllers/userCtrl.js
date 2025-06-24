@@ -302,7 +302,30 @@ const userCtrl = {
       console.error(err);
       res.status(500).json({ msg: "Error deleting product." });
     }
-  },
+  },// Add this method to userCtrl object
+getAllUsers: async (req, res) => {
+  try {
+    const users = await Users.find({})
+      .select("-password") // Exclude password field
+      .sort({ createdAt: -1 }); // Sort by newest first
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+},
+
+// Admin delete user
+adminDeleteUser: async (req, res) => {
+  try {
+    const user = await Users.findById(req.params.id);
+    if (!user) return res.status(404).json({ msg: "User not found." });
+    
+    await user.deleteOne();
+    res.json({ msg: "User deleted successfully!" });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+},
 };
 
 function validateEmail(email) {

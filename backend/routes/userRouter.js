@@ -23,4 +23,12 @@ router.patch("/update", auth, userCtrl.updateUser);
 router.get('/top-users', require('../controllers/userCtrl').getTopUsers);
 router.get('/top-users-week', require('../controllers/userCtrl').getTopUsersWeek);
 
+//  admin routes
+const admin = require("../middleware/admin");
+
+// Admin: Get all users
+router.get("/admin/all", auth, admin, userCtrl.getAllUsers);
+
+// Admin: Delete user
+router.delete("/admin/:id", auth, admin, userCtrl.adminDeleteUser);
 module.exports = router;
