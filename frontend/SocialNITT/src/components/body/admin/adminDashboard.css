@@ -1,3 +1,6 @@
+/* container */
+ 
+
 /* AdminDashboard.css */
 
 .admin-dashboard {
@@ -25,7 +28,7 @@
 }
 
 .adminHead {
-  background: linear-gradient(135deg, #850E35 0%, #EE6983 100%);
+  background: #A6344B;
   color: white;
   margin: 0;
   padding: 1.5rem 2rem;
@@ -135,7 +138,8 @@
 }
 
 .admin-table th {
-  background: linear-gradient(135deg, #850E35 0%, #EE6983 100%);
+  border: 2px solid #ffffff; 
+  background: #A6344B;
   color: white;
   padding: 16px;
   text-align: left;
@@ -143,6 +147,7 @@
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  border-radius: 10px;
 }
 
 .admin-table td {
@@ -222,118 +227,10 @@
   padding: 2rem;
 }
 
-.card-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
+
 
 /* Custom Card for Foods */
-.custom-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  overflow: hidden;
-  transition: all 0.3s ease;
-  border: 1px solid #e9ecef;
-}
-
-.custom-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-}
-
-.card-body {
-  padding: 1.5rem;
-}
-
-.card-title {
-  color: #2c3e50;
-  margin-bottom: 0.75rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.card-description {
-  color: #6c757d;
-  margin-bottom: 1rem;
-  font-size: 14px;
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.card-price-date {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-}
-
-.card-price {
-  font-weight: 700;
-  color: #28a745;
-  font-size: 1.1rem;
-}
-
-.card-date {
-  color: #6c757d;
-  font-size: 13px;
-}
-
-.card-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 1rem;
-}
-
-.card-edit, .edit-link {
-  background: linear-gradient(135deg, #17a2b8, #138496);
-  color: white;
-  text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-  display: inline-block;
-  text-align: center;
-}
-
-.card-edit:hover, .edit-link:hover {
-  background: linear-gradient(135deg, #138496, #117a8b);
-  transform: translateY(-1px);
-  text-decoration: none;
-  color: white;
-}
-
-.card-delete {
-  background: linear-gradient(135deg, #dc3545, #c82333);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-}
-
-.card-delete:hover {
-  background: linear-gradient(135deg, #c82333, #bd2130);
-  transform: translateY(-1px);
-}
+ 
 
 /* Pagination Styles */
 .pagination-container {

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProducts } from "../../../redux/slices/productSlice";
-import ProductCard from '../../cards/ProductCard'; // ✅ Ensure correct relative path
- 
+import ProductCard from '../../cards/ProductCard';
 
 function Dashboard() {
   const dispatch = useDispatch();
@@ -21,6 +20,14 @@ function Dashboard() {
       dispatch(fetchProducts());
     }
   }, [isLogged, dispatch, status]);
+
+  // Sort products to show latest first
+  const sortedProducts = products ? [...products].sort((a, b) => {
+    // Sort by updatedAt (most recent first), fallback to createdAt if updatedAt doesn't exist
+    const dateA = new Date(a.updatedAt || a.createdAt);
+    const dateB = new Date(b.updatedAt || b.createdAt);
+    return dateB - dateA; // Descending order (latest first)
+  }) : [];
 
   return (
     <>
@@ -40,8 +47,9 @@ function Dashboard() {
               </svg>
               <input
                 type="text"
-                placeholder="Search"
+                placeholder="Search products..."
                 className="search-input"
+                value={searchTerm}
                 onChange={(event) => {
                   setSearchTerm(event.target.value);
                 }}
@@ -59,10 +67,13 @@ function Dashboard() {
 
         {/* Card container using ProductCard */}
         <div className="card-container">
-          {products && products
+          {sortedProducts
             .filter((item) => {
               if (searchTerm === "") return true;
-              return item.title.toLowerCase().includes(searchTerm.toLowerCase());
+              return (
+                item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.description.toLowerCase().includes(searchTerm.toLowerCase())
+              );
             })
             .map((item) =>
               !item.isArchived ? (
@@ -70,6 +81,25 @@ function Dashboard() {
               ) : null
             )}
         </div>
+
+        {/* Show message when no products found */}
+        {sortedProducts
+          .filter((item) => {
+            if (searchTerm === "") return true;
+            return (
+              item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              item.description.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+          })
+          .filter(item => !item.isArchived).length === 0 && (
+          <div className="empty-state">
+            {searchTerm ? (
+              <p>No products found matching "{searchTerm}"</p>
+            ) : (
+              <p>No products available at the moment.</p>
+            )}
+          </div>
+        )}
       </section>
     </>
   );

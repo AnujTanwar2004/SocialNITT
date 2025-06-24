@@ -136,7 +136,7 @@ function Hero() {
 
       {/* Top Users Leaderboard (All Time) */}
       <hr style={{ margin: "2rem 0" }} />
-      <div className="hero-section">
+      <div className="hero-section  ">
         <h2>🏆 Top Contributors (All Time)</h2>
         <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
           {topUsers.map((user, idx) => (
@@ -175,7 +175,7 @@ function Hero() {
 
       {/* Top Users Leaderboard (This Week) */}
       <hr style={{ margin: "2rem 0" }} />
-      <div className="hero-section">
+      <div className="hero-section ">
         <h2>🔥 Top Contributors (This Week)</h2>
         <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
           {topUsersWeek.map((user, idx) => (

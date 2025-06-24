@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchFoods } from "../../../redux/slices/foodSlice";
-import ServiceCard from "../../cards/ServiceCard"; // <-- Import ServiceCard
-import { getImageUrl } from '../../utils/axiosClient';
+import ServiceCard from "../../cards/ServiceCard";
+import { getImageUrl } from "../../utils/axiosClient";
 
 function FoodsDashboard() {
   const dispatch = useDispatch();
@@ -113,6 +113,9 @@ function FoodsDashboard() {
                   item.category.toLowerCase().includes(searchTerm.toLowerCase())
                 );
               })
+              .sort(
+                (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+              )
               .map((item) =>
                 !item.isArchived ? (
                   <ServiceCard

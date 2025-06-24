@@ -1,5 +1,5 @@
 .service-card-header {
-    background: #850E35;  /* Set background to black */
+    background: #A6344B;  /* Set background to black */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -24,12 +24,7 @@
 
 
 
-.card-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    justify-content: flex-start;
-}
+
 
 .service-card {
     width: 260px;
