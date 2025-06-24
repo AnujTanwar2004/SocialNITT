@@ -10,6 +10,8 @@ import { fetchFoods } from "../../../redux/slices/foodSlice";
 import { getImageUrl } from '../../utils/axiosClient';
 import ProductCard from "../../cards/ProductCard";
 import ServiceCard from "../../cards/ServiceCard";
+import FoodCard from '../../cards/FoodCard';
+
 
 
 const initialState = {
@@ -241,22 +243,27 @@ function Profile() {
             <div className="cards-header">
               <h2>MY PRODUCTS</h2>
             </div>
-            <div className="card-container">
-              {products.map((item) =>
-                item.user === user._id ? (
-                  <ProductCard
-            key={item._id}
-            item={item}
-            isProfileView={true}
-            handleDelete={handleDelete}
-            handleArchive={handleArchive}
-                />
-
-                ) : null
-              )}
-            </div>
+            <div className="  card-slider-container">
+      <div className="  card-slider">
+        {products.map((item) =>
+          item.user === user._id ? (
+            <ProductCard
+              key={item._id}
+              item={item}
+              isProfileView={true}
+              handleDelete={handleDelete}
+              handleArchive={handleArchive}
+            />
+          ) : null
+        )}
+      </div>
+    </div>
           </div>
           {/* Services Section */}
+          <div className="cards-primary">
+            <div className="cards-header">
+              <h2>MY SERVICES</h2>
+            </div>
           <div className="card-container">
   {services.map((item) => {
     const itemUserId = getUserId(item);
@@ -274,55 +281,32 @@ function Profile() {
     ) : null;
   })}
 </div>
+</div>
 
+{/* Foods Section */}
+<div className="cards-primary">
+  <div className="cards-header">
+    <h2>MY FOODS</h2>
+  </div>
+  <div className="card-container">
+    {foods.map((item) => {
+      const itemUserId = getUserId(item);
+      return itemUserId === user._id ? (
+        <FoodCard
+          key={item._id}
+          item={item}
+          type="food"
+          getUrgencyColor={getUrgencyColor}
+          getStatusColor={getStatusColor}
+          isProfileView={true}
+          handleDelete={handleDelete}
+          handleArchive={handleArchive}
+        />
+      ) : null;
+    })}
+  </div>
+</div>
 
-          {/* Foods Section */}
-          <div className="cards-primary">
-            <div className="cards-header">
-              <h2>MY FOODS</h2>
-            </div>
-            <div className="card-container">
-              {foods.map((item) => {
-                const itemUserId = getUserId(item);
-                return itemUserId === user._id ? (
-                  <article className="card" key={item._id}>
-                    <Link to={`/view_food/${item._id}`}>
-                      <img 
-                        src={getImageUrl(item.image) || 'http://localhost:5000/uploads/default-avatar.png'} 
-                        loading="lazy" 
-                        alt={item.title} 
-                        className="w-full h-48 rounded-tl-md rounded-tr-md"
-                        onError={(e) => {
-                          e.target.src = 'http://localhost:5000/uploads/default-avatar.png'
-                        }}
-                      />
-                      <div className="card-header">
-                        <div className="info">
-                          <span className="cost">₹ {item.budget}</span>
-                          <span className="date">{formatDate(item.updatedAt)}</span>
-                        </div>
-                      </div>
-                      <div className="card-footer">
-                        <h3>{item.title}</h3>
-                        <p>{item.description}</p>
-                      </div>
-                    </Link>
-                    <div className="card-archive">
-                      <p>ARCHIVED:&nbsp;
-                        {item.isArchived === 1 ? <i className="fas fa-check"></i> : <i className="fas fa-times"></i>}
-                      </p>
-                    </div>
-                    <div className="card-actions">
-                      <Link to={`/edit_food/${item._id}`}>
-                        <i className="fas fa-edit"> Edit</i>
-                      </Link>
-                      <button onClick={() => handleDelete(item._id, itemUserId, 'food')}>Delete</button>
-                    </div>
-                  </article>
-                ) : null;
-              })}
-            </div>
-          </div>
         </div>
       </div>
     </>
