@@ -1,8 +1,7 @@
-
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosClient from "../../utils/axiosClient"; // ✅ Changed: Use axiosClient instead of axios
 import {
   isEmpty,
   priceValidate,
@@ -42,8 +41,7 @@ function CreateService() {
   const { user } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
-  const [image, setImage] = useState(null);
-  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+
   const navigate = useNavigate();
 
   const categories = [
@@ -64,12 +62,7 @@ function CreateService() {
     setService({ ...service, [name]: value, err: "", success: "" });
   };
 
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
-      setImagePreviewUrl(URL.createObjectURL(e.target.files[0]));
-    }
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -104,27 +97,23 @@ function CreateService() {
     try {
       setLoading(true);
 
-      const token = localStorage.getItem("accessToken");
+      // ✅ ONLY CHANGE: Remove manual token handling
       const formData = new FormData();
       formData.append("title", title);
       formData.append("description", description);
       formData.append("budget", budget);
       formData.append("location", location);
       formData.append("category", category);
+      formData.append("serviceType", "One-time"); // Changed to match your model's enum
       formData.append("urgency", urgency);
       formData.append("phone", phone);
-      if (image) formData.append("image", image);
 
-      await axios.post(
-        "/api/services",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axiosClient.post("/api/services", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          // ✅ REMOVED: No manual Authorization header
+        },
+      });
 
       setService({
         ...service,
@@ -152,21 +141,6 @@ function CreateService() {
 
       {showPreview && (
         <div className="preview-card custom-card" style={{ marginBottom: "2rem" }}>
-          <div className="card-image-wrapper">
-            {imagePreviewUrl && (
-              <img
-                src={imagePreviewUrl}
-                alt="Preview"
-                className="card-image"
-                style={{
-                  width: "100%",
-                  height: "160px",
-                  objectFit: "cover",
-                  borderRadius: "12px 12px 0 0",
-                }}
-              />
-            )}
-          </div>
           <div className="card-body">
             <h3 className="card-title">{title}</h3>
             <p className="card-description">{description}</p>
@@ -285,15 +259,7 @@ function CreateService() {
           />
         </div>
 
-        <div>
-          <label htmlFor="image">Image (optional)</label>
-          <input
-            type="file"
-            id="image"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </div>
+
 
         <div className="row" style={{ display: "flex", gap: "1rem" }}>
           <button

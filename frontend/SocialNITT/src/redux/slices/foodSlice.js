@@ -5,12 +5,8 @@ export const fetchFoods = createAsyncThunk(
   'food/fetchFoods',
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('accessToken')
-      const res = await axiosClient.get('/api/foods', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+      // Remove manual token handling - axiosClient handles this automatically
+      const res = await axiosClient.get('/api/foods')
       return res.data
     } catch (err) {
       return rejectWithValue(err.response?.data?.msg || "Failed to fetch food")

@@ -1,12 +1,13 @@
+
 const express = require("express");
 const router = express.Router();
 
 const userCtrl = require("../controllers/userCtrl");
 const auth = require("../middleware/auth");
 
-// User Registration & Activation
-router.post("/register", userCtrl.register);
-router.post("/activation", userCtrl.activateEmail);
+// DAuth Authentication
+router.get("/dauth/login", userCtrl.dauthLogin);
+router.get("/dauth/callback", userCtrl.dauthCallback);
 
 // Authentication
 router.post("/login", userCtrl.login);
@@ -20,15 +21,14 @@ router.post("/reset", auth, userCtrl.resetPassword);
 // User Profile
 router.get("/infor", auth, userCtrl.getUserInfo);
 router.patch("/update", auth, userCtrl.updateUser);
-router.get('/top-users', require('../controllers/userCtrl').getTopUsers);
-router.get('/top-users-week', require('../controllers/userCtrl').getTopUsersWeek);
+router.get('/top-users', userCtrl.getTopUsers);
+router.get('/top-users-week', userCtrl.getTopUsersWeek);
 
-//  admin routes
+router.get('/info', auth, userCtrl.getUserInfo);
+
+// Admin routes
 const admin = require("../middleware/admin");
-
-// Admin: Get all users
 router.get("/admin/all", auth, admin, userCtrl.getAllUsers);
-
-// Admin: Delete user
 router.delete("/admin/:id", auth, admin, userCtrl.adminDeleteUser);
+
 module.exports = router;

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axiosClient from '../../components/utils/axiosClient'
 
-// Async thunk to fetch user info — token auto-injected by axiosClient
+// Fix the endpoint URL
 export const fetchUser = createAsyncThunk(
   'auth/fetchUser',
   async () => {
-    const res = await axiosClient.get('/user/infor')
+    const res = await axiosClient.get('/user/info') // Fixed: was /user/infor
     return {
       user: res.data,
       isAdmin: res.data.role === 1,

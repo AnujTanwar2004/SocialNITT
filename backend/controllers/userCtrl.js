@@ -1,17 +1,83 @@
 const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const axios = require("axios"); // Add this import for DAuth
 const sendMail = require("./sendMail");
 const logToFile = require("../utils/logger");
 
 const {
   CLIENT_URL,
+  DAUTH_CLIENT_ID,        // Add these for DAuth
+  DAUTH_CLIENT_SECRET,    // Add these for DAuth
+  DAUTH_REDIRECT_URI,     // Add these for DAuth
   ACTIVATION_TOKEN_SECRET,
   ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_SECRET,
 } = process.env;
 
 const userCtrl = {
+  // ADD THESE DAUTH METHODS TO YOUR EXISTING CONTROLLER
+  dauthLogin: (req, res) => {
+    const dauthUrl = `https://auth.delta.nitt.edu/authorize?client_id=${DAUTH_CLIENT_ID}&redirect_uri=${encodeURIComponent(DAUTH_REDIRECT_URI)}&response_type=code&grant_type=authorization_code&scope=user`;
+    res.redirect(dauthUrl);
+  },
+
+  dauthCallback: async (req, res) => {
+    const code = req.query.code;
+    if (!code) return res.status(400).json({ msg: "No code provided" });
+
+    try {
+      // Use URLSearchParams for form-encoded data
+      const tokenData = new URLSearchParams({
+        grant_type: "authorization_code",
+        code,
+        client_id: DAUTH_CLIENT_ID,
+        client_secret: DAUTH_CLIENT_SECRET,
+        redirect_uri: DAUTH_REDIRECT_URI,
+      });
+
+      const tokenRes = await axios.post("https://auth.delta.nitt.edu/api/oauth/token", tokenData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+
+      const access_token = tokenRes.data.access_token;
+
+      // Use POST request to /api/resources/user
+      const userRes = await axios.post("https://auth.delta.nitt.edu/api/resources/user", {}, {
+        headers: { Authorization: `Bearer ${access_token}` },
+      });
+
+      console.log('User response:', userRes.data);
+      
+      const { name, email } = userRes.data;
+
+      let user = await Users.findOne({ email });
+
+      if (!user) {
+        user = new Users({ name, email });
+        await user.save();
+      }
+
+      const refreshToken = createRefreshToken({ id: user._id });
+
+      res.cookie("refreshtoken", refreshToken, {
+        httpOnly: true,
+        path: "/user/refresh_token",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      const token = createAccessToken({ id: user._id });
+
+      res.redirect(`${CLIENT_URL}?access_token=${token}`);
+    } catch (err) {
+      console.error("DAuth callback error:", err.response?.data || err.message);
+      res.status(500).json({ msg: "DAuth login failed", error: err.response?.data });
+    }
+  },
+
+  // YOUR EXISTING METHODS (keep all of these)
   register: async (req, res) => {
     try {
       const { name, email, password } = req.body;
@@ -302,30 +368,31 @@ const userCtrl = {
       console.error(err);
       res.status(500).json({ msg: "Error deleting product." });
     }
-  },// Add this method to userCtrl object
-getAllUsers: async (req, res) => {
-  try {
-    const users = await Users.find({})
-      .select("-password") // Exclude password field
-      .sort({ createdAt: -1 }); // Sort by newest first
-    res.json(users);
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
-  }
-},
+  },
 
-// Admin delete user
-adminDeleteUser: async (req, res) => {
-  try {
-    const user = await Users.findById(req.params.id);
-    if (!user) return res.status(404).json({ msg: "User not found." });
-    
-    await user.deleteOne();
-    res.json({ msg: "User deleted successfully!" });
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
-  }
-},
+  getAllUsers: async (req, res) => {
+    try {
+      const users = await Users.find({})
+        .select("-password") // Exclude password field
+        .sort({ createdAt: -1 }); // Sort by newest first
+      res.json(users);
+    } catch (err) {
+      res.status(500).json({ msg: err.message });
+    }
+  },
+
+  // Admin delete user
+  adminDeleteUser: async (req, res) => {
+    try {
+      const user = await Users.findById(req.params.id);
+      if (!user) return res.status(404).json({ msg: "User not found." });
+      
+      await user.deleteOne();
+      res.json({ msg: "User deleted successfully!" });
+    } catch (err) {
+      res.status(500).json({ msg: err.message });
+    }
+  },
 };
 
 function validateEmail(email) {
@@ -333,14 +400,14 @@ function validateEmail(email) {
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
 }
-// i am tired i want to sleep
+
 const createActivationToken = (payload) =>
   jwt.sign(payload, ACTIVATION_TOKEN_SECRET, { expiresIn: "5m" });
 
 const createAccessToken = (payload) =>
-  jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
+  jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
 
 const createRefreshToken = (payload) =>
-  jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
+  jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
 
 module.exports = userCtrl;
