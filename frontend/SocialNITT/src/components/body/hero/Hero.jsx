@@ -60,15 +60,18 @@ function Hero() {
   };
 
   const renderProducts = (items) => (
-    <div className="card-container">
+    <div className="  card-slider-container">
+    <div className="  card-slider">
       {items.map((item) =>
         !item.isArchived ? <ProductCard key={item._id} item={item} /> : null
       )}
     </div>
+    </div>
   );
 
   const renderServicesOrFoods = (items, type) => (
-    <div className="card-container">
+    <div className="  card-slider-container">
+    <div className="  card-slider">
       {items.map((item) =>
         !item.isArchived ? (
           <ServiceCard
@@ -80,6 +83,7 @@ function Hero() {
           />
         ) : null
       )}
+    </div>
     </div>
   );
 
@@ -104,7 +108,7 @@ function Hero() {
       <div className="hero-section">
         <div className="hero-section-header">
           <h2>Services</h2>
-          <Link to="/services" className="cta-ctn">
+          <Link to="/services" className="cta-btn">
             See More Services
           </Link>
         </div>
@@ -132,7 +136,7 @@ function Hero() {
 
       {/* Top Users Leaderboard (All Time) */}
       <hr style={{ margin: "2rem 0" }} />
-      <div className="hero-section">
+      <div className="hero-section  ">
         <h2>🏆 Top Contributors (All Time)</h2>
         <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
           {topUsers.map((user, idx) => (
@@ -171,7 +175,7 @@ function Hero() {
 
       {/* Top Users Leaderboard (This Week) */}
       <hr style={{ margin: "2rem 0" }} />
-      <div className="hero-section">
+      <div className="hero-section ">
         <h2>🔥 Top Contributors (This Week)</h2>
         <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
           {topUsersWeek.map((user, idx) => (

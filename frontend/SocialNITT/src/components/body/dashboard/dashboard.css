@@ -1,3 +1,14 @@
+/* container */
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem; /* Space between cards */
+  padding: 0 1rem; /* Equal margin at left and right */
+}
+
+
 /* ===== CLEANED DASHBOARD.CSS - CORE STYLES ONLY ===== */
 
 /* Enhanced CTA Primary Section */
@@ -204,7 +215,7 @@
   margin-right: auto;
   margin-top: auto;
   padding: 1rem 1rem 1rem 1rem;
-  max-width: 1280px;
+  width: 90%;
 }
 
 @media (min-width: 1024px) {
@@ -230,23 +241,13 @@
   color: #6b7280;
 }
 
-.cards-primary .card-container {
-  margin-top: 1rem;
-  display: grid;
-  gap: 0.5rem;
-  padding-bottom: 50px;
-}
-
+ 
 @media (min-width: 640px) {
-  .cards-primary .card-container {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  
 }
 
 @media (min-width: 1024px) {
-  .cards-primary .card-container {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+   
 }
 
 /* Create Product/Service Form */

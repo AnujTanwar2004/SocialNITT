@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo, useCallback } from "react";
 import axiosClient from "../../utils/axiosClient";
 import ProductCard from "../../cards/ProductCard";
 import ServiceCard from "../../cards/ServiceCard";
+import FoodCard from "../../cards/FoodCard";
 import { Link, useNavigate } from "react-router-dom";
 import "./adminDashboard.css";
 
@@ -136,7 +137,37 @@ function AdminDashboard() {
   const [servicePage, setServicePage] = useState(1);
   const [foodPage, setFoodPage] = useState(1);
 
-  const itemsPerPage = 5;
+  const getUrgencyColor = (urgency) => {
+    switch (urgency) {
+      case "Urgent":
+        return "#FF4444";
+      case "High":
+        return "#FF8800";
+      case "Medium":
+        return "#FFA500";
+      case "Low":
+        return "#4CAF50";
+      default:
+        return "#666";
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Active":
+        return "#4CAF50";
+      case "In Progress":
+        return "#2196F3";
+      case "Completed":
+        return "#9C27B0";
+      case "Cancelled":
+        return "#F44336";
+      default:
+        return "#666";
+    }
+  };
+
+  const itemsPerPage = 8;
 
   useEffect(() => {
     axiosClient.get("/api/products/admin/all").then(res => setProducts(res.data));
@@ -387,8 +418,8 @@ function AdminDashboard() {
                     isProfileView={true}
                     handleDelete={() => handleDeleteService(item._id)}
                     handleArchive={() => {}}
-                    getUrgencyColor={() => "#850E35"}
-                    getStatusColor={() => "#850E35"}
+                    getUrgencyColor={getUrgencyColor}
+                    getStatusColor={getStatusColor}
                   />
                 ))}
               </div>
@@ -424,20 +455,15 @@ function AdminDashboard() {
             <>
               <div className="card-container">
                 {getPaginatedData(filteredFoods, foodPage).map(item => (
-                  <article className="custom-card" key={item._id}>
-                    <div className="card-body">
-                      <h3 className="card-title">{item.title}</h3>
-                      <p className="card-description">{item.description}</p>
-                      <div className="card-price-date">
-                        <span className="card-price">₹ {item.budget}</span>
-                        <span className="card-date">{item.updatedAt?.slice(0, 10)}</span>
-                      </div>
-                      <div className="card-actions">
-                        <Link to={`/edit_food/${item._id}`} className="card-edit">Edit</Link>
-                        <button className="card-delete" onClick={() => handleDeleteFood(item._id)}>Delete</button>
-                      </div>
-                    </div>
-                  </article>
+                  <FoodCard
+                  key={item._id}
+                  item={item}
+                  isProfileView={true}
+                  handleDelete={() => handleDeleteService(item._id)}
+                  handleArchive={() => {}}
+                  getUrgencyColor={getUrgencyColor}
+                  getStatusColor={getStatusColor}
+                />
                 ))}
               </div>
               
