@@ -17,7 +17,7 @@ function Login() {
 
   const handleDAuthLogin = () => {
     console.log("🔄 Redirecting to DAuth login...");
-    window.location.href = 'http://10.1.17.129:5000/user/dauth/login';
+    window.location.href = 'http://localhost:5000/user/dauth/login';
   }
 
   // Don't render login form if user is already logged in

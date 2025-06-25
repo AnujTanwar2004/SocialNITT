@@ -12,8 +12,7 @@ app.use(express.json())
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'http://10.1.17.129:5000',  
-    /^http:\/\/192\.168\.1\.\d+:3000$/, //  
+     /^http:\/\/192\.168\.1\.\d+:3000$/, //  
   ],
   credentials: true
 }))
@@ -44,8 +43,7 @@ mongoose.connect(process.env.MONGODB_URL)
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Server is running on port ${PORT}`)
     console.log(`📱 Local: http://localhost:${PORT}`)
-    console.log(`🌐 Network: http://10.1.17.129:${PORT}`) // Your IP
-    console.log(`📁 Uploads accessible at: http://localhost:${PORT}/uploads/`)
+     console.log(`📁 Uploads accessible at: http://localhost:${PORT}/uploads/`)
   })
 })
 .catch(err => {
