@@ -455,7 +455,7 @@ function AdminDashboard() {
             <>
               <div className="card-container">
                 {getPaginatedData(filteredFoods, foodPage).map(item => (
-                  <FoodCard
+                  <ServiceCard
                   key={item._id}
                   item={item}
                   isProfileView={true}
