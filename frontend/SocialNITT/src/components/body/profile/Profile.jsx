@@ -171,10 +171,12 @@ function Profile() {
 
   // Helper function to get user ID from different field types
   const getUserId = (item) => {
-    if (typeof item.user === 'string') return item.user;
-    if (typeof item.user === 'object' && item.user._id) return item.user._id;
-    return null;
-  };
+  if (!item || !item.user) return null;
+  if (typeof item.user === 'string') return item.user;
+  if (typeof item.user === 'object' && item.user._id) return item.user._id;
+  return null;
+};
+
 
   const handleArchive = async (itemId, type) => {
     try {
@@ -226,15 +228,7 @@ function Profile() {
             <label>Email</label>
             <input type="email" defaultValue={user.email} disabled />
           </div>
-          <div className="form-group">
-            <label>New Password</label>
-            <input type="password" name="password" value={password} onChange={handleChange} />
-          </div>
-          <div className="form-group">
-            <label>Confirm New Password</label>
-            <input type="password" name="cf_password" value={cf_password} onChange={handleChange} />
-          </div>
-          <button disabled={loading} onClick={handleUpdate}>Update</button>
+          
         </div>
 
         <div className="col-right">

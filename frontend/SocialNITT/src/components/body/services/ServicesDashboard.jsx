@@ -116,11 +116,13 @@ function ServicesDashboard() {
                   <ServiceCard
                     key={item._id}
                     item={item}
+                    type="service"    // <-- add this line
                     getUrgencyColor={getUrgencyColor}
                     getStatusColor={getStatusColor}
                   />
                 ) : null
-              )}
+              )
+          }
         </div>
       </section>
     </>

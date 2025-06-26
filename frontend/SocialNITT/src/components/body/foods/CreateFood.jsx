@@ -173,34 +173,30 @@ function CreateFood() {
             overflow: "hidden",
             backgroundColor: "white",
             boxShadow: "0 4px 8px rgba(133, 14, 53, 0.1)"
-          }}
+           }}
         >
           {/* Preview Header */}
-          <div style={{
-            background: "linear-gradient(135deg, #850E35, #EE6983)",
-            color: "white",
-            padding: "10px 15px",
-            fontSize: "14px",
-            fontWeight: "600",
-            textAlign: "center"
-          }}>
-            📋 PREVIEW - How your food request will appear
+           <div
+    style={{
+      backgroundColor: "#850E35",
+      color: "white",
+      height : "40px",
+      textAlign:"center",
+      paddingTop:"10px"
+    }}
+    >
+            📋 PREVIEW -  
           </div>
 
           {/* Image Preview (if image is selected) */}
           {imagePreviewUrl && (
-            <div className="card-image-wrapper">
-              <img
-                src={imagePreviewUrl}
-                alt="Preview"
-                className="card-image"
-                style={{
-                  width: "100%",
-                  height: "160px",
-                  objectFit: "cover",
-                }}
-              />
-            </div>
+             <ServiceCard
+                    key={item._id}
+                    item={item}
+                    type="food"
+                    getUrgencyColor={getUrgencyColor}
+                    getStatusColor={getStatusColor}
+                  />
           )}
 
           <div className="card-body" style={{ padding: "1.5rem" }}>

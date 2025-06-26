@@ -313,189 +313,149 @@ function ViewService() {
     );
 
   return (
-    <section className="cta-secondary">
-      <div className="cta-cover"></div>
-      <div className="cta-container">
-        <div className="cta-details">
-          <h3>{service.title}</h3>
-
-          <div className="service-view-info">
-            <div className="info-row">
-              <span className="service-budget">
-                💰 Budget: ₹ {service.budget}
-              </span>
-              <span
-                className="service-urgency"
-                style={{ color: getUrgencyColor(service.urgency) }}
-              >
-                🚨 {service.urgency} Priority
-              </span>
-            </div>
-
-            <div className="info-row">
-              <span>📋 Category: {service.category}</span>
-              <span>🔄 Type: {service.serviceType}</span>
-            </div>
-             
-            <div className="info-row">
-              <span>📍 Location: {service.location}</span>
-              <span>
-                📅 Posted: {new Date(service.createdAt).toLocaleDateString()}
-              </span>
-            </div>
-
-            <div className="info-row">
-              <span>👤 Posted by: {service.user?.name || "Anonymous"}</span>
-              <span
-                className="service-status"
-                style={{
-                  color: service.status === "Active" ? "#4CAF50" : "#666",
-                  fontWeight: "bold",
-                }}
-              >
-                📊 Status: {service.status}
-              </span>
-            </div>
+  <section className="cta-secondary">
+    <div className="cta-cover"></div>
+    <div className="cta-container">
+      <div className="cta-details">
+        <h3>{service.title}</h3>
+        <div className="service-view-info">
+          <div className="info-row">
+            <span className="service-budget">💰 Budget: ₹ {service.budget}</span>
+            <span className="service-urgency" style={{ color: getUrgencyColor(service.urgency) }}>
+              🚨 {service.urgency} Priority
+            </span>
           </div>
-
-          <div className="service-description">
-            <h4>Description:</h4>
-            <p>{service.description}</p>
+          <div className="info-row">
+            <span>📋 Category: {service.category}</span>
+            <span>🔄 Type: {service.serviceType}</span>
           </div>
-
-          <a
-            className="cta-btn"
-            href={`https://wa.me/${service.phone}`}
-            target="_blank"
-            rel="noreferrer"
-          >                     
-            Contact for Service
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              />
-            </svg>
-           </a>
+          <div className="info-row">
+            <span>📍 Location: {service.location}</span>
+            <span>📅 Posted: {new Date(service.createdAt).toLocaleDateString()}</span>
+          </div>
+          <div className="info-row">
+            <span>👤 Posted by: {service.user?.name || "Anonymous"}</span>
+            <span className="service-status" style={{
+              color: service.status === "Active" ? "#4CAF50" : "#666",
+              fontWeight: "bold"
+            }}>📊 Status: {service.status}</span>
+          </div>
         </div>
-        {/* Add image section for services if they have images */}
-        {service.image && (
-          <div className="cta-image">
-            <img 
-              src={getImageUrl(service.image)} 
-              alt={service.title}
-              onError={(e) => {
-                e.target.src = 'http://localhost:5000/uploads/default-avatar.png'
-              }}
-            />
+        <div className="service-description">
+          <h4>Description:</h4>
+          <p>{service.description}</p>
+        </div>
+        <a className="cta-btn" href={`https://wa.me/${service.phone}`} target="_blank" rel="noreferrer">
+          Contact for Service
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </a>
+      </div>
+
+      {service.image && (
+        <div className="cta-image">
+          <img src={getImageUrl(service.image)} alt={service.title}
+            onError={(e) => e.target.src = 'http://localhost:5000/uploads/default-avatar.png'} />
+        </div>
+      )}
+    </div>
+
+    {service.location && (
+      <div className="map-section" style={{
+        margin: '40px 0',
+        padding: '0 20px',
+        maxWidth: '1200px',
+        marginLeft: 'auto',
+        marginRight: 'auto'
+      }}>
+        <h4 style={{
+          marginBottom: '20px',
+          color: '#333',
+          textAlign: 'center',
+          fontSize: '24px'
+        }}>
+          ⚙️ Service Location
+        </h4>
+
+        {/* Map loader and error UI */}
+        {!mapLoaded && !mapError && (
+          <div style={{
+            height: '400px',
+            background: '#f5f5f5',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '8px',
+            border: '1px solid #ddd'
+          }}>
+            <p>Loading map...</p>
+          </div>
+        )}
+
+        {mapError && (
+          <div style={{
+            height: '400px',
+            background: '#f8f9fa',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '8px',
+            border: '1px solid #ddd',
+            color: '#666',
+            flexDirection: 'column'
+          }}>
+            <p>Unable to load map or find location.</p>
+            <p style={{ fontSize: '14px', marginTop: '10px' }}>
+              Location: <strong>{service.location}</strong>
+            </p>
+          </div>
+        )}
+
+        <div id="leaflet-map-service" style={{
+          height: '400px',
+          width: '100%',
+          borderRadius: '8px',
+          border: '1px solid #ddd',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          display: mapLoaded && !mapError ? 'block' : 'none',
+          imageRendering: 'crisp-edges',
+          WebkitImageRendering: '-webkit-optimize-contrast'
+        }}></div>
+
+        {coordinates && (
+          <div style={{
+            marginTop: '15px',
+            textAlign: 'center',
+            padding: '10px',
+            background: coordinates.isApproximate ? '#fff3cd' : '#f8f9fa',
+            borderRadius: '5px',
+            border: `1px solid ${coordinates.isApproximate ? '#ffeaa7' : '#e9ecef'}`
+          }}>
+            <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>
+              <i className="fa fa-map-marker" style={{ color: coordinates.isApproximate ? '#ffc107' : getUrgencyColor(service.urgency), marginRight: '5px' }}></i>
+              {service.location}
+              {coordinates.isApproximate && (
+                <span style={{
+                  marginLeft: '10px',
+                  fontSize: '12px',
+                  color: '#856404',
+                  fontStyle: 'italic'
+                }}>
+                  (Approximate - NIT Trichy Campus)
+                </span>
+              )}
+            </p>
+            <p style={{ margin: '5px 0 0 0', color: '#888', fontSize: '12px' }}>
+              Coordinates: {coordinates.lat.toFixed(6)}, {coordinates.lng.toFixed(6)}
+            </p>
           </div>
         )}
       </div>
-
-      {/* OpenStreetMap Section for Service */}
-      {service.location && (
-        <div className="map-section" style={{ 
-          margin: '40px 0', 
-          padding: '0 20px',
-          maxWidth: '1200px',
-          marginLeft: 'auto',
-          marginRight: 'auto'
-        }}>
-          <h4 style={{ 
-            marginBottom: '20px', 
-            color: '#333',
-            textAlign: 'center',
-            fontSize: '24px'
-          }}>
-            ⚙️ Service Location
-          </h4>
-          
-          {!mapLoaded && !mapError && (
-            <div style={{
-              height: '400px',
-              background: '#f5f5f5',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: '8px',
-              border: '1px solid #ddd'
-            }}>
-              <p>Loading map...</p>
-            </div>
-          )}
-          
-          {mapError && (
-            <div style={{
-              height: '400px',
-              background: '#f8f9fa',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: '8px',
-              border: '1px solid #ddd',
-              color: '#666',
-              flexDirection: 'column'
-            }}>
-              <p>Unable to load map or find location.</p>
-              <p style={{ fontSize: '14px', marginTop: '10px' }}>
-                Location: <strong>{service.location}</strong>
-              </p>
-            </div>
-          )}
-          
-          <div
-            id="leaflet-map-service"
-            style={{
-              height: '400px',
-              width: '100%',
-              borderRadius: '8px',
-              border: '1px solid #ddd',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-              display: mapLoaded && !mapError ? 'block' : 'none',
-              imageRendering: 'crisp-edges',
-              WebkitImageRendering: '-webkit-optimize-contrast'
-            }}
-          ></div>
-          
-          {coordinates && (
-            <div style={{
-              marginTop: '15px',
-              textAlign: 'center',
-              padding: '10px',
-              background: coordinates.isApproximate ? '#fff3cd' : '#f8f9fa',
-              borderRadius: '5px',
-              border: `1px solid ${coordinates.isApproximate ? '#ffeaa7' : '#e9ecef'}`
-            }}>
-              <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>
-                <i className="fa fa-map-marker" style={{ color: coordinates.isApproximate ? '#ffc107' : getUrgencyColor(service.urgency), marginRight: '5px' }}></i>
-                {service.location}
-                {coordinates.isApproximate && (
-                  <span style={{ 
-                    marginLeft: '10px', 
-                    fontSize: '12px', 
-                    color: '#856404',
-                    fontStyle: 'italic'
-                  }}>
-                    (Approximate - NIT Trichy Campus)
-                  </span>
-                )}
-              </p>
-              <p style={{ margin: '5px 0 0 0', color: '#888', fontSize: '12px' }}>
-                Coordinates: {coordinates.lat.toFixed(6)}, {coordinates.lng.toFixed(6)}
-              </p>
-            </div>
-          )}
-        </div>
-      )}
-    </section>
-  );
+    )}
+  </section>
+)
+;
 }
 
 export default ViewService;

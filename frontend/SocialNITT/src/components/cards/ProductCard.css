@@ -210,6 +210,21 @@
 }
 
 @media (max-width: 768px) {
+  .custom-card {
+  width: 100%;
+  max-width: 270px;
+  flex: 1 1 calc(25% - 1rem); /* Default: 4 per row on wide screens */
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border-radius: 0.75rem;
+  border: 1px solid #e0d7d7;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: auto;
+}
   .card-container {
     display: flex;
     flex-wrap: wrap;
@@ -218,19 +233,7 @@
     padding: 0 0.25rem; /* tight left-right space */
   }
 
-  .custom-card {
-    flex: 0 0 calc(50% - 0.5rem);
-    max-width: calc(50% - 0.5rem);
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #e0d7d7;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    padding: 0.5rem;
-  }
+   
 
   .card-image {
     width: 100%;
@@ -334,29 +337,19 @@
 }
 
 @media (max-width: 768px) {
+  
   .card-price-date {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: nowrap; /* Ensure they stay on the same line */
-    gap: 0.5rem;
-    margin-top: 0.3rem;
-    font-size: 0.75rem;
+  
   }
 
   .card-action {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 0.5rem;
+    
   }
 
   .card-button {
-    margin: 0 auto; /* Horizontally center */
-    width: 90%;
-    padding: 0.5rem;
-    font-size: 0.75rem;
+     
   }
 }
+
 
  

@@ -244,12 +244,26 @@
 }
 
  
-@media (min-width: 640px) {
-  
+@media (max-width: 768px) {
+  .card-container{
+    display: grid;
+grid-template-columns: repeat(3, 1fr);
+    
+  }
+}
+@media (max-width: 640px){
+.card-container{
+    display: grid;
+grid-template-columns: repeat(2, 1fr);
+    
+  }
 }
 
-@media (min-width: 1024px) {
-   
+@media (max-width: 480px) {
+ .card-container{
+   display: grid;
+   grid-template-columns: repeat(1,1fr);
+ } 
 }
 
 /* Create Product/Service Form */
@@ -332,7 +346,14 @@ label {
   background: #ccc;
   cursor: not-allowed;
 }
-
+@media (max-width:480px){
+  .create_product h2{
+    font-size: 1.4rem;
+  }
+  .create_product label{
+    font-size: 0.8rem;
+  }
+}
 /* View Products/Services - Core Layout */
 .cta-secondary {
   position: relative;
@@ -861,8 +882,8 @@ label {
   .search-form-primary .search-form-container {
     height: 42px;
          }
-  .search-form-primary .search-form-container{
-    
+  .search-form-primary .search-form-container .search-input{
+    padding-top: 12px;
    }
   .cta-primary .cta-container .cta-btn {
 
@@ -934,16 +955,28 @@ label {
 }
 
 @media (max-width: 480px) {
-  .cta-primary {
-    margin: 10px auto;
-    padding: 1rem;
-  }
+     .cta-primary {
+        margin: 10px auto;
+        padding: 0.5rem;
+    }
   
   .search-form-primary .search-form-container .search-input {
-    padding: 14px 18px 14px 50px;
-    font-size: 0.95rem;
+     font-size: 0.9rem;
+     padding: 10px 30px 10px 40px;
+    }
+    .search-form-primary .search-form-container{
+      height: 35px;
+    }
+  .cta-primary .cta-container .cta-btn p a {
+    font-size: 0.6rem;
+    padding: 7px 14px 7px 14px;
   }
-  
+  .cta-primary .cta-container .cta-btn{
+    height: 30px;
+    width: 10.6rem;
+    padding:0px;
+  }
+
   .search-form-primary .search-form-container .search-icon {
     left: 18px;
     width: 1.1rem;
@@ -957,6 +990,7 @@ label {
   .cta-secondary .cta-container .cta-details .cta-btn {
     width: 100%;
     justify-content: center;
+    
     padding: 1rem;
   }
   

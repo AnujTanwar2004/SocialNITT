@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import './ServiceCard.css';
 
 function ServiceCard({
@@ -11,6 +12,7 @@ function ServiceCard({
   handleDelete,
   handleArchive,
 }) {
+  const { user } = useSelector((state) => state.auth);
   const userId = typeof item.user === "string" ? item.user : item.user?._id;
 
   return (
@@ -53,21 +55,33 @@ function ServiceCard({
             <div className="service-card-category">📋 {item.category}</div>
             <div className="service-card-location">📍 {item.location}</div>
           </div>
-          {!isProfileView && (
-  <div className="service-card-user">
-    👤 {item.user?.name || "Anonymous"}
-  </div>
-)}
-
         </div>
+
+        {/* User Info */}
+        {!isProfileView && (
+          <div className="service-card-user">
+            {user && (
+              <div
+                style={{
+                  marginTop: "1rem",
+                  padding: "0.75rem",
+                  background: "#f8f9fa",
+                  borderRadius: "8px",
+                  borderLeft: "3px solid #850E35"
+                }}
+              >
+                <p style={{ margin: 0, color: "#333" }}>{user.name}</p>
+              </div>
+            )}
+          </div>
+        )}
       </Link>
 
-      {/* Action Buttons (Only for Profile View) */}
+      {/* Profile View Actions */}
       {isProfileView && (
         <>
           <div className="card-archive">
             <p>
-              
               {item.isArchived === 1 ? <i className="fas fa-check"></i> : <i className="fas fa-times"></i>}
             </p>
           </div>
