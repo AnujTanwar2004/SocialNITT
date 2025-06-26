@@ -5,7 +5,7 @@ import axios from 'axios';
 import favicon from '../assets/favicon.png';
 import burgerBar from '../assets/burger-bar.png';
 import NotificationBell from '../notification/Notification'
-
+import contact from '../contact/ContactUs'
 function Header() {
   const auth = useSelector(state => state.auth);
   const { user, isLogged } = auth;
@@ -40,7 +40,7 @@ function Header() {
       <li><Link to="/products">🛍️ Products</Link></li>
       <li><Link to="/services">🔧 Services</Link></li>
       <li><Link to="/foods">🤤 Food</Link></li>
-      {/* Show Admin Dashboard link only for admin */}
+       {/* Show Admin Dashboard link only for admin */}
       {user?.role === 1 && (
         <li>
           <Link to="/admin">🛡️ Admin Dashboard</Link>

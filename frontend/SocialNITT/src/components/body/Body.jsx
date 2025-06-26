@@ -26,7 +26,9 @@ import EditFood from "./foods/EditFood";
 
 import NotFound from "../utils/NotFound/NotFound";
 import Hero from "./hero/Hero";
+import ContactSection from "../contact/ContactUs"; // or wherever your file is
 
+import AboutUS from "../body/aboutus/AboutUs"
 function Body() {
   const auth = useSelector((state) => state.auth);
   const { isLogged } = auth;
@@ -101,6 +103,8 @@ function Body() {
           path="/edit_food/:id"
           element={isLogged ? <EditFood /> : <NotFound />}
         />
+        <Route path="/contact" element={<ContactSection />} />
+ <Route path="/aboutus" element={<AboutUS />} />
       </Routes>
     </section>
   );

@@ -1,13 +1,15 @@
 header {
-  width: 100%;
-  min-height: 4.5rem;
-  background: #850E35;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-   padding: 0 30px;
-   position: fixed;
-   box-shadow: 0 6px 20px rgba(133, 14, 53, 0.3);
+width: 100%;
+min-height: 4.5rem;
+background: rgba(133, 14, 53, 0.85); /* 85% opacity */
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 0 30px;
+position: fixed;
+box-shadow: 0 6px 20px rgba(133, 14, 53, 0.3);
+backdrop-filter: blur(3px); /* optional for glass effect */
+
   }
 
 header .logo {
