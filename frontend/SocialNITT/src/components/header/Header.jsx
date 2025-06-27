@@ -54,7 +54,7 @@ function Header() {
     <header>
       <div className="logo">
         <Link to="/"><img src={favicon} alt="logo" /></Link>
-        <Link to="/"><h1>SocialNITT</h1></Link>
+        <Link to="/"><h1>CommuNITT</h1></Link>
       </div>
 
       {/* Updated: navLinks + userLink always rendered here */}
