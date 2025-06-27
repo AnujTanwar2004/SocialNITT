@@ -35,7 +35,7 @@ const AboutUs = () => {
     {
       id: 1,
       name: "Anuj Tanwar",
-      role: "Full Stack Developer & Project Lead",
+      role: "Full Stack Developer & Project BAckend Lead",
       image: "/api/placeholder/300/300",
       bio: "Passionate about creating seamless user experiences and building robust backend systems that scale.",
       skills: ["React", "Node.js", "MongoDB", "Express", "AWS"],
@@ -56,6 +56,17 @@ const AboutUs = () => {
     },
     {
       id: 3,
+      name: "Dev Sharma",
+      role: "Backend Developer & Database Architect",
+      image: "/api/placeholder/300/300",
+      bio: "Specializing in scalable backend architecture and efficient database design for modern applications.",
+      skills: ["Node.js", "MongoDB", "Express", "API Design", "Docker"],
+      github: "https://github.com/devsharma",
+      linkedin: "https://linkedin.com/in/devsharma",
+      twitter: "https://twitter.com/devsharma"
+    },
+     {
+      id: 4,
       name: "Dev Sharma",
       role: "Backend Developer & Database Architect",
       image: "/api/placeholder/300/300",
@@ -107,10 +118,10 @@ const AboutUs = () => {
   ];
 
   const stats = [
-    { number: "2,500+", label: "Active Students", icon: "👥" },
-    { number: "5,000+", label: "Products Traded", icon: "📦" },
-    { number: "1,200+", label: "Services Completed", icon: "⚡" },
-    { number: "850+", label: "Food Reviews", icon: "⭐" }
+    { number: "2+", label: "Active Students", icon: "👥" },
+    { number: "5+", label: "Products Traded", icon: "📦" },
+    { number: "1+", label: "Services Completed", icon: "⚡" },
+    { number: "12+", label: "Food Reviews", icon: "⭐" }
   ];
 
   const testimonials = [
@@ -138,17 +149,16 @@ const AboutUs = () => {
   ];
 
   const milestones = [
-    { year: "2023", title: "Platform Launch", description: "SocialNITT goes live with basic marketplace features" },
-    { year: "2024", title: "Service Hub", description: "Expanded to include comprehensive service marketplace" },
-    { year: "2024", title: "AI Integration", description: "Launched intelligent chatbot and recommendation system" },
-    { year: "2025", title: "Community Growth", description: "Reached 2,500+ active users across NIT Trichy" }
+    { year: "2025", title: "Platform Launch", description: "SocialNITT goes live with basic marketplace features" },
+     { year: "2025", title: "AI Integration", description: "Launched intelligent chatbot and recommendation system" },
+    { year: "2025", title: "Community Growth", description: "Reached 2 + active users across NIT Trichy" }
   ];
 
   return (
     <div className="about-container">
       {/* Hero Section with Animated Background */}
-      <section className="hero-section" id="hero">
-        <div className="hero-background">
+      <section className="hero-section-about" id="hero">
+        <div className="hero-background-about">
           <div className="floating-shapes">
             <div className="shape shape-1"></div>
             <div className="shape shape-2"></div>
@@ -157,71 +167,71 @@ const AboutUs = () => {
           </div>
         </div>
         
-        <div className={`hero-content ${isVisible.hero ? 'fade-in-up' : ''}`}>
-          <h1 className="hero-title">
+        <div className={`hero-content-about ${isVisible.hero ? 'fade-in-up-about' : ''}`}>
+          <h1 className="hero-title-about">
             Revolutionizing
-            <span className="gradient-text"> Campus Life</span>
+            <span className="gradient-text-about"> Campus Life</span>
           </h1>
-          <p className="hero-subtitle">
+          <p className="hero-subtitleabout-about">
             Where innovation meets community. SocialNITT is the next-generation platform 
             connecting NIT Trichy students through smart technology and meaningful interactions.
           </p>
-          <div className="hero-buttons">
-            <button className="btn-primary pulse">
+          <div className="hero-buttons-about">
+            <button className="btn-primary-about pulse-about">
               Explore Platform
-              <span className="btn-icon">🚀</span>
+              <span className="btn-icon-about">🚀</span>
             </button>
-            <button className="btn-secondary">
+            <button className="btn-secondary-about">
               Watch Demo
-              <span className="btn-icon">▶️</span>
+              <span className="btn-icon-about">▶️</span>
             </button>
           </div>
         </div>
       </section>
 
       {/* Interactive Stats */}
-      <section className="stats-section" id="stats">
+      <section className="stats-section-about" id="stats">
         <div className={`stats-grid ${isVisible.stats ? 'slide-in' : ''}`}>
           {stats.map((stat, index) => (
-            <div key={index} className="stat-card" style={{ animationDelay: `${index * 0.1}s` }}>
-              <div className="stat-icon">{stat.icon}</div>
-              <div className="stat-number">{stat.number}</div>
-              <div className="stat-label">{stat.label}</div>
+            <div key={index} className="stat-card-about" style={{ animationDelay: `${index * 0.1}s` }}>
+              <div className="stat-icon-about">{stat.icon}</div>
+              <div className="stat-number-about">{stat.number}</div>
+              <div className="stat-label-about">{stat.label}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Mission Section with Parallax */}
-      <section className="mission-section" id="mission">
-        <div className="mission-container">
-          <div className={`mission-content ${isVisible.mission ? 'fade-in-left' : ''}`}>
-            <h2 className="section-title">Our Mission</h2>
-            <p className="mission-text">
+      <section className="mission-section-about" id="mission">
+        <div className="mission-container-about">
+          <div className={`mission-content-about ${isVisible.mission ? 'fade-in-left-about' : ''}`}>
+            <h2 className="section-title-about">Our Mission</h2>
+            <p className="mission-text-about">
               We're on a mission to create the most vibrant, connected, and innovative campus 
               community in India. Through cutting-edge technology and user-centric design, 
               we're building bridges between students, fostering collaboration, and making 
               campus life more efficient and enjoyable.
             </p>
-            <div className="mission-highlights">
-              <div className="highlight">
-                <span className="highlight-icon">🎯</span>
+            <div className="mission-highlights-about ">
+              <div className="highlight-about ">
+                <span className="highlight-icon-about">🎯</span>
                 <span>Student-First Approach</span>
               </div>
-              <div className="highlight">
-                <span className="highlight-icon">💡</span>
+              <div className="highlight-about">
+                <span className="highlight-icon-about">💡</span>
                 <span>Innovation-Driven Solutions</span>
               </div>
-              <div className="highlight">
-                <span className="highlight-icon">🌱</span>
+              <div className="highlight-about">
+                <span className="highlight-icon-about">🌱</span>
                 <span>Sustainable Campus Living</span>
               </div>
             </div>
           </div>
-          <div className={`mission-visual ${isVisible.mission ? 'fade-in-right' : ''}`}>
-            <div className="floating-card">
-              <div className="card-glow"></div>
-              <div className="card-content">
+          <div className={`mission-visual-about ${isVisible.mission ? 'fade-in-right-about' : ''}`}>
+            <div className="floating-card-about">
+              <div className="card-glow-about"></div>
+              <div className="card-content-about">
                 <h3>🎓 Built for Students</h3>
                 <p>By students, for students. Every feature designed with campus life in mind.</p>
               </div>
@@ -231,81 +241,81 @@ const AboutUs = () => {
       </section>
 
       {/* Features Grid with Hover Effects */}
-      <section className="features-section" id="features">
-        <div className="section-header">
-          <h2 className="section-title">Platform Features</h2>
-          <p className="section-subtitle">
+      <section className="features-section-about" id="features">
+        <div className="section-header-about">
+          <h2 className="section-title-about">Platform Features</h2>
+          <p className="section-subtitle-about">
             Discover the powerful features that make SocialNITT the ultimate campus companion
           </p>
         </div>
         
-        <div className={`features-grid ${isVisible.features ? 'stagger-in' : ''}`}>
+        <div className={`features-grid-about ${isVisible.features ? 'stagger-in-about' : ''}`}>
           {features.map((feature, index) => (
             <div 
               key={index} 
-              className="feature-card"
+              className="feature-card-about"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="feature-background" style={{ background: feature.gradient }}></div>
-              <div className="feature-content">
-                <div className="feature-icon">{feature.icon}</div>
-                <h3 className="feature-title">{feature.title}</h3>
-                <p className="feature-description">{feature.description}</p>
+              <div className="feature-background-about" style={{ background: feature.gradient }}></div>
+              <div className="feature-content-about">
+                <div className="feature-icon-about">{feature.icon}</div>
+                <h3 className="feature-title-about">{feature.title}</h3>
+                <p className="feature-description-about">{feature.description}</p>
               </div>
-              <div className="feature-hover-effect"></div>
+              <div className="feature-hover-effect-about"></div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Team Section with 3D Cards */}
-      <section className="team-section" id="team">
-        <div className="section-header">
-          <h2 className="section-title">Meet the Creators</h2>
-          <p className="section-subtitle">
+      <section className="team-section-about" id="team">
+        <div className="section-header-about">
+          <h2 className="section-title-about">Meet the Creators</h2>
+          <p className="section-subtitle-about">
             The passionate team behind SocialNITT's success
           </p>
         </div>
         
-        <div className={`team-grid ${isVisible.team ? 'zoom-in' : ''}`}>
+        <div className={`team-grid-about ${isVisible.team ? 'zoom-in-about' : ''}`}>
           {teamMembers.map((member, index) => (
             <div 
               key={member.id} 
-              className="team-card"
+              className="team-card-about"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
-              <div className="card-3d">
-                <div className="card-front">
-                  <div className="member-avatar">
-                    <div className="avatar-ring"></div>
-                    <div className="avatar-image">
+              <div className="card-3d-about">
+                <div className="card-front-about">
+                  <div className="member-avatar-about">
+                    <div className="avatar-ring-about"></div>
+                    <div className="avatar-image-about">
                       {member.name.split(' ').map(n => n[0]).join('')}
                     </div>
                   </div>
-                  <h3 className="member-name">{member.name}</h3>
-                  <p className="member-role">{member.role}</p>
-                  <div className="skills-preview">
+                  <h3 className="member-name-about">{member.name}</h3>
+                  <p className="member-role-about">{member.role}</p>
+                  <div className="skills-preview-about">
                     {member.skills.slice(0, 3).map((skill, i) => (
-                      <span key={i} className="skill-tag">{skill}</span>
+                      <span key={i} className="skill-tag-about">{skill}</span>
                     ))}
                   </div>
                 </div>
                 
-                <div className="card-back">
-                  <p className="member-bio">{member.bio}</p>
-                  <div className="member-skills">
+                <div className="card-back-about">
+                  <p className="member-bio-about">{member.bio}</p>
+                  <div className="member-skills-about">
                     {member.skills.map((skill, i) => (
-                      <span key={i} className="skill-pill">{skill}</span>
+                      <span key={i} className="skill-pill-about">{skill}</span>
                     ))}
                   </div>
-                  <div className="social-links">
-                    <a href={member.github} className="social-link github">
+                  <div className="social-links-about">
+                    <a href={member.github} className="social-link-about github-about">
                       <span>📱</span>
                     </a>
-                    <a href={member.linkedin} className="social-link linkedin">
+                    <a href={member.linkedin} className="social-link-about linkedin-about">
                       <span>💼</span>
                     </a>
-                    <a href={member.twitter} className="social-link twitter">
+                    <a href={member.twitter} className="social-link-about twitter-about">
                       <span>🐦</span>
                     </a>
                   </div>
@@ -317,20 +327,20 @@ const AboutUs = () => {
       </section>
 
       {/* Timeline Section */}
-      <section className="timeline-section" id="timeline">
-        <div className="section-header">
-          <h2 className="section-title">Our Journey</h2>
-          <p className="section-subtitle">Key milestones in SocialNITT's evolution</p>
+      <section className="timeline-section-about" id="timeline">
+        <div className="section-header-about">
+          <h2 className="section-title-about">Our Journey</h2>
+          <p className="section-subtitle-about">Key milestones in SocialNITT's evolution</p>
         </div>
         
-        <div className={`timeline ${isVisible.timeline ? 'animate-timeline' : ''}`}>
+        <div className={`timeline-about ${isVisible.timeline ? 'animate-timeline-about' : ''}`}>
           {milestones.map((milestone, index) => (
-            <div key={index} className="timeline-item">
-              <div className="timeline-marker"></div>
-              <div className="timeline-content">
-                <div className="timeline-year">{milestone.year}</div>
-                <h3 className="timeline-title">{milestone.title}</h3>
-                <p className="timeline-description">{milestone.description}</p>
+            <div key={index} className="timeline-item-about">
+              <div className="timeline-marker-about"></div>
+              <div className="timeline-content-about">
+                <div className="timeline-year-about">{milestone.year}</div>
+                <h3 className="timeline-title-about">{milestone.title}</h3>
+                <p className="timeline-description-about">{milestone.description}</p>
               </div>
             </div>
           ))}
@@ -338,26 +348,26 @@ const AboutUs = () => {
       </section>
 
       {/* Testimonials Carousel */}
-      <section className="testimonials-section" id="testimonials">
-        <div className="section-header">
-          <h2 className="section-title">What Students Say</h2>
-          <p className="section-subtitle">Real feedback from our amazing community</p>
+      <section className="testimonials-section-about" id="testimonials">
+        <div className="section-header-about">
+          <h2 className="section-title-about">What Students Say</h2>
+          <p className="section-subtitle-about">Real feedback from our amazing community</p>
         </div>
         
-        <div className="testimonials-container">
-          <div className="testimonial-card active">
-            <div className="testimonial-content">
-              <div className="stars">
+        <div className="testimonials-container-about">
+          <div className="testimonial-card-about active">
+            <div className="testimonial-content-about">
+              <div className="stars-about">
                 {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                  <span key={i} className="star">⭐</span>
+                  <span key={i} className="star-about">⭐</span>
                 ))}
               </div>
-              <p className="testimonial-text">"{testimonials[currentTestimonial].content}"</p>
-              <div className="testimonial-author">
-                <div className="author-avatar">
+              <p className="testimonial-text-about">"{testimonials[currentTestimonial].content}"</p>
+              <div className="testimonial-author-about">
+                <div className="author-avatar-about">
                   {testimonials[currentTestimonial].name.split(' ').map(n => n[0]).join('')}
                 </div>
-                <div className="author-info">
+                <div className="author-info-about">
                   <h4>{testimonials[currentTestimonial].name}</h4>
                   <p>{testimonials[currentTestimonial].role}</p>
                 </div>
@@ -365,7 +375,7 @@ const AboutUs = () => {
             </div>
           </div>
           
-          <div className="testimonial-dots">
+          <div className="testimonial-dots-about">
             {testimonials.map((_, index) => (
               <button 
                 key={index}
@@ -378,21 +388,22 @@ const AboutUs = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="cta-section" id="cta">
-        <div className="cta-background">
-          <div className="cta-particles"></div>
+      <section className="cta-section-about" id="cta">
+        <div className="cta-background-about">
+          <div className="cta-particles-about"></div>
         </div>
-        <div className="cta-content">
-          <h2 className="cta-title">Ready to Transform Your Campus Experience?</h2>
-          <p className="cta-subtitle">
+        <div className="cta-content-about">
+          <h2 className="cta-title-about">Ready to Transform Your Campus Experience?</h2>
+          <p className="cta-subtitle-about">
             Join thousands of students who are already making the most of their college life
           </p>
-          <div className="cta-buttons">
-            <button className="btn-primary glow">
-              Start Your Journey
-              <span className="btn-sparkle">✨</span>
+          <div className="cta-buttons-about">
+            <button className="btn-primary glow-about">
+             
+              <a href="/login" className="btn-primary"> Start Your Journey</a>
+              <span className="btn-sparkle-about">✨</span>
             </button>
-            <button className="btn-outline">
+            <button className="btn-outline-about">
               Learn More
             </button>
           </div>

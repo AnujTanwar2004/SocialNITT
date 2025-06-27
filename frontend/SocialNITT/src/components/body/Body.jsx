@@ -104,7 +104,7 @@ function Body() {
           element={isLogged ? <EditFood /> : <NotFound />}
         />
         <Route path="/contact" element={<ContactSection />} />
- <Route path="/aboutus" element={<AboutUS />} />
+        <Route path="/aboutus" element={<AboutUS />} />
       </Routes>
     </section>
   );

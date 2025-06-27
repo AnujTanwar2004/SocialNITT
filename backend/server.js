@@ -31,6 +31,7 @@ app.use('/api/products', require('./routes/productRouter'))
 app.use('/api/services', require('./routes/serviceRouter'))
 app.use('/api/foods',require('./routes/foodRouter'))
 app.use('/api/notifications', require('./routes/notificationRouter'));
+app.use('/api/contact', require('./routes/contactRouter')) // Add this line
 app.get('/', (req, res) => {
     res.send("APP IS RUNNING.")
 })

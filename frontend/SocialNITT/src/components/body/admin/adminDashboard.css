@@ -192,6 +192,21 @@
   border: 1px solid #90caf9;
 }
 
+.role-badge.unread {
+  background: #ff6b6b;
+  color: white;
+}
+
+.role-badge.read {
+  background: #51cf66;
+  color: white;
+}
+
+.role-badge.replied {
+  background: #339af0;
+  color: white;
+}
+
 /* Delete Button */
 .delete-btn {
   background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
@@ -305,6 +320,30 @@
   background: #ffffff;
   border-radius: 8px;
   border: 2px dashed rgba(133, 14, 53, 0.3);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 /* Responsive Design */

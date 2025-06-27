@@ -8,7 +8,7 @@ const axiosClient = axios.create({
 });
 
 // Variable to store the current token
-let currentToken = null;
+let currentToken = null; 
 
 // Function to set token (called from outside)
 export const setAxiosToken = (token) => {
