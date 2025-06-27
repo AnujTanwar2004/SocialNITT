@@ -289,7 +289,7 @@ function Profile() {
         <FoodCard
           key={item._id}
           item={item}
-          type="food"
+          
           getUrgencyColor={getUrgencyColor}
           getStatusColor={getStatusColor}
           isProfileView={true}

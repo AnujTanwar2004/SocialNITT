@@ -394,10 +394,7 @@ label {
 }
 
 @media (max-width: 1024px) {
-  .cta-secondary .cta-container {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
+   
 }
 
 /* Product Details Section */
@@ -1251,3 +1248,87 @@ label {
 .overflow-scroll { overflow: scroll; }
 
 /* End of Cleaned Dashboard CSS */
+
+ 
+@media (max-width:1024px) {
+  .cta-secondary .cta-container{
+    gap: 1.5rem;
+  }
+  .cta-secondary .cta-container .cta-details {
+    padding: 1.5rem;
+    background: #ffffff;
+    border-radius: 1.5rem;
+    box-shadow: 0 .8rem 3.5rem rgba(133, 14, 53, 0.08);
+    border: 1px solid rgba(133, 14, 53, 0.1);
+  }
+  
+  .cta-secondary .cta-container .cta-details h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    
+    margin-bottom: 1rem;
+    line-height: 1.2;
+     
+  }
+  
+   
+  
+  /* Info Rows */
+  .cta-secondary .cta-container .cta-details .first,
+  .cta-secondary .cta-container .cta-details .second {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: .6rem;
+  
+    
+     
+  }
+  
+  .cta-secondary .cta-container .cta-details .first p:first-child {
+    font-size: 1.2rem;
+    margin-right: 2px; 
+ 
+  }
+  
+  .cta-secondary .cta-container .cta-details .first p:last-child,
+  .cta-secondary .cta-container .cta-details .second p {
+    
+     
+    gap: 0.4rem;
+  }
+  
+  .cta-secondary .cta-container .cta-details .first p:last-child i,
+  .cta-secondary .cta-container .cta-details .second p i {
+    
+    font-size: .8rem;
+  }
+  
+  /* Description */
+  .cta-secondary .cta-container .cta-details > p {
+     
+    line-height: 1.7;
+    font-size: 1rem;
+    margin: 1.2rem 0;
+    padding: 1rem;
+    
+    
+    
+ 
+  }
+  
+  /* Contact Button Enhancement */
+  .cta-secondary .cta-container .cta-details .cta-btn {
+    margin-top: 0;
+    padding: .8rem 1.5rem;
+    
+    
+    font-size: .9rem;
+
+  }
+ 
+}
+@media (max-width:768px) {
+  
+}

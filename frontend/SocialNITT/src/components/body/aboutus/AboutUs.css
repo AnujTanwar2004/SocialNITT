@@ -30,7 +30,7 @@
 }
 
 /* ============ HERO SECTION ============ */
-.hero-section {
+.about-hero-section {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -1181,7 +1181,7 @@
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-  .hero-section {
+  .about-hero-section {
     background: #000000;
   }
   

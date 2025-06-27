@@ -69,7 +69,7 @@ function Hero() {
     </div>
   );
 
-  const renderServicesOrFoods = (items, type) => (
+  const renderServices = (items, type) => (
     <div className="  card-slider-container">
     <div className="  card-slider">
       {items.map((item) =>
@@ -78,6 +78,7 @@ function Hero() {
             key={item._id}
             item={item}
             type={type}
+            isProfileView={false}
             getUrgencyColor={getUrgencyColor}
             getStatusColor={getStatusColor}
           />
@@ -86,6 +87,26 @@ function Hero() {
     </div>
     </div>
   );
+
+  const renderFoods = (items, type) => (
+    <div className="  card-slider-container">
+    <div className="  card-slider">
+      {items.map((item) =>
+        !item.isArchived ? (
+          <ServiceCard
+            key={item._id}
+            item={item}
+            type={type}
+            isProfileView={false}
+            getUrgencyColor={getUrgencyColor}
+            getStatusColor={getStatusColor}
+          />
+        ) : null
+      )}
+    </div>
+    </div>
+  );
+
 
   return (
     <section className="hero" style={{ padding: "2rem" }}>
@@ -112,7 +133,7 @@ function Hero() {
             See More Services
           </Link>
         </div>
-        {renderServicesOrFoods(services, "service")}
+        {renderServices(services, "service")}
       </div>
 
       <hr style={{ margin: "2rem 0" }} />
@@ -131,7 +152,7 @@ function Hero() {
             See More Foods
           </Link>
         </div>
-        {renderServicesOrFoods(foods, "food")}
+        {renderFoods(foods, "food")}
       </div>
 
       {/* Top Users Leaderboard (All Time) */}

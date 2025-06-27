@@ -1,16 +1,15 @@
 header {
-width: 100%;
-min-height: 4.5rem;
-background: rgba(133, 14, 53, 0.85); /* 85% opacity */
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 0 30px;
-position: fixed;
-box-shadow: 0 6px 20px rgba(133, 14, 53, 0.3);
-backdrop-filter: blur(3px); /* optional for glass effect */
-
-  }
+  width: 100%;
+  min-height: 4.5rem;
+  background: rgba(133, 14, 53, 0.85); /* 85% opacity */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  position: fixed;
+  box-shadow: 0 6px 20px rgba(133, 14, 53, 0.3);
+  backdrop-filter: blur(3px); /* optional for glass effect */
+}
 
 header .logo {
   display: flex;
@@ -52,6 +51,7 @@ header ul li {
   display: inline-block;
   padding: 10px 20px;
   opacity: 0.9;
+  font-size: 1rem;
 }
 
 header ul li:hover {
@@ -96,6 +96,13 @@ header ul li a {
   white-space: nowrap;
 }
 
+/* --------- Responsive padding adjustment --------- */
+@media (max-width: 1140px) {
+  header ul li {
+    padding: 10px 10px;
+  }
+}
+
 /* --------- Responsive for tablets --------- */
 @media (max-width: 1024px) and (min-width: 769px) {
   header {
@@ -121,10 +128,20 @@ header ul li a {
   header ul {
     margin-right: 0px;
   }
+  header ul li{
+    display: inline-block;
+    padding: 8px 14px;
+    opacity: 0.9;
+    font-size: .8rem;
+  }
 
   header ul li a {
     white-space: nowrap;
-    font-size: 13px;
+    font-size: .8rem;
+  }
+  button{
+    width:40px;
+    height:40px
   }
 }
 
@@ -167,8 +184,6 @@ header ul li a {
   gap: 10px;
 }
 
- 
-
 .username {
   color: white;
   font-size: 14px;
@@ -181,7 +196,7 @@ header ul li a {
   cursor: pointer;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   .menu-controls {
     display: flex;
     position: absolute;
@@ -226,3 +241,4 @@ header ul li a {
     display: block;
   }
 }
+

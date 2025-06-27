@@ -8,7 +8,7 @@
   }
   
   .service-card-title {
-    font-size: 17px;
+    font-size: 1.2rem;
     font-weight: 700;
     color:white;  /* Title text in white */
     text-transform: capitalize;

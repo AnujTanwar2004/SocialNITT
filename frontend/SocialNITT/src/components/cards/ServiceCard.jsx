@@ -17,7 +17,7 @@ function ServiceCard({
 
   return (
     <article className="custom-card">
-      <Link to={`/view_${type}/${item._id}`} className="card-link">
+      <Link to={`/view_service/${item._id}`} className="card-link">
         {/* Header */}
         <div className="service-title-badges">
           <div className="service-card-header">
@@ -56,7 +56,7 @@ function ServiceCard({
             <div className="service-card-location">📍 {item.location}</div>
           </div>
         </div>
-
+        </Link>
         {/* User Info */}
         {!isProfileView && (
           <div className="service-card-user">
@@ -75,7 +75,7 @@ function ServiceCard({
             )}
           </div>
         )}
-      </Link>
+      
 
       {/* Profile View Actions */}
       {isProfileView && (
@@ -87,11 +87,11 @@ function ServiceCard({
           </div>
           <div className="card-actions">
             <div className="action-row">
-              <Link to={`/edit_service/${item._id}`} className="card-button edit-button">
+              <Link to={`/edit_service/${item._id}`} className="   cta-btn">
                 Edit
               </Link>
               <button
-                className="card-button delete-button"
+                className="card-button  "
                 onClick={() => handleDelete(item._id, userId, "service")}
               >
                 Delete

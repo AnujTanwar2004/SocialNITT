@@ -79,7 +79,7 @@ function ProductCard({ item, isProfileView = false, handleDelete, handleArchive 
                 borderLeft: "3px solid #850E35",
               }}
             >
-              <p style={{ margin: 0, color: "#333" }}>{user.name}</p>
+              <p style={{ margin: 0, color: "#333",width:"80%" }}>{user.name}</p>
             </div>
           )}
         </div>

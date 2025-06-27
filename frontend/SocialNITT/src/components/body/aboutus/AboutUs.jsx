@@ -147,7 +147,7 @@ const AboutUs = () => {
   return (
     <div className="about-container">
       {/* Hero Section with Animated Background */}
-      <section className="hero-section" id="hero">
+      <section className="about-hero-section" id="hero">
         <div className="hero-background">
           <div className="floating-shapes">
             <div className="shape shape-1"></div>

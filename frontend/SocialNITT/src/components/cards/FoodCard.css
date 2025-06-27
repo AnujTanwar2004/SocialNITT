@@ -23,15 +23,19 @@
   
 
   .food-card {
-    width: 260px;
-    background-color: #ffffff;
-    border: 1px solid #f0e0e0;
-    border-radius: 16px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 270px;
+    flex: 1 1 calc(25% - 1rem); /* Default: 4 per row on wide screens */
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px);
+    border-radius: 0.75rem;
+    border: 1px solid #e0d7d7;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    margin: auto;
   }
   
   .food-card:hover {
