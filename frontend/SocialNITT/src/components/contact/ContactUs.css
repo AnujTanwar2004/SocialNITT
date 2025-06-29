@@ -1,0 +1,139 @@
+.contact-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3rem;
+  padding: 3rem;
+  background: #f8f9fa;
+  border-radius: 1rem;
+  margin: 2rem auto;
+   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+   margin-right: 40px;
+   margin-left: 40px;
+  }
+
+.contact-left {
+  flex: 1;
+}
+
+.contact-left h1 {
+  font-size: 2.2rem;
+  color: #111;
+  margin-bottom: 1rem;
+}
+
+.contact-left p {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.contact-details {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-details li {
+  font-size: 0.95rem;
+  color: #333;
+  margin: 0.8rem 0;
+}
+
+.contact-right {
+  flex: 1;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.contact-right form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-row input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+}
+
+textarea {
+  resize: none;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-footer span {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.form-footer button {
+  padding: 0.65rem 1.5rem;
+  background: #4b3cc9;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.form-footer button:hover {
+  background: #3c2bb8;
+}
+
+.error-message {
+  background-color: #fee;
+  color: #d33;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #fcc;
+}
+
+.success-message {
+  background-color: #efe;
+  color: #383;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #cfc;
+}
+
+.form-footer button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-wrapper {
+    flex-direction: column;
+    padding: 2rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+}

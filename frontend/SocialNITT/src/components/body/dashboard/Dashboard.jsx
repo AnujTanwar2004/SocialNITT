@@ -1,37 +1,61 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { fetchProducts } from "../../../redux/slices/productSlice"
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchProducts } from "../../../redux/slices/productSlice";
+import ProductCard from '../../cards/ProductCard';
 
- 
 function Dashboard() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const auth = useSelector(state => state.auth)
-  const { isLogged } = auth
+  const auth = useSelector(state => state.auth);
+  const { isLogged } = auth;
 
-  const products = useSelector(state => state.products.items)  
-  const status = useSelector(state => state.products.status)
+  const products = useSelector(state => state.products.items);
+  const status = useSelector(state => state.products.status);
 
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (isLogged && status === 'idle') {
-      dispatch(fetchProducts())  //  current mental state needs a hard reset 
-    }                            // ctrl +sleep
-                                 // npm run wake up early 
-  }, [isLogged, dispatch, status])
+      dispatch(fetchProducts());
+    }
+  }, [isLogged, dispatch, status]);
+
+  // Sort products to show latest first
+  const sortedProducts = products ? [...products].sort((a, b) => {
+    // Sort by updatedAt (most recent first), fallback to createdAt if updatedAt doesn't exist
+    const dateA = new Date(a.updatedAt || a.createdAt);
+    const dateB = new Date(b.updatedAt || b.createdAt);
+    return dateB - dateA; // Descending order (latest first)
+  }) : [];
 
   return (
     <>
       <section>
         <div className="cta-primary">
           <div className="cta-container">
-             <div className="cta-btn">
+            <div className="cta-btn">
               <p><Link to="/create_product">List Product</Link></p>
-             </div>
+            </div>
           </div>
-           
+
+          {/* Search bar */}
+          <form onSubmit={(e) => e.preventDefault()} className="search-form-primary">
+            <div className="search-form-container">
+              <svg xmlns="http://www.w3.org/2000/svg" className="search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Search products..."
+                className="search-input"
+                value={searchTerm}
+                onChange={(event) => {
+                  setSearchTerm(event.target.value);
+                }}
+              />
+            </div>
+          </form>
         </div>
       </section>
 
@@ -41,53 +65,44 @@ function Dashboard() {
           <p>A place where NITT Exchanges</p>
         </div>
 
-        <form onSubmit={(e) => e.preventDefault()} className="search-form-primary">
-          <div className="search-form-container">
-            <svg xmlns="http://www.w3.org/2000/svg" className="search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search"
-              className="search-input"
-              onChange={(event) => {
-                setSearchTerm(event.target.value)
-              }}
-            />
-          </div>
-        </form>
-
+        {/* Card container using ProductCard */}
         <div className="card-container">
-          {products && products
+          {sortedProducts
             .filter((item) => {
-              if (searchTerm === "") return true
-              return item.title.toLowerCase().includes(searchTerm.toLowerCase())
+              if (searchTerm === "") return true;
+              return (
+                item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.description.toLowerCase().includes(searchTerm.toLowerCase())
+              );
             })
-            .map((item, key) =>
+            .map((item) =>
               !item.isArchived ? (
-                <article className="card" key={key}>
-                  <p className="card-details">
-                    <Link to={`/view_product/${item._id}`}>
-                      <img src={item.image} loading="lazy" alt={item.title} className="w-full h-48 rounded-tl-md rounded-tr-md" />
-                      <div className="card-header">
-                        <div className="info">
-                          <span className="cost">₹ {item.price}</span>
-                          <span className="date">{item.updatedAt.slice(0, 10)}</span>
-                        </div>
-                      </div>
-                      <div className="card-footer">
-                        <h3>{item.title}</h3>
-                        <p>{item.description}</p>
-                      </div>
-                    </Link>
-                  </p>
-                </article>
+                <ProductCard key={item._id} item={item} />
               ) : null
             )}
         </div>
+
+        {/* Show message when no products found */}
+        {sortedProducts
+          .filter((item) => {
+            if (searchTerm === "") return true;
+            return (
+              item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              item.description.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+          })
+          .filter(item => !item.isArchived).length === 0 && (
+          <div className="empty-state">
+            {searchTerm ? (
+              <p>No products found matching "{searchTerm}"</p>
+            ) : (
+              <p>No products available at the moment.</p>
+            )}
+          </div>
+        )}
       </section>
     </>
-  )
+  );
 }
 
-export default Dashboard
+export default Dashboard;

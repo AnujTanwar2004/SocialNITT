@@ -1,24 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axiosClient from '../../components/utils/axiosClient'
 
-// Async thunk to fetch all products (token auto-attached by axiosClient)
 export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token')
-      const res = await axiosClient.get('/api/products', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+      // Remove manual token handling - axiosClient handles this automatically
+      const res = await axiosClient.get('/api/products')
       return res.data
     } catch (err) {
       return rejectWithValue(err.response?.data?.msg || "Failed to fetch products")
     }
   }
 )
-
 
 const productSlice = createSlice({
   name: 'products',

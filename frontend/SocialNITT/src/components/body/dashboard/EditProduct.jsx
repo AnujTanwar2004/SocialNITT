@@ -26,7 +26,7 @@ function EditProduct() {
   // Fixed selectors
   const products = useSelector(state => state.products.items) // Changed from state.products.products
   const auth = useSelector(state => state.auth)
-  const { token } = auth // Get token from auth state
+  const token = localStorage.getItem("accessToken");
 
   const [editProduct, setProduct] = useState(initialState)
   const { title, price, description, location, category, phone, isArchived, image, err, success } = editProduct
@@ -61,45 +61,33 @@ function EditProduct() {
     setProduct({ ...editProduct, [name]: value, err: '', success: '' })
   }
 
-  const changeAvatar = async e => {
-    e.preventDefault()
+  const changeAvatar = async (e) => {
+    e.preventDefault();
     try {
-      const file = e.target.files[0]
-      if (!file)
-        return setProduct({ ...editProduct, err: "No files were uploaded.", success: '' })
+      const file = e.target.files[0];
+      if (!file) return;
 
-      if (file.size > 1024 * 1024)
-        return setProduct({ ...editProduct, err: "Size too large. Max 1MB", success: '' })
+      // Validate file size/type here if needed
 
-      if (file.type !== 'image/jpeg' && file.type !== 'image/png')
-        return setProduct({ ...editProduct, err: "File format is incorrect. Use JPG/PNG", success: '' })
+      const formData = new FormData();
+      formData.append('file', file);
 
-      const formData = new FormData()
-      formData.append('file', file)
-
-      setLoading(true)
-
-      const res = await axios.post('/api/upload/upload_avatar', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}` // Added Bearer prefix
+      // Upload to backend
+      const res = await axios.post(
+        "/api/upload/avatar",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
         }
-      })
+      );
 
-      setLoading(false)
-      console.log("Upload Response: ", res.data)
-
-      setAvatar(res.data.url)
-      setProduct({ ...editProduct, image: res.data.url, err: '', success: 'Image uploaded successfully' })
-
+      // Set the image URL/path in state
+      setProduct({ ...editProduct, image: res.data.url, err: '', success: '' });
     } catch (err) {
-      console.error("Upload Error:", err)
-      setProduct({
-        ...editProduct,
-        err: err.response?.data?.msg || "Upload failed",
-        success: ''
-      })
-      setLoading(false)
+      setProduct({ ...editProduct, err: 'Image upload failed', success: '' });
     }
   }
 

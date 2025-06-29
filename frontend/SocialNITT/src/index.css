@@ -18,7 +18,7 @@
   box-sizing: border-box;
   margin: 0;
   font-family: 'Nunito', sans-serif;
-
+ 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -34,8 +34,19 @@ code {
   box-shadow: 0 0 20px #eee;
   margin: 0 auto;
   overflow: hidden;
+  
 }
-
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  height: 4rem; /* or your actual height */
+}
+.App {
+  padding-top: 4rem; /* matches header height */
+}
 a{
   text-decoration: none;
   color: white;
@@ -48,4 +59,8 @@ button{
   outline: none;
   cursor: pointer;
 }
-
+*{
+scroll-snap-type: y mandatory;
+        scrollbar-width: none;
+    
+}

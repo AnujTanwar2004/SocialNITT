@@ -1,76 +1,236 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-  function Hero() {
-  const products = useSelector((state) => state.products.items || []).slice(0, 3);
-  const services = useSelector((state) => state.services.items || []).slice(0, 3);
-  const foods = useSelector((state) => state.foods.items || []).slice(0, 3);
+import ProductCard from "../../cards/ProductCard";
+import ServiceCard from "../../cards/ServiceCard";
+import axiosClient from "../../utils/axiosClient"; // adjust path if needed
 
-  // Card rendering helper
-  const renderCards = (items, type) =>
-    <div className="card-container" style={{ display: "flex", gap: "1rem" }}>
+import "./hero.css";
+
+function Hero() {
+  const products = useSelector((state) => state.products.items || []);
+  const services = useSelector((state) => state.services.items || []);
+  const foods = useSelector((state) => state.foods.items || []);
+
+  const [topUsers, setTopUsers] = useState([]);
+  const [topUsersWeek, setTopUsersWeek] = useState([]);
+
+  useEffect(() => {
+    // Fetch all-time top users
+    axiosClient
+      .get("/user/top-users")
+      .then((res) => setTopUsers(res.data))
+      .catch(() => setTopUsers([]));
+
+    // Fetch weekly top users
+    axiosClient
+      .get("/user/top-users-week")
+      .then((res) => setTopUsersWeek(res.data))
+      .catch(() => setTopUsersWeek([]));
+  }, []);
+
+  const getUrgencyColor = (urgency) => {
+    switch (urgency) {
+      case "Urgent":
+        return "#FF4444";
+      case "High":
+        return "#FF8800";
+      case "Medium":
+        return "#FFA500";
+      case "Low":
+        return "#4CAF50";
+      default:
+        return "#666";
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Active":
+        return "#4CAF50";
+      case "In Progress":
+        return "#2196F3";
+      case "Completed":
+        return "#9C27B0";
+      case "Cancelled":
+        return "#F44336";
+      default:
+        return "#666";
+    }
+  };
+
+  const renderProducts = (items) => (
+    <div className="  card-slider-container">
+    <div className="  card-slider">
+      {items.map((item) =>
+        !item.isArchived ? <ProductCard key={item._id} item={item} /> : null
+      )}
+    </div>
+    </div>
+  );
+
+  const renderServices = (items, type) => (
+    <div className="  card-slider-container">
+    <div className="  card-slider">
       {items.map((item) =>
         !item.isArchived ? (
-          <article className="card" key={item._id} style={{ width: "250px" }}>
-            <p className="card-details">
-              <Link to={`/view_${type}/${item._id}`}>
-                <img
-                  src={item.image}
-                  loading="lazy"
-                  alt={item.title}
-                  className="w-full h-48 rounded-tl-md rounded-tr-md"
-                  style={{ width: "100%", height: "150px", objectFit: "cover" }}
-                />
-                <div className="card-header">
-                  <div className="info">
-                    {item.price && <span className="cost">₹ {item.price}</span>}
-                    <span className="date">
-                      {item.updatedAt ? item.updatedAt.slice(0, 10) : ""}
-                    </span>
-                  </div>
-                </div>
-                <div className="card-footer">
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                </div>
-              </Link>
-            </p>
-          </article>
+          <ServiceCard
+            key={item._id}
+            item={item}
+            type={type}
+            isProfileView={false}
+            getUrgencyColor={getUrgencyColor}
+            getStatusColor={getStatusColor}
+          />
         ) : null
       )}
-    </div>;
+    </div>
+    </div>
+  );
+
+  const renderFoods = (items, type) => (
+    <div className="  card-slider-container">
+    <div className="  card-slider">
+      {items.map((item) =>
+        !item.isArchived ? (
+          <ServiceCard
+            key={item._id}
+            item={item}
+            type={type}
+            isProfileView={false}
+            getUrgencyColor={getUrgencyColor}
+            getStatusColor={getStatusColor}
+          />
+        ) : null
+      )}
+    </div>
+    </div>
+  );
+
 
   return (
     <section className="hero" style={{ padding: "2rem" }}>
       <h1 style={{ textAlign: "center" }}>Welcome to SocialNITT</h1>
 
-      {/* Products Row */}
+      {/* Products Section */}
       <div className="hero-section">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div className="hero-section-header">
           <h2>Products</h2>
-          <Link to="/products" className="cta-btn">See More Products</Link>
+          <Link to="/products" className="cta-btn">
+            See More Products
+          </Link>
         </div>
-        {renderCards(products, "product")}
+        {renderProducts(products)}
       </div>
+
       <hr style={{ margin: "2rem 0" }} />
 
-      {/* Services Row */}
+      {/* Services Section */}
       <div className="hero-section">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div className="hero-section-header">
           <h2>Services</h2>
-          <Link to="/services" className="cta-ctn">See More Services</Link>
+          <Link to="/services" className="cta-btn">
+            See More Services
+          </Link>
         </div>
-        {renderCards(services, "service")}
+        {renderServices(services, "service")}
       </div>
+
       <hr style={{ margin: "2rem 0" }} />
 
-      {/* Foods Row */}
+      {/* Foods Section */}
       <div className="hero-section">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <h2>Foods</h2>
-          <Link to="/foods" className="cta-btn">See More Foods</Link>
+          <Link to="/foods" className="cta-btn">
+            See More Foods
+          </Link>
         </div>
-        {renderCards(foods, "food")}
+        {renderFoods(foods, "food")}
+      </div>
+
+      {/* Top Users Leaderboard (All Time) */}
+      <hr style={{ margin: "2rem 0" }} />
+      <div className="hero-section  ">
+        <h2>🏆 Top Contributors (All Time)</h2>
+        <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
+          {topUsers.map((user, idx) => (
+            <div
+              key={user._id}
+              style={{
+                border: "2px solid gold",
+                borderRadius: "12px",
+                padding: "1rem",
+                minWidth: "180px",
+                background: "#fffbe6",
+                textAlign: "center",
+              }}
+            >
+              <img
+                src={user.avatar}
+                alt={user.name}
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: "50%",
+                  marginBottom: 8,
+                }}
+              />
+              <h3 style={{ margin: 0 }}>{user.name}</h3>
+              <p style={{ margin: 0, color: "#850E35", fontWeight: "bold" }}>
+                {user.points} points
+              </p>
+              <p style={{ margin: 0, color: "#888" }}>
+                {idx === 0 ? "🥇" : idx === 1 ? "🥈" : "🥉"}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Top Users Leaderboard (This Week) */}
+      <hr style={{ margin: "2rem 0" }} />
+      <div className="hero-section ">
+        <h2>🔥 Top Contributors (This Week)</h2>
+        <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
+          {topUsersWeek.map((user, idx) => (
+            <div
+              key={user._id}
+              style={{
+                border: "2px solid #ff9800",
+                borderRadius: "12px",
+                padding: "1rem",
+                minWidth: "180px",
+                background: "#fffbe6",
+                textAlign: "center",
+              }}
+            >
+              <img
+                src={user.avatar}
+                alt={user.name}
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: "50%",
+                  marginBottom: 8,
+                }}
+              />
+              <h3 style={{ margin: 0 }}>{user.name}</h3>
+              <p style={{ margin: 0, color: "#ff9800", fontWeight: "bold" }}>
+                {user.weeklyPoints} points
+              </p>
+              <p style={{ margin: 0, color: "#888" }}>
+                {idx === 0 ? "🥇" : idx === 1 ? "🥈" : "🥉"}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

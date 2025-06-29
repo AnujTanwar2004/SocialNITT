@@ -21,9 +21,19 @@ const productSchema = new mongoose.Schema({
         required: [true, "Please enter your location!"]
     },
     category: {
-        type: String,
-        required: [true, "Please enter product category!"]
-    },
+            type: String,
+            required: [true, "Please select service category!"],
+            enum: [
+                'Sports',
+                'Fashion',
+                'Electronics',
+                'Utility',
+                'Instruments',
+                'IT & Technical',
+                'Stationary',
+                'Others(Contact admin to add category)'
+            ]
+        },
     phone: {
         type: Number,
         required: [true, "Please enter your phone number!"]

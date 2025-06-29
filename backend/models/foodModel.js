@@ -27,14 +27,16 @@ const foodSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please select service category!"],
         enum: [
-            'Construction & Renovation',
-            'Plumbing & Water',
-            'Electrical',
-            'Cleaning & Maintenance',
-            'Transportation & Logistics',
-            'IT & Technical',
-            'Professional Services',
-            'Others'
+            "Wafours",
+    "Dry-Fruits",
+    "South-Indian Cousine",
+    "North-Indian Cousine",
+    "Breakfast",
+    "Snacks",
+    "Extra Food",
+    "dariy product",
+    "extra food",
+    "Others",
         ]
     },
     //services type is removed from here

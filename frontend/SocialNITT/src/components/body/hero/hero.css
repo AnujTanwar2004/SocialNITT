@@ -1,5 +1,13 @@
 .see-more{
-    background-color:  #850E35;
+  background-color: black; 
+  font-weight: bold;
     border-radius: 5px;
     height: 30px;
 }
+.hero-section-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+ 
+ 

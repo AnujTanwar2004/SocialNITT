@@ -16,7 +16,17 @@ const initialState = {
   err: '',
   success: ''
 }
-// create the product 
+const categories = [
+                   'Sports',
+                   'Fashion',
+                   'Electronics',
+                   'Utility',
+                   'Instruments',
+                   'IT & Technical',
+                   'Stationary',
+                   'Others(Contact admin to add category)'
+  ];
+
 function CreateProduct() {
   const [product, setProduct] = useState(initialState)
   const { title, price, description, location, category, phone, image, err, success } = product
@@ -25,101 +35,95 @@ function CreateProduct() {
   const userId = user._id
 
   const [loading, setLoading] = useState(false)
+  const [showPreview, setShowPreview] = useState(false);
   const navigate = useNavigate()
 
   const handleChangeInput = e => {
     const { name, value } = e.target
     setProduct({ ...product, [name]: value, err: '', success: '' })
   }
-const changeAvatar = async e => {
-  e.preventDefault()
-  try {
-    const file = e.target.files[0]
-    if (!file)
-      return setProduct({ ...product, err: "No files were uploaded.", success: '' })
 
-    if (file.size > 1024 * 1024)
-      return setProduct({ ...product, err: "Size too large. Max 1MB", success: '' })
+  // ✅ FIXED: Remove manual token handling - let axiosClient handle it
+  const changeAvatar = async e => {
+    e.preventDefault()
+    try {
+      const file = e.target.files[0]
+      if (!file)
+        return setProduct({ ...product, err: "No files were uploaded.", success: '' })
 
-    if (file.type !== 'image/jpeg' && file.type !== 'image/png')
-      return setProduct({ ...product, err: "File format is incorrect. Use JPG/PNG", success: '' })
+      if (file.size > 1024 * 1024)
+        return setProduct({ ...product, err: "Size too large. Max 1MB", success: '' })
 
-    const formData = new FormData()
-    formData.append('file', file)
+      if (file.type !== 'image/jpeg' && file.type !== 'image/png')
+        return setProduct({ ...product, err: "File format is incorrect. Use JPG/PNG", success: '' })
 
-    setLoading(true)
+      const formData = new FormData()
+      formData.append('file', file)
 
-    const token = localStorage.getItem('token')
+      setLoading(true)
 
-    const res = await axiosClient.post('/api/upload/avatar', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${token}`
-      }
-    })
+      // ✅ FIXED: Remove manual token - axiosClient handles it automatically
+      const res = await axiosClient.post('/api/upload/avatar', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+          // No manual Authorization header needed
+        }
+      })
 
-    setLoading(false)
-    console.log("Upload Response: ", res.data)
+      setLoading(false)
+      console.log("Upload Response: ", res.data)
 
-    setProduct({ ...product, image: res.data.url, err: '', success: 'Image uploaded successfully' })
+      setProduct({ ...product, image: res.data.url, err: '', success: 'Image uploaded successfully' })
 
-  } catch (err) {
-    console.error("Upload Error:", err)
-    setProduct({
-      ...product,
-      err: err.response?.data?.msg || "Upload failed",
-      success: ''
-    })
-    setLoading(false)
+    } catch (err) {
+      console.error("Upload Error:", err)
+      setProduct({
+        ...product,
+        err: err.response?.data?.msg || "Upload failed",
+        success: ''
+      })
+      setLoading(false)
+    }
   }
-}
 
-
-
+  // ✅ FIXED: Remove manual token handling - let axiosClient handle it
   const handleSubmit = async e => {
-  e.preventDefault()
+    e.preventDefault()
 
-  if (isEmpty(title) || isEmpty(price) || isEmpty(description) || isEmpty(location) || isEmpty(category) || isEmpty(phone))
-    return setProduct({ ...product, err: "Please fill in all fields", success: '' })
+    if (isEmpty(title) || isEmpty(price) || isEmpty(description) || isEmpty(location) || isEmpty(category) || isEmpty(phone))
+      return setProduct({ ...product, err: "Please fill in all fields", success: '' })
 
-  if (priceValidate(price))
-    return setProduct({ ...product, err: "Price must be greater than or equal to 0", success: '' })
+    if (priceValidate(price))
+      return setProduct({ ...product, err: "Price must be greater than or equal to 0", success: '' })
 
-  if (!validatePhone(phone))
-    return setProduct({ ...product, err: "Enter a valid phone number", success: '' })
+    if (!validatePhone(phone))
+      return setProduct({ ...product, err: "Enter a valid phone number", success: '' })
 
-  if (!image)
-    return setProduct({ ...product, err: "Please upload an image", success: '' })
+    if (!image)
+      return setProduct({ ...product, err: "Please upload an image", success: '' })
 
-  try {
-    console.log({ title, description, price, location, category, phone, image, userId })
+    try {
+      console.log({ title, description, price, location, category, phone, image, userId })
 
-    const token = localStorage.getItem('token')
+      // ✅ FIXED: Remove manual token - axiosClient handles it automatically
+      const res = await axiosClient.post('/api/products', {
+        title,
+        description,
+        price: Number(price),
+        location,
+        category,
+        phone: Number(phone),
+        image
+      })
+      // No manual headers needed - axiosClient handles token automatically
 
-    const res = await axiosClient.post('/api/products', {
-  title,
-  description,
-  price: Number(price),
-  location,
-  category,
-  phone: Number(phone),
-  image
-}, {
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
+      setProduct({ ...initialState, success: res.data.msg })
+
+    } catch (err) {
+      console.error("Create Product Error:", err)
+      setProduct({ ...product, err: err.response?.data?.msg || "Submit failed", success: '' })
+    }
   }
-})
-
-
-    setProduct({ ...initialState, success: res.data.msg })
-
-  } catch (err) {
-    console.error("Create Product Error:", err)
-    setProduct({ ...product, err: err.response?.data?.msg || "Submit failed", success: '' })
-  }
-}
-
 
   return (
     <>
@@ -150,8 +154,22 @@ const changeAvatar = async e => {
           <div><label htmlFor="location">Location</label>
             <input type="text" name="location" value={location} onChange={handleChangeInput} required />
           </div>
-          <div><label htmlFor="category">Category</label>
-            <input type="text" name="category" value={category} onChange={handleChangeInput} required />
+          <div>
+            <label htmlFor="category">Product Category*</label>
+            <select
+              id="category"
+              value={category}
+              name="category"
+              onChange={handleChangeInput}
+              required
+            >
+              <option value="">Select Category</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
           </div>
           <div><label htmlFor="phone">Phone no.</label>
             <input type="text" name="phone" value={phone} onChange={handleChangeInput} required />
@@ -165,6 +183,39 @@ const changeAvatar = async e => {
             <button type="submit" disabled={loading || !image}>Create</button>
           </div>
         </form>
+
+        {/* Preview Section */}
+        <button
+          type="button"
+          className="card-button"
+          onClick={() => setShowPreview((prev) => !prev)}
+        >
+          {showPreview ? "Hide Preview" : "Preview"}
+        </button>
+        {showPreview && (
+          <div className="preview-card custom-card" style={{ marginBottom: "2rem" }}>
+            <div className="card-image-wrapper">
+              {image && (
+                <img
+                  src={typeof image === "string" && image.startsWith("http") ? image : URL.createObjectURL(image)}
+                  alt="Preview"
+                  className="card-image"
+                />
+              )}
+            </div>
+            <div className="card-body">
+              <h3 className="card-title">{title}</h3>
+              <p className="card-description">{description}</p>
+              <div className="card-price-date">
+                <span className="card-price">₹ {price}</span>
+                <span className="card-date">{location}</span>
+              </div>
+              <div style={{ fontSize: "13px", color: "#888" }}>
+                <span>{category}</span> | <span>{phone}</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   )

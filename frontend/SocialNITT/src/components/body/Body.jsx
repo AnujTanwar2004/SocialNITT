@@ -3,10 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import Login from "./auth/Login";
-import Register from "./auth/Register";
-import ActivationEmail from "./auth/ActivationEmail";
-import ForgotPass from "./auth/ForgotPassword";
-import ResetPass from "./auth/ResetPassword";
+ 
 
 import Profile from "./profile/Profile";
 
@@ -17,7 +14,6 @@ import ViewProduct from "./dashboard/ViewProduct";
 import EditProduct from "./dashboard/EditProduct";
 
 // New Services Components
-
 import ServicesDashboard from "./services/ServicesDashboard";
 import CreateService from "./services/CreateService";
 import ViewService from "./services/ViewService";
@@ -30,10 +26,13 @@ import EditFood from "./foods/EditFood";
 
 import NotFound from "../utils/NotFound/NotFound";
 import Hero from "./hero/Hero";
+import ContactSection from "../contact/ContactUs"; // or wherever your file is
 
+import AboutUS from "../body/aboutus/AboutUs"
 function Body() {
   const auth = useSelector((state) => state.auth);
   const { isLogged } = auth;
+ 
 
   return (
     <section>
@@ -41,25 +40,10 @@ function Body() {
         {/* Home Route - Products by default */}
         <Route path="/" element={isLogged ? <Hero /> : <Home />} />
 
-        {/* Authentication Routes */}
-        <Route path="/login" element={isLogged ? <NotFound /> : <Login />} />
-        <Route
-          path="/register"
-          element={isLogged ? <NotFound /> : <Register />}
-        />
-        <Route
-          path="/user/activate/:activation_token"
-          element={<ActivationEmail />}
-        />
-        <Route
-          path="/forgot_password"
-          element={isLogged ? <NotFound /> : <ForgotPass />}
-        />
-        <Route
-          path="/user/reset/:token"
-          element={isLogged ? <NotFound /> : <ResetPass />}
-        />
-
+        {/* Authentication Routes - FIXED: Allow access to login page */}
+        <Route path="/login" element={<Login />} />
+         
+ 
         {/* Profile Route */}
         <Route
           path="/profile"
@@ -68,9 +52,9 @@ function Body() {
 
         {/* Product Routes */}
         <Route
-  path="/products"
-  element={isLogged ? <Dashboard /> : <NotFound />}
-/>
+          path="/products"
+          element={isLogged ? <Dashboard /> : <NotFound />}
+        />
         <Route
           path="/create_product"
           element={isLogged ? <CreateProduct /> : <NotFound />}
@@ -101,6 +85,7 @@ function Body() {
           path="/edit_service/:id"
           element={isLogged ? <EditService /> : <NotFound />}
         />
+
         {/* Food Routes */}
         <Route
           path="/foods"
@@ -118,6 +103,8 @@ function Body() {
           path="/edit_food/:id"
           element={isLogged ? <EditFood /> : <NotFound />}
         />
+        <Route path="/contact" element={<ContactSection />} />
+        <Route path="/aboutus" element={<AboutUS />} />
       </Routes>
     </section>
   );

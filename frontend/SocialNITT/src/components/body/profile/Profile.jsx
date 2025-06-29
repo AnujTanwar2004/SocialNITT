@@ -7,6 +7,12 @@ import { showSuccessMsg, showErrMsg } from '../../utils/notification/Notificatio
 import { fetchProducts } from "../../../redux/slices/productSlice";
 import { fetchServices } from "../../../redux/slices/serviceSlice";
 import { fetchFoods } from "../../../redux/slices/foodSlice";
+import { getImageUrl } from '../../utils/axiosClient';
+import ProductCard from "../../cards/ProductCard";
+import ServiceCard from "../../cards/ServiceCard";
+import FoodCard from '../../cards/FoodCard';
+
+
 
 const initialState = {
   name: '',
@@ -22,6 +28,36 @@ function Profile() {
   const { items: products = [] } = useSelector(state => state.products || { items: [] });
   const { items: services = [] } = useSelector(state => state.services || { items: [] });
   const { items: foods = [] } = useSelector(state => state.foods || { items: [] });
+  const getUrgencyColor = (urgency) => {
+    switch (urgency) {
+      case "Urgent":
+        return "#FF4444";
+      case "High":
+        return "#FF8800";
+      case "Medium":
+        return "#FFA500";
+      case "Low":
+        return "#4CAF50";
+      default:
+        return "#666";
+    }
+  };
+  
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Active":
+        return "#4CAF50";
+      case "In Progress":
+        return "#2196F3";
+      case "Completed":
+        return "#9C27B0";
+      case "Cancelled":
+        return "#F44336";
+      default:
+        return "#666";
+    }
+  };
+  
 
   const { user, isLogged } = auth;
   const [data, setData] = useState(initialState);
@@ -58,13 +94,17 @@ function Profile() {
       formData.append('file', file);
 
       setLoading(true);
-      const res = await axios.post('/api/upload_avatar', formData, {
-        headers: { 'content-type': 'multipart/form-data', Authorization: token },
+      const res = await axios.post('/api/upload/avatar', formData, {
+        headers: { 
+          'content-type': 'multipart/form-data', 
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}` 
+        },
       });
       setLoading(false);
       setAvatar(res.data.url);
     } catch (err) {
-      setData({ ...data, err: err.response.data.msg, success: '' });
+      setData({ ...data, err: err.response?.data?.msg || 'Upload failed', success: '' });
+      setLoading(false);
     }
   };
 
@@ -74,11 +114,11 @@ function Profile() {
         name: name || user.name,
         avatar: avatar || user.avatar,
       }, {
-        headers: { Authorization: token },
+        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
       });
       setData({ ...data, err: '', success: 'Updated successfully!' });
     } catch (err) {
-      setData({ ...data, err: err.response.data.msg, success: '' });
+      setData({ ...data, err: err.response?.data?.msg || 'Update failed', success: '' });
     }
   };
 
@@ -90,10 +130,12 @@ function Profile() {
       return setData({ ...data, err: 'Passwords did not match.', success: '' });
 
     try {
-      await axios.post('/user/reset', { password }, { headers: { Authorization: token } });
+      await axios.post('/user/reset', { password }, { 
+        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } 
+      });
       setData({ ...data, err: '', success: 'Password updated successfully!' });
     } catch (err) {
-      setData({ ...data, err: err.response.data.msg, success: '' });
+      setData({ ...data, err: err.response?.data?.msg || 'Password update failed', success: '' });
     }
   };
 
@@ -113,14 +155,14 @@ function Profile() {
         setLoading(true);
         await axios.delete(`/api/${type}s/${itemId}`, {
           headers: { 
-            Authorization: `Bearer ${auth.token}`,
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
         });
         setLoading(false);
         setCallback(!callback);
       }
     } catch (err) {
-      setData({ ...data, err: err.response.data.msg, success: "" });
+      setData({ ...data, err: err.response?.data?.msg || 'Delete failed', success: "" });
       setLoading(false);
     }
   };
@@ -129,10 +171,29 @@ function Profile() {
 
   // Helper function to get user ID from different field types
   const getUserId = (item) => {
-    if (typeof item.user === 'string') return item.user;
-    if (typeof item.user === 'object' && item.user._id) return item.user._id;
-    return null;
+  if (!item || !item.user) return null;
+  if (typeof item.user === 'string') return item.user;
+  if (typeof item.user === 'object' && item.user._id) return item.user._id;
+  return null;
+};
+
+
+  const handleArchive = async (itemId, type) => {
+    try {
+      setLoading(true);
+      await axios.patch(`/api/${type}s/archive/${itemId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+      setLoading(false);
+      setCallback(!callback);
+    } catch (err) {
+      setData({ ...data, err: err.response?.data?.msg || 'Archive update failed', success: '' });
+      setLoading(false);
+    }
   };
+  
 
   return (
     <>
@@ -146,7 +207,13 @@ function Profile() {
         <div className="col-left">
           <h2>User Profile</h2>
           <div className="avatar">
-            <img src={avatar || user.avatar} alt="" />
+            <img 
+              src={getImageUrl(avatar || user.avatar)} 
+              alt="Profile Avatar" 
+              onError={(e) => {
+                e.target.src = 'http://localhost:5000/uploads/default-avatar.png'
+              }}
+            />
             <span>
               <i className="fas fa-camera"></i>
               <p>Change</p>
@@ -161,15 +228,7 @@ function Profile() {
             <label>Email</label>
             <input type="email" defaultValue={user.email} disabled />
           </div>
-          <div className="form-group">
-            <label>New Password</label>
-            <input type="password" name="password" value={password} onChange={handleChange} />
-          </div>
-          <div className="form-group">
-            <label>Confirm New Password</label>
-            <input type="password" name="cf_password" value={cf_password} onChange={handleChange} />
-          </div>
-          <button disabled={loading} onClick={handleUpdate}>Update</button>
+          
         </div>
 
         <div className="col-right">
@@ -178,119 +237,70 @@ function Profile() {
             <div className="cards-header">
               <h2>MY PRODUCTS</h2>
             </div>
-            <div className="card-container">
-              {products.map((item) =>
-                item.user === user._id ? (
-                  <article className="card" key={item._id}>
-                    <Link to={`/view_product/${item._id}`}>
-                      <img src={item.image} loading="lazy" alt={item.title} className="w-full h-48 rounded-tl-md rounded-tr-md" />
-                      <div className="card-header">
-                        <div className="info">
-                          <span className="cost">₹ {item.price}</span>
-                          <span className="date">{formatDate(item.updatedAt)}</span>
-                        </div>
-                      </div>
-                      <div className="card-footer">
-                        <h3>{item.title}</h3>
-                        <p>{item.description}</p>
-                      </div>
-                    </Link>
-                    <div className="card-archive">
-                      <p>ARCHIVED:&nbsp;
-                        {item.isArchived === 1 ? <i className="fas fa-check"></i> : <i className="fas fa-times"></i>}
-                      </p>
-                    </div>
-                    <div className="card-actions">
-                      <Link to={`/edit_product/${item._id}`}>
-                        <i className="fas fa-edit"> Edit</i>
-                      </Link>
-                      <button onClick={() => handleDelete(item._id, item.user, 'product')}>Delete</button>
-                    </div>
-                  </article>
-                ) : null
-              )}
-            </div>
+            <div className="  card-slider-container">
+      <div className="  card-slider">
+        {products.map((item) =>
+          item.user === user._id ? (
+            <ProductCard
+              key={item._id}
+              item={item}
+              isProfileView={true}
+              handleDelete={handleDelete}
+              handleArchive={handleArchive}
+            />
+          ) : null
+        )}
+      </div>
+    </div>
           </div>
-
           {/* Services Section */}
           <div className="cards-primary">
             <div className="cards-header">
               <h2>MY SERVICES</h2>
             </div>
-            <div className="card-container">
-              {services.map((item) => {
-                const itemUserId = getUserId(item);
-                return itemUserId === user._id ? (
-                  <article className="card" key={item._id}>
-                    <Link to={`/view_service/${item._id}`}>
-                      <img src={item.image || '/default-service.jpg'} loading="lazy" alt={item.title} className="w-full h-48 rounded-tl-md rounded-tr-md" />
-                      <div className="card-header">
-                        <div className="info">
-                          <span className="cost">₹ {item.budget}</span>
-                          <span className="date">{formatDate(item.updatedAt)}</span>
-                        </div>
-                      </div>
-                      <div className="card-footer">
-                        <h3>{item.title}</h3>
-                        <p>{item.description}</p>
-                      </div>
-                    </Link>
-                    <div className="card-archive">
-                      <p>ARCHIVED:&nbsp;
-                        {item.isArchived === 1 ? <i className="fas fa-check"></i> : <i className="fas fa-times"></i>}
-                      </p>
-                    </div>
-                    <div className="card-actions">
-                      <Link to={`/edit_service/${item._id}`}>
-                        <i className="fas fa-edit"> Edit</i>
-                      </Link>
-                      <button onClick={() => handleDelete(item._id, itemUserId, 'service')}>Delete</button>
-                    </div>
-                  </article>
-                ) : null;
-              })}
-            </div>
-          </div>
+          <div className="card-container">
+  {services.map((item) => {
+    const itemUserId = getUserId(item);
+    return itemUserId === user._id ? (
+      <ServiceCard
+      key={item._id}
+      item={item}
+      isProfileView={true}
+      handleDelete={handleDelete}
+      handleArchive={handleArchive}
+      getUrgencyColor={getUrgencyColor}
+      getStatusColor={getStatusColor}
+    />
+    
+    ) : null;
+  })}
+</div>
+</div>
 
-          {/* Foods Section */}
-          <div className="cards-primary">
-            <div className="cards-header">
-              <h2>MY FOODS</h2>
-            </div>
-            <div className="card-container">
-              {foods.map((item) => {
-                const itemUserId = getUserId(item);
-                return itemUserId === user._id ? (
-                  <article className="card" key={item._id}>
-                    <Link to={`/view_food/${item._id}`}>
-                      <img src={item.image || '/default-food.jpg'} loading="lazy" alt={item.title} className="w-full h-48 rounded-tl-md rounded-tr-md" />
-                      <div className="card-header">
-                        <div className="info">
-                          <span className="cost">₹ {item.budget}</span>
-                          <span className="date">{formatDate(item.updatedAt)}</span>
-                        </div>
-                      </div>
-                      <div className="card-footer">
-                        <h3>{item.title}</h3>
-                        <p>{item.description}</p>
-                      </div>
-                    </Link>
-                    <div className="card-archive">
-                      <p>ARCHIVED:&nbsp;
-                        {item.isArchived === 1 ? <i className="fas fa-check"></i> : <i className="fas fa-times"></i>}
-                      </p>
-                    </div>
-                    <div className="card-actions">
-                      <Link to={`/edit_food/${item._id}`}>
-                        <i className="fas fa-edit"> Edit</i>
-                      </Link>
-                      <button onClick={() => handleDelete(item._id, itemUserId, 'food')}>Delete</button>
-                    </div>
-                  </article>
-                ) : null;
-              })}
-            </div>
-          </div>
+{/* Foods Section */}
+<div className="cards-primary">
+  <div className="cards-header">
+    <h2>MY FOODS</h2>
+  </div>
+  <div className="card-container">
+    {foods.map((item) => {
+      const itemUserId = getUserId(item);
+      return itemUserId === user._id ? (
+        <FoodCard
+          key={item._id}
+          item={item}
+          
+          getUrgencyColor={getUrgencyColor}
+          getStatusColor={getStatusColor}
+          isProfileView={true}
+          handleDelete={handleDelete}
+          handleArchive={handleArchive}
+        />
+      ) : null;
+    })}
+  </div>
+</div>
+
         </div>
       </div>
     </>

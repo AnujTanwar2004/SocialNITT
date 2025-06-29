@@ -1,76 +1,43 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import { showErrMsg, showSuccessMsg } from '../../utils/notification/Notification'
-import { useDispatch } from 'react-redux'
-import { login } from '../../../redux/slices/authSlice'
-
-const initialState = {
-  email: '',
-  password: '',
-  err: '',
-  success: ''
-}
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
-  const [user, setUser] = useState(initialState)
-  const dispatch = useDispatch()
-  const history = useNavigate()
+  const { isLogged } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
-  const { email, password, err, success } = user
+  // Redirect already logged-in users to hero page
+  useEffect(() => {
+    console.log("🔍 Login component - isLogged:", isLogged);
+    if (isLogged) {
+      console.log("✅ User already logged in, redirecting to hero...");
+      navigate('/');
+    }
+  }, [isLogged, navigate]);
 
-  const handleChangeInput = e => {
-    const { name, value } = e.target
-    setUser({ ...user, [name]: value, err: '', success: '' })
+  const handleDAuthLogin = () => {
+    console.log("🔄 Redirecting to DAuth login...");
+    window.location.href = 'http://localhost:5000/user/dauth/login';
   }
 
- const handleSubmit = async e => {
-  e.preventDefault()
-  try {
-    const res = await axios.post('http://localhost:5000/user/login', { email, password }, { withCredentials: true })
-
-     localStorage.setItem('accessToken', res.data.access_token)
-    localStorage.setItem('firstLogin', true)
-
-    setUser({ ...user, err: '', success: res.data.msg })
-
-    dispatch(login())
-    history("/")
-
-  } catch (err) {
-    err.response.data.msg &&
-      setUser({ ...user, err: err.response.data.msg, success: '' })
+  // Don't render login form if user is already logged in
+  if (isLogged) {
+    return <div>Redirecting...</div>;
   }
-}
 
   return (
     <div className="login_page">
       <h2>Login</h2>
-      {err && showErrMsg(err)}
-      {success && showSuccessMsg(success)}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email Address</label>
-          <input type="text" placeholder="Enter email address" id="email"
-            value={email} name="email" onChange={handleChangeInput} />
-        </div>
+      <button onClick={handleDAuthLogin} className="dauth-login-btn">
+        Login with DAuth
+      </button>
 
-        <div>
-          <label htmlFor="password">Password</label>
-          <input type="password" placeholder="Enter password" id="password"
-            value={password} name="password" onChange={handleChangeInput} />
-        </div>
-
-        <div className="row">
-          <button type="submit">Login</button>
-          <Link to="/forgot_password">Forgot your password?</Link>
-        </div>
-      </form>
-
-      <p>New Customer? <Link to="/register">Register</Link></p>
+      <p style={{ marginTop: "20px" }}>
+        You must have a Delta DAuth account to access this site.
+      </p>
     </div>
-  )
+  );
 }
- 
-export default Login
+
+export default Login;

@@ -1,85 +1,244 @@
-header{
-    width: 100%;
-    min-height: 100px;
-    background: #850E35;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 0 30px;
+header {
+  width: 100%;
+  min-height: 4.5rem;
+  background: rgba(133, 14, 53, 0.85); /* 85% opacity */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  position: fixed;
+  box-shadow: 0 6px 20px rgba(133, 14, 53, 0.3);
+  backdrop-filter: blur(3px); /* optional for glass effect */
 }
+
 header .logo {
-    display: flex;
-    font-size: 13px;
-    position: relative;
-    left: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-header .logo h1{
-    margin-left: 1rem;
-    font-size: 2rem;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-}
-header .logo img{
-    max-width: 3.5rem;
-    max-height: 3.5rem;
-    border-radius: .5rem;
-
-}
-header a{
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-}
-header ul li{
-    display: inline-block;
-    padding: 10px 20px;
-    opacity: 0.9;
-}
-header ul li:hover{
-    opacity: 1;
+  display: flex;
+  font-size: 13px;
+  align-items: center;
+  justify-content: center;
 }
 
-header ul li img{
-    width: 30px;
-    height: 30px;
-    transform: translateY(10px);
-    border-radius: 50%;
+header .logo h1 {
+  margin-left: 1rem;
+  font-size: 1.7rem;
+  position: relative;
+  left: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header .logo img {
+  max-width: 3rem;
+  max-height: 3rem;
+  border-radius: 0.5rem;
+}
+
+header a {
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-decoration: none;
+}
+
+header ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+header ul li {
+  display: inline-block;
+  padding: 10px 20px;
+  opacity: 0.9;
+  font-size: 1rem;
+}
+
+header ul li:hover {
+  opacity: 1;
+}
+
+header ul li img {
+  width: 30px;
+  height: 30px;
+  transform: translateY(10px);
+  border-radius: 50%;
 }
 
 /* --------- Dropdown ---------- */
-.drop-nav{
-    position: relative;
-    padding: 10px 0;
+.drop-nav {
+  position: relative;
+  padding: 10px 0;
 }
- .drop-nav a{
-    text-transform: capitalize;
-    overflow: hidden;
-}
-.drop-nav .dropdown{
-    position: absolute;
-    background: #850E35;
-    width: 100%;
-    width: calc(100% + 30px);
-    top: 50px;
-    display: none;
-    
-}
-.drop-nav .dropdown li{
-    display: block;
-}
-.drop-nav:hover .dropdown{
-    display: block;
-} 
 
-@media (max-width: 640px) {
-    .logo h1{
-        display: none;
-    }
+.drop-nav a {
+  text-transform: capitalize;
+  overflow: hidden;
+}
+
+.drop-nav .dropdown {
+  position: absolute;
+  background: #850E35;
+  width: calc(100% + 30px);
+  top: 50px;
+  display: none;
+}
+
+.drop-nav .dropdown li {
+  display: block;
+}
+
+.drop-nav:hover .dropdown {
+  display: block;
+}
+
+header ul li a {
+  white-space: nowrap;
+}
+
+/* --------- Responsive padding adjustment --------- */
+@media (max-width: 1140px) {
+  header ul li {
+    padding: 10px 10px;
   }
+}
+
+/* --------- Responsive for tablets --------- */
+@media (max-width: 1024px) and (min-width: 769px) {
+  header {
+    min-height: 65px;
+    padding: 0 20px;
+  }
+
+  header .logo {
+    left: 0.9rem;
+  }
+
+  header .logo h1 {
+    font-size: 1.5rem;
+    position: relative;
+    left: -8px;
+  }
+
+  header .logo img {
+    max-width: 2.5rem;
+    max-height: 2.5rem;
+  }
+
+  header ul {
+    margin-right: 0px;
+  }
+  header ul li{
+    display: inline-block;
+    padding: 8px 14px;
+    opacity: 0.9;
+    font-size: .8rem;
+  }
+
+  header ul li a {
+    white-space: nowrap;
+    font-size: .8rem;
+  }
+  button{
+    width:40px;
+    height:40px
+  }
+}
+
+/* --------- Responsive for phones --------- */
+@media (max-width: 768px) {
+  header {
+    min-height: 50px;
+    padding: 0 15px;
+  }
+
+  header .logo {
+    left: 1rem;
+  }
+
+  header .logo h1 {
+    font-size: 1rem;
+    position: relative;
+    left: -8px;
+  }
+
+  header .logo img {
+    max-width: 2rem;
+    max-height: 2rem;
+  }
+
+  header ul {
+    margin-right: 0px;
+  }
+
+  header ul li a {
+    white-space: nowrap;
+    font-size: 10px;
+  }
+}
+
+/* --------- Hamburger Menu & Avatar (Mobile View) --------- */
+.menu-controls {
+  display: none;
+  align-items: center;
+  gap: 10px;
+}
+
+.username {
+  color: white;
+  font-size: 14px;
+  margin-left: 6px;
+}
+
+.burger-icon {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  .menu-controls {
+    display: flex;
+    position: absolute;
+    right: 20px;
+    top: 14px;
+    z-index: 1000;
+  }
+
+  header ul.nav-menu {
+    display: none;
+  }
+
+  header ul.nav-menu.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #850E35;
+    width: 70%;
+    max-width: 250px;
+    padding: 10px 20px;
+    z-index: 999;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+  }
+
+  header ul.nav-menu.active li {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+  }
+
+  header ul.nav-menu .drop-nav .dropdown {
+    position: relative;
+    top: 0;
+    width: 100%;
+    background: #850E35;
+    display: none;
+  }
+
+  header ul.nav-menu .drop-nav:hover .dropdown {
+    display: block;
+  }
+}
+

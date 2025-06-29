@@ -20,8 +20,6 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.9.0",
-    "cloudinary": "^2.6.1",
-    "express-fileupload": "^1.5.1",
     "react-redux": "^9.2.0"
   },
   "devDependencies": {

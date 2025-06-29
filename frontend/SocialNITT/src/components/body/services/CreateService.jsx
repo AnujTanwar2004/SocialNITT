@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosClient from "../../utils/axiosClient"; // ✅ Changed: Use axiosClient instead of axios
 import {
   isEmpty,
   priceValidate,
@@ -18,7 +18,6 @@ const initialState = {
   budget: 0,
   location: "",
   category: "",
-  serviceType: "",
   urgency: "Medium",
   phone: "",
   err: "",
@@ -33,7 +32,6 @@ function CreateService() {
     budget,
     location,
     category,
-    serviceType,
     urgency,
     phone,
     err,
@@ -42,6 +40,8 @@ function CreateService() {
 
   const { user } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+
   const navigate = useNavigate();
 
   const categories = [
@@ -55,13 +55,14 @@ function CreateService() {
     "Others",
   ];
 
-  const serviceTypes = ["One-time", "Recurring", "Project-based"];
   const urgencyLevels = ["Low", "Medium", "High", "Urgent"];
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
     setService({ ...service, [name]: value, err: "", success: "" });
   };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,7 +72,6 @@ function CreateService() {
       isEmpty(description) ||
       isEmpty(location) ||
       isEmpty(category) ||
-      isEmpty(serviceType) ||
       isEmpty(phone)
     )
       return setService({
@@ -97,25 +97,23 @@ function CreateService() {
     try {
       setLoading(true);
 
-      const token = localStorage.getItem("accessToken");
-      await axios.post(
-        "/api/services",
-        {
-          title,
-          description,
-          budget,
-          location,
-          category,
-          serviceType,
-          urgency,
-          phone,
+      // ✅ ONLY CHANGE: Remove manual token handling
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("budget", budget);
+      formData.append("location", location);
+      formData.append("category", category);
+      formData.append("serviceType", "One-time"); // Changed to match your model's enum
+      formData.append("urgency", urgency);
+      formData.append("phone", phone);
+
+      await axiosClient.post("/api/services", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          // ✅ REMOVED: No manual Authorization header
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      });
 
       setService({
         ...service,
@@ -141,10 +139,26 @@ function CreateService() {
     <div className="create_product">
       <h2>Post Service Request</h2>
 
+      {showPreview && (
+        <div className="preview-card custom-card" style={{ marginBottom: "2rem" }}>
+          <div className="card-body">
+            <h3 className="card-title">{title}</h3>
+            <p className="card-description">{description}</p>
+            <div className="card-price-date">
+              <span className="card-price">₹ {budget}</span>
+              <span className="card-date">{location}</span>
+            </div>
+            <div style={{ fontSize: "13px", color: "#888" }}>
+              <span>{category}</span> | <span>{phone}</span> | <span>{urgency}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {err && showErrMsg(err)}
       {success && showSuccessMsg(success)}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div>
           <label htmlFor="title">Service Title*</label>
           <input
@@ -184,24 +198,6 @@ function CreateService() {
             {categories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="serviceType">Service Type*</label>
-          <select
-            id="serviceType"
-            value={serviceType}
-            name="serviceType"
-            onChange={handleChangeInput}
-            required
-          >
-            <option value="">Select Type</option>
-            {serviceTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
               </option>
             ))}
           </select>
@@ -263,7 +259,16 @@ function CreateService() {
           />
         </div>
 
-        <div className="row">
+
+
+        <div className="row" style={{ display: "flex", gap: "1rem" }}>
+          <button
+            type="button"
+            className="card-button"
+            onClick={() => setShowPreview((prev) => !prev)}
+          >
+            {showPreview ? "Hide Preview" : "Preview"}
+          </button>
           <button type="submit" disabled={loading}>
             {loading ? "Creating..." : "Post Service Request"}
           </button>

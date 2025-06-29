@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+ uploads/*
+!uploads/.gitkeep
+
+# Or if you want to keep a default avatar
+uploads/*
+!uploads/default-avatar.png
+
+1st week work
+2nd week tasks
+
+package-lock.json
+vite.config.js
