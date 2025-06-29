@@ -59,21 +59,12 @@ function ServiceCard({
         </Link>
         {/* User Info */}
         {!isProfileView && (
-          <div className="service-card-user">
-            {user && (
-              <div
-                style={{
-                  marginTop: "1rem",
-                  padding: "0.75rem",
-                  background: "#f8f9fa",
-                  borderRadius: "8px",
-                  borderLeft: "3px solid #850E35"
-                }}
-              >
-                <p style={{ margin: 0, color: "#333" }}>{user.name}</p>
-              </div>
-            )}
-          </div>
+         <div className="service-card-user see-more-wrapper">
+         <Link to={`/view_product/${item._id}`} className="see-more-button">
+           See More
+         </Link>
+       </div>
+       
         )}
       
 

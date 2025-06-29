@@ -68,15 +68,15 @@ function ProductCard({ item, isProfileView = false, handleDelete, handleArchive 
           </div>
         </>
       ) : (
-       <div className="see-more-wrapper service-card-user">
-  <div  >
-    <button className="see-more-button"
-       
-    >
-      See More
-    </button>
-  </div>
+        
+ <div className="service-card-user see-more-wrapper">
+  <Link to={`/view_product/${item._id}`} className="see-more-button">
+    See More
+  </Link>
 </div>
+
+
+ 
 
       )}
     </article>

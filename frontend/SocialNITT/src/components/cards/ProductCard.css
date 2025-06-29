@@ -170,23 +170,27 @@
 }
 
 .see-more-button {
+  display: inline-block;
   width: 100%;
   padding: 0.5rem 1rem;
-  background-color: #A6344B; /* Maroon (same as Contact button) */
+  background-color: #A6344B;
   color: white;
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
   font-weight: 600;
+  text-decoration: none;            /* Remove underline */
+  text-align: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.25s ease;
   margin-bottom: 1rem;
 }
 
 .see-more-button:hover {
-  background-color: #850E35; /* Darker maroon on hover */
+  background-color: #850E35;
   transform: scale(1.03);
 }
+
 
 
  
