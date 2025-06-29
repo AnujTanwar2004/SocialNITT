@@ -10,7 +10,11 @@ header {
   box-shadow: 0 6px 20px rgba(133, 14, 53, 0.3);
   backdrop-filter: blur(3px); /* optional for glass effect */
 }
-
+.nav-menu{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 header .logo {
   display: flex;
   font-size: 13px;
@@ -130,7 +134,7 @@ header ul li a {
   }
   header ul li{
     display: inline-block;
-    padding: 8px 14px;
+    
     opacity: 0.9;
     font-size: .8rem;
   }
@@ -146,7 +150,7 @@ header ul li a {
 }
 
 /* --------- Responsive for phones --------- */
-@media (max-width: 768px) {
+@media (max-width: 886px) {
   header {
     min-height: 50px;
     padding: 0 15px;
@@ -206,7 +210,9 @@ header ul li a {
   }
 
   header ul.nav-menu {
-    display: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   header ul.nav-menu.active {
