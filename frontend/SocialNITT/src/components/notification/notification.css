@@ -1,297 +1,70 @@
-/* Notification Bell Container */
-.notification-bell-container {
-    position: relative;
-    list-style: none;
-  }
-  
-  /* Notification Bell Button */
-  .notification-bell-button {
-    background: none;
+/* Notification Bell Dark Background - Add to notification.css */
+
+.notification-bell-button {
+    background: rgba(0, 0, 0, 0.15) !important; /* Dark semi-transparent background */
     border: none;
     cursor: pointer;
-    padding: 8px;
+    padding: 10px;
     border-radius: 50%;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s ease;
     font-size: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 16px rgba(133, 14, 53, 0.2);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px); /* Glass effect */
+    -webkit-backdrop-filter: blur(10px);
   }
   
   .notification-bell-button:hover {
-    transform: scale(1.08);
-    box-shadow: 0 6px 20px rgba(133, 14, 53, 0.3);
+    background: rgba(0, 0, 0, 0.25) !important; /* Darker on hover */
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   }
   
-  .notification-bell-button:focus {
-    outline: 2px solid #850E35;
-    outline-offset: 2px;
+  .notification-bell-button:active {
+    background: rgba(0, 0, 0, 0.35) !important; /* Even darker when clicked */
+    transform: scale(0.95);
   }
   
-  /* Notification Dropdown */
-  .notification-dropdown {
-    position: absolute;
-    right: 0;
-    top: 56px;
-    width: 340px;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-    z-index: 10000;
-    border: 1px solid #e1e5e9;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    animation: slideIn 0.2s ease-out;
-  }
-  
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Notification Header */
-  .notification-header {
-    background: linear-gradient(135deg, #850E35, #a91142);
-    color: #fff;
-    padding: 14px 18px;
-    font-weight: 600;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .notification-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .notification-icon {
+  /* Alternative - Solid dark background */
+  .notification-bell-button-solid {
+    background: #2d3748 !important; /* Dark gray background */
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
     font-size: 18px;
-  }
-  
-  .notification-close-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    transition: background 0.2s ease;
-    line-height: 1;
-  }
-  
-  .notification-close-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-  
-  .notification-close-btn:focus {
-    outline: 2px solid rgba(255, 255, 255, 0.5);
-    outline-offset: 2px;
-  }
-  
-  /* Notification List Container */
-  .notification-list-container {
-    flex: 1;
-    padding: 16px;
-    background: #f8f9fa;
-    max-height: 260px;
-    overflow-y: auto;
-  }
-  
-  .notification-list-container::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .notification-list-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 3px;
-  }
-  
-  .notification-list-container::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 3px;
-  }
-  
-  .notification-list-container::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
-  }
-  
-  /* Notification List */
-  .notification-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .notification-empty {
-    color: #888;
-    text-align: center;
-    padding: 24px 0;
-    font-style: italic;
-  }
-  
-  /* Individual Notification Item */
-  .notification-item {
-    margin-bottom: 16px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    padding: 12px 14px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .notification-item:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .notification-item:last-child {
-    margin-bottom: 0;
-  }
-  
-  .notification-message {
-    font-size: 14px;
-    color: #333;
-    line-height: 1.4;
-    margin-bottom: 10px;
-  }
-  
-  /* Notification Actions */
-  .notification-actions {
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(45, 55, 72, 0.3);
   }
   
-  .notification-btn {
+  .notification-bell-button-solid:hover {
+    background: #1a202c !important; /* Darker on hover */
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(26, 32, 44, 0.4);
+  }
+  
+  /* Brand color dark background */
+  .notification-bell-button-brand {
+    background: rgba(133, 14, 53, 0.8) !important; /* Your brand color with opacity */
     border: none;
-    border-radius: 20px;
-    padding: 6px 18px;
-    font-size: 13px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: 500;
-    white-space: nowrap;
+    padding: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(133, 14, 53, 0.3);
   }
   
-  .notification-dismiss-btn {
-    background: linear-gradient(135deg, #6c757d, #868e96);
-    color: #fff;
+  .notification-bell-button-brand:hover {
+    background: rgba(133, 14, 53, 1) !important; /* Full opacity on hover */
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(133, 14, 53, 0.4);
   }
-  
-  .notification-dismiss-btn:hover {
-    background: #495057;
-    transform: translateY(-1px);
-  }
-  
-  .notification-delete-btn {
-    background: linear-gradient(135deg, #dc3545, #a91142);
-    color: #fff;
-  }
-  
-  .notification-delete-btn:hover {
-    background: #a91142;
-    transform: translateY(-1px);
-  }
-  
-  .notification-btn:focus {
-    outline: 2px solid #007bff;
-    outline-offset: 2px;
-  }
-  
-  .notification-btn:active {
-    transform: translateY(0);
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .notification-dropdown {
-      width: 320px;
-      right: -10px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .notification-dropdown {
-      width: 280px;
-      right: -20px;
-    }
-    
-    .notification-header {
-      padding: 12px 16px;
-      font-size: 14px;
-    }
-    
-    .notification-list-container {
-      padding: 12px;
-    }
-    
-    .notification-item {
-      padding: 10px 12px;
-    }
-    
-    .notification-message {
-      font-size: 13px;
-    }
-    
-    .notification-btn {
-      padding: 5px 15px;
-      font-size: 12px;
-    }
-  }
-  
-  @media (max-width: 350px) {
-    .notification-dropdown {
-      width: 260px;
-      right: -30px;
-    }
-    
-    .notification-actions {
-      flex-direction: column;
-      gap: 8px;
-    }
-    
-    .notification-btn {
-      width: 100%;
-      text-align: center;
-    }
-  }
-  
-  /* High contrast mode support */
-  @media (prefers-contrast: high) {
-    .notification-dropdown {
-      border: 2px solid #000;
-    }
-    
-    .notification-item {
-      border: 1px solid #666;
-    }
-  }
-  
-  /* Reduced motion support */
-  @media (prefers-reduced-motion: reduce) {
-    .notification-bell-button,
-    .notification-dropdown,
-    .notification-item,
-    .notification-btn {
-      transition: none;
-    }
-    
-    @keyframes slideIn {
-      from, to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  } 

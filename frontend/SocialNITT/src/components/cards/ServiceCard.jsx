@@ -77,24 +77,27 @@ function ServiceCard({
             </p>
           </div>
           <div className="card-actions">
-            <div className="action-row">
-              <Link to={`/edit_service/${item._id}`} className="   cta-btn">
-                Edit
-              </Link>
-              <button
-                className="card-button  "
-                onClick={() => handleDelete(item._id, userId, "service")}
-              >
-                Delete
-              </button>
-            </div>
-            <button
-              className="card-button"
-              onClick={() => handleArchive(item._id, item.isArchived)}
-            >
-              {item.isArchived === 1 ? "Unarchive" : "Archive"}
-            </button>
-          </div>
+  {/* Archive button पहले */}
+  <button
+    className="card-button"
+    onClick={() => handleArchive(item._id, item.isArchived)}
+  >
+    {item.isArchived === 1 ? "Unarchive" : "Archive"}
+  </button>
+  
+  {/* Edit/Delete अगली line में */}
+  <div className="action-row">
+    <Link to={`/edit_service/${item._id}`} className="cta-btn">
+      Edit
+    </Link>
+    <button
+      className="card-button"
+      onClick={() => handleDelete(item._id, userId, "service")}
+    >
+      Delete
+    </button>
+  </div>
+</div>
         </>
       )}
     </article>
