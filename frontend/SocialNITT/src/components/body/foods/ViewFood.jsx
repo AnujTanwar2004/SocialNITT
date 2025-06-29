@@ -281,7 +281,7 @@ const handleContact = async () => {
   
   // Ensure we have a valid Indian number (minimum 12 digits: 91 + 10 digits)
   if (whatsappNumber && whatsappNumber.length >= 12) {
-    window.open(`https://wa.me/${whatsappNumber}`, '_blank');
+    window.open(`https://wa.me/+91 ${whatsappNumber}`, '_blank');
   } else {
     alert('Invalid phone number format. Please contact the seller directly.');
     console.warn('Invalid phone number:', food.phone, '→', whatsappNumber);

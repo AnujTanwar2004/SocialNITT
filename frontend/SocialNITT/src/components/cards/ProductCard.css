@@ -163,6 +163,32 @@
   
 }
 
+.see-more-wrapper {
+  width: 80%;
+  margin: 0.4rem auto 0;
+  text-align: center;
+}
+
+.see-more-button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: #A6344B; /* Maroon (same as Contact button) */
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.25s ease;
+  margin-bottom: 1rem;
+}
+
+.see-more-button:hover {
+  background-color: #850E35; /* Darker maroon on hover */
+  transform: scale(1.03);
+}
+
+
  
 
  

@@ -68,21 +68,16 @@ function ProductCard({ item, isProfileView = false, handleDelete, handleArchive 
           </div>
         </>
       ) : (
-        <div className="service-card-user">
-          {user && (
-            <div
-              style={{
-                marginTop: "1rem",
-                padding: "0.75rem",
-                background: "#f8f9fa",
-                borderRadius: "8px",
-                borderLeft: "3px solid #850E35",
-              }}
-            >
-              <p style={{ margin: 0, color: "#333",width:"80%" }}>{user.name}</p>
-            </div>
-          )}
-        </div>
+       <div className="see-more-wrapper service-card-user">
+  <div  >
+    <button className="see-more-button"
+       
+    >
+      See More
+    </button>
+  </div>
+</div>
+
       )}
     </article>
   );

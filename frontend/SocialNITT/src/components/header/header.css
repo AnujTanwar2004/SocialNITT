@@ -79,6 +79,21 @@ header ul li img {
   text-transform: capitalize;
   overflow: hidden;
 }
+.notification{
+  background: linear-gradient(135deg, #850E35, #a91142);
+          color: #fff;
+          border: none;
+          border-radius: 50%;
+          width: 44px;
+          height: 44px;
+          font-size: 1.3rem;
+          box-shadow: 0 4px 16px rgba(133, 14, 53, 0.2);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s;
+}
 
 .drop-nav .dropdown {
   position: absolute;
@@ -143,7 +158,7 @@ header ul li a {
     white-space: nowrap;
     font-size: .8rem;
   }
-  button{
+  .notification{
     width:40px;
     height:40px
   }
@@ -245,6 +260,15 @@ header ul li a {
 
   header ul.nav-menu .drop-nav:hover .dropdown {
     display: block;
+  }
+
+  header ul.nav-menu {
+    display: none; /* hide by default */
+    flex-direction: column;
+  }
+
+  header ul.nav-menu.active {
+    display: flex !important; /* show when active */
   }
 }
 

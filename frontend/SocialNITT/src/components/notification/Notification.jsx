@@ -46,23 +46,9 @@ function NotificationBell() {
 
   return (
     <li style={{ position: 'relative', listStyle: 'none' }} ref={bellRef}>
-      <button
+      <button className='notification'
         onClick={() => setShow(s => !s)}
-        style={{
-          background: 'linear-gradient(135deg, #850E35, #a91142)',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '50%',
-          width: '44px',
-          height: '44px',
-          fontSize: '1.3rem',
-          boxShadow: '0 4px 16px rgba(133, 14, 53, 0.2)',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          transition: 'all 0.3s'
-        }}
+         
         aria-label="Show notifications"
         onMouseOver={e => {
           e.target.style.transform = "scale(1.08)";

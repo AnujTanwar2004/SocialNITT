@@ -16,7 +16,7 @@ function ServiceCard({
   const userId = typeof item.user === "string" ? item.user : item.user?._id;
 
   return (
-    <article className="custom-card">
+    <article className="service-card">
       <Link to={`/view_service/${item._id}`} className="card-link">
         {/* Header */}
         <div className="service-title-badges">
