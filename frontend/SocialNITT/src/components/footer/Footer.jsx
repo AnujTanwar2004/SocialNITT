@@ -12,9 +12,9 @@ function Footer() {
                     <div className="footer-section about-section">
                         <div className="logo">
                             <div className="logo-icon">
-                                <span>SN</span>
+                                <span>CN</span>
                             </div>
-                            <h3>SocialNITT</h3>
+                            <h3>CommuNITT</h3>
                         </div>
                         <p>A student-powered network connecting the NITT community. Buy, sell, exchange services, and build lasting connections.</p>
                         
@@ -75,7 +75,7 @@ function Footer() {
                         <div className="contact-list">
                             <div className="contact-item">
                                 <i className="fas fa-envelope"></i>
-                                <span>support@socialnitt.com</span>
+                                <span>support@CommuNITT.com</span>
                             </div>
                             <div className="contact-item">
                                 <i className="fas fa-map-marker-alt"></i>
@@ -92,7 +92,7 @@ function Footer() {
                 {/* Bottom Footer */}
                 <div className="footer-bottom">
                     <div className="footer-bottom-content">
-                        <p>&copy; 2025 SocialNITT. Created by mentees of Janet Ma'am | All rights reserved.</p>
+                        <p>&copy; 2025 CommuNITT. Created by mentees of Janet Ma'am | All rights reserved.</p>
                         <div className="footer-bottom-links">
                             <Link to="/privacy">Privacy Policy</Link>
                             <Link to="/terms">Terms of Service</Link>

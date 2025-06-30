@@ -10,4 +10,12 @@
   align-items: center;
 }
  
- 
+ .see{
+   color:  #850E35;
+ }
+ @media (max-width:768px) {
+   .hero-section h2{
+     font-size: 1.1rem;
+   }
+   
+ }

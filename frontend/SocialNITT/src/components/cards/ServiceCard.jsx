@@ -16,7 +16,7 @@ function ServiceCard({
   const userId = typeof item.user === "string" ? item.user : item.user?._id;
 
   return (
-    <article className="custom-card">
+    <article className="service-card">
       <Link to={`/view_service/${item._id}`} className="card-link">
         {/* Header */}
         <div className="service-title-badges">
@@ -59,21 +59,12 @@ function ServiceCard({
         </Link>
         {/* User Info */}
         {!isProfileView && (
-          <div className="service-card-user">
-            {user && (
-              <div
-                style={{
-                  marginTop: "1rem",
-                  padding: "0.75rem",
-                  background: "#f8f9fa",
-                  borderRadius: "8px",
-                  borderLeft: "3px solid #850E35"
-                }}
-              >
-                <p style={{ margin: 0, color: "#333" }}>{user.name}</p>
-              </div>
-            )}
-          </div>
+         <div className="service-card-user see-more-wrapper">
+         <Link to={`/view_product/${item._id}`} className="see-more-button">
+           See More
+         </Link>
+       </div>
+       
         )}
       
 
@@ -86,24 +77,27 @@ function ServiceCard({
             </p>
           </div>
           <div className="card-actions">
-            <div className="action-row">
-              <Link to={`/edit_service/${item._id}`} className="   cta-btn">
-                Edit
-              </Link>
-              <button
-                className="card-button  "
-                onClick={() => handleDelete(item._id, userId, "service")}
-              >
-                Delete
-              </button>
-            </div>
-            <button
-              className="card-button"
-              onClick={() => handleArchive(item._id, item.isArchived)}
-            >
-              {item.isArchived === 1 ? "Unarchive" : "Archive"}
-            </button>
-          </div>
+  {/* Archive button पहले */}
+  <button
+    className="card-button"
+    onClick={() => handleArchive(item._id, item.isArchived)}
+  >
+    {item.isArchived === 1 ? "Unarchive" : "Archive"}
+  </button>
+  
+  {/* Edit/Delete अगली line में */}
+  <div className="action-row">
+    <Link to={`/edit_service/${item._id}`} className="cta-btn">
+      Edit
+    </Link>
+    <button
+      className="card-button"
+      onClick={() => handleDelete(item._id, userId, "service")}
+    >
+      Delete
+    </button>
+  </div>
+</div>
         </>
       )}
     </article>

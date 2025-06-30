@@ -1,0 +1,70 @@
+/* Notification Bell Dark Background - Add to notification.css */
+
+.notification-bell-button {
+    background: rgba(0, 0, 0, 0.15) !important; /* Dark semi-transparent background */
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px); /* Glass effect */
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .notification-bell-button:hover {
+    background: rgba(0, 0, 0, 0.25) !important; /* Darker on hover */
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .notification-bell-button:active {
+    background: rgba(0, 0, 0, 0.35) !important; /* Even darker when clicked */
+    transform: scale(0.95);
+  }
+  
+  /* Alternative - Solid dark background */
+  .notification-bell-button-solid {
+    background: #2d3748 !important; /* Dark gray background */
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(45, 55, 72, 0.3);
+  }
+  
+  .notification-bell-button-solid:hover {
+    background: #1a202c !important; /* Darker on hover */
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(26, 32, 44, 0.4);
+  }
+  
+  /* Brand color dark background */
+  .notification-bell-button-brand {
+    background: rgba(133, 14, 53, 0.8) !important; /* Your brand color with opacity */
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(133, 14, 53, 0.3);
+  }
+  
+  .notification-bell-button-brand:hover {
+    background: rgba(133, 14, 53, 1) !important; /* Full opacity on hover */
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(133, 14, 53, 0.4);
+  }

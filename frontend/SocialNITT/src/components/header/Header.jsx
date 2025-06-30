@@ -95,12 +95,13 @@ function Header() {
       </ul>
 
       <div className="menu-controls">
-        <img
-          src={burgerBar}
-          alt="Menu"
-          className="burger-icon"
-          onMouseEnter={() => setMenuOpen(!menuOpen)}
-        />
+        
+      <img
+  src={burgerBar}
+  alt="Menu"
+  className="burger-icon"
+  onClick={() => setMenuOpen(!menuOpen)} // onClick use करें
+/>
       </div>
     </header>
   );

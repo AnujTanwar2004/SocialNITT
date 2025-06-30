@@ -29,7 +29,8 @@ background: rgba(133, 14, 53, 0.85); /* 85% opacity */
 
 .footer-content {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    grid-template-columns: 1.5fr 0.9fr 1.2fr 0.9fr;
+
     gap: 2rem;
     margin-bottom: 1.5rem;
 }

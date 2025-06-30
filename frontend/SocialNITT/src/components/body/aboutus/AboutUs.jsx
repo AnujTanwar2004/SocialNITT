@@ -45,36 +45,36 @@ const AboutUs = () => {
     },
     {
       id: 2,
-      name: "Suraj Patel",
-      role: "Frontend Developer & UI/UX Designer",
+      name: "Sachin Panwar",
+      role: "Frontend Developer  ",
       image: "/api/placeholder/300/300",
       bio: "Crafting beautiful and intuitive interfaces that users love to interact with every single day.",
-      skills: ["React", "CSS3", "Figma", "JavaScript", "TypeScript"],
-      github: "https://github.com/surajpatel",
-      linkedin: "https://linkedin.com/in/surajpatel",
-      twitter: "https://twitter.com/surajpatel"
+      skills: ["React", "CSS3", "Figma", "JavaScript", "MongoDB"],
+      github: "https://github.com/Sachin9644",
+      linkedin: "https://www.linkedin.com/in/sachin-panwar-7b10b7346/",
+      twitter: " "
     },
     {
       id: 3,
-      name: "Dev Sharma",
+      name: "Himanshu Meena",
       role: "Backend Developer & Database Architect",
       image: "/api/placeholder/300/300",
       bio: "Specializing in scalable backend architecture and efficient database design for modern applications.",
       skills: ["Node.js", "MongoDB", "Express", "API Design", "Docker"],
       github: "https://github.com/devsharma",
-      linkedin: "https://linkedin.com/in/devsharma",
-      twitter: "https://twitter.com/devsharma"
+      linkedin: " ",
+      twitter: " "
     },
      {
       id: 4,
-      name: "Dev Sharma",
+      name: "Aman Devatwal",
       role: "Backend Developer & Database Architect",
       image: "/api/placeholder/300/300",
       bio: "Specializing in scalable backend architecture and efficient database design for modern applications.",
       skills: ["Node.js", "MongoDB", "Express", "API Design", "Docker"],
-      github: "https://github.com/devsharma",
-      linkedin: "https://linkedin.com/in/devsharma",
-      twitter: "https://twitter.com/devsharma"
+      github: " ",
+      linkedin: " ",
+      twitter: " "
     }
   ];
 
@@ -128,7 +128,7 @@ const AboutUs = () => {
     {
       name: "Priya Sharma",
       role: "Final Year CSE",
-      content: "SocialNITT completely transformed how I connect with my peers. Found my laptop, got tutoring help, and even discovered the best food spots on campus!",
+      content: "CommuNITT completely transformed how I connect with my peers. Found my laptop, got tutoring help, and even discovered the best food spots on campus!",
       rating: 5,
       avatar: "/api/placeholder/80/80"
     },
@@ -142,14 +142,14 @@ const AboutUs = () => {
     {
       name: "Anjali Reddy",
       role: "2nd Year ME",
-      content: "Love how easy it is to find services. Got my laptop repaired by a senior student at half the market price through SocialNITT!",
+      content: "Love how easy it is to find services. Got my laptop repaired by a senior student at half the market price through CommuNITT!",
       rating: 5,
       avatar: "/api/placeholder/80/80"
     }
   ];
 
   const milestones = [
-    { year: "2025", title: "Platform Launch", description: "SocialNITT goes live with basic marketplace features" },
+    { year: "2025", title: "Platform Launch", description: "CommuNITT goes live with basic marketplace features" },
      { year: "2025", title: "AI Integration", description: "Launched intelligent chatbot and recommendation system" },
     { year: "2025", title: "Community Growth", description: "Reached 2 + active users across NIT Trichy" }
   ];
@@ -173,7 +173,7 @@ const AboutUs = () => {
             <span className="gradient-text-about"> Campus Life</span>
           </h1>
           <p className="hero-subtitleabout-about">
-            Where innovation meets community. SocialNITT is the next-generation platform 
+            Where innovation meets community. CommuNITT is the next-generation platform 
             connecting NIT Trichy students through smart technology and meaningful interactions.
           </p>
           <div className="hero-buttons-about">
@@ -245,7 +245,7 @@ const AboutUs = () => {
         <div className="section-header-about">
           <h2 className="section-title-about">Platform Features</h2>
           <p className="section-subtitle-about">
-            Discover the powerful features that make SocialNITT the ultimate campus companion
+            Discover the powerful features that make CommuNITT the ultimate campus companion
           </p>
         </div>
         
@@ -330,7 +330,7 @@ const AboutUs = () => {
       <section className="timeline-section-about" id="timeline">
         <div className="section-header-about">
           <h2 className="section-title-about">Our Journey</h2>
-          <p className="section-subtitle-about">Key milestones in SocialNITT's evolution</p>
+          <p className="section-subtitle-about">Key milestones in CommNITT's evolution</p>
         </div>
         
         <div className={`timeline-about ${isVisible.timeline ? 'animate-timeline-about' : ''}`}>

@@ -110,13 +110,13 @@ function Hero() {
 
   return (
     <section className="hero" style={{ padding: "2rem" }}>
-      <h1 style={{ textAlign: "center" }}>Welcome to SocialNITT</h1>
+      <h1 style={{ textAlign: "center" }}>Welcome to CommuNITT</h1>
 
       {/* Products Section */}
       <div className="hero-section">
         <div className="hero-section-header">
           <h2>Products</h2>
-          <Link to="/products" className="cta-btn">
+          <Link to="/products" className="see">
             See More Products
           </Link>
         </div>
@@ -129,7 +129,7 @@ function Hero() {
       <div className="hero-section">
         <div className="hero-section-header">
           <h2>Services</h2>
-          <Link to="/services" className="cta-btn">
+          <Link to="/services" className="see">
             See More Services
           </Link>
         </div>
@@ -148,7 +148,7 @@ function Hero() {
           }}
         >
           <h2>Foods</h2>
-          <Link to="/foods" className="cta-btn">
+          <Link to="/foods" className="see">
             See More Foods
           </Link>
         </div>

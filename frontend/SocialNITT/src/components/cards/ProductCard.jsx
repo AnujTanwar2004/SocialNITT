@@ -40,49 +40,45 @@ function ProductCard({ item, isProfileView = false, handleDelete, handleArchive 
       {/* ACTIONS: Edit / Delete / Archive for Profile */}
       {isProfileView ? (
         <>
-          {/* Archive/Unarchive button */}
-          <div className="card-action">
-            <button
-              className="archive-card-button"
-              onClick={() => handleArchive(item._id, item.isArchived)}
-            >
-              {item.isArchived === 1 ? "Unarchive" : "Archive"}
-            </button>
+               <div className="card-archive">
+            <p>
+              {item.isArchived === 1 ? <i className="fas fa-check"></i> : <i className="fas fa-times"></i>}
+            </p>
           </div>
-
-          {/* Edit and Delete */}
-          <div className="edit-delete-card-action">
-            <Link
-              to={`/edit_product/${item._id}`}
-              className="card-edit"
-              style={{ textAlign: "center" }}
-            >
-              <i className="card-edit"></i> Edit
-            </Link>
-            <button
-              className="card-delete"
-              onClick={() => handleDelete(item._id, item.user, "product")}
-            >
-              <i className="fas fa-trash"></i> Delete
-            </button>
+          <div className="card-actions">
+  {/* Archive button पहले */}
+  <button
+    className="card-button"
+    onClick={() => handleArchive(item._id, item.isArchived)}
+  >
+    {item.isArchived === 1 ? "Unarchive" : "Archive"}
+  </button>
+  
+  {/* Edit/Delete अगली line में */}
+  <div className="action-row">
+    <Link to={`/edit_service/${item._id}`} className="cta-btn">
+      Edit
+    </Link>
+    <button
+      className="card-button"
+      onClick={() => handleDelete(item._id, userId, "service")}
+    >
+      Delete
+    </button>
+  </div>
           </div>
         </>
       ) : (
-        <div className="service-card-user">
-          {user && (
-            <div
-              style={{
-                marginTop: "1rem",
-                padding: "0.75rem",
-                background: "#f8f9fa",
-                borderRadius: "8px",
-                borderLeft: "3px solid #850E35",
-              }}
-            >
-              <p style={{ margin: 0, color: "#333",width:"80%" }}>{user.name}</p>
-            </div>
-          )}
-        </div>
+        
+ <div className="service-card-user see-more-wrapper">
+  <Link to={`/view_product/${item._id}`} className="see-more-button">
+    See More
+  </Link>
+</div>
+
+
+ 
+
       )}
     </article>
   );
