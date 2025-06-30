@@ -15,7 +15,7 @@ function FoodCard({
 
   return (
     <article className="food-card">
-      <Link to={`/view_product/${item._id}`} className="food-card-link">
+      <Link to={`/view_food/${item._id}`} className="food-card-link">
         <div className="food-title-header">
           <div className="food-card-header">
             <h3 className="food-card-title">{item.title}</h3>
