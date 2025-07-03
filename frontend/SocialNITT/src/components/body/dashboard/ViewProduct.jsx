@@ -288,13 +288,13 @@ function ViewProduct() {
           <h3>{product.title}</h3>
           <div className="first">
             <p>₹ {product.price}</p>
-            <p><i className="fa fa-map-marker" title="location"></i> {product.location}</p>
+            <p><i className="fa fa-map-marker" title="location"></i>📍 {product.location}</p>
           </div>
           <div className="second">
-            <p>Category: {product.category}</p>
-            <p><i className="fa fa-calendar" title="Posted at"></i> {product.updatedAt.slice(0, 10)}</p>
+            <p>🏷️ Category: {product.category}</p>
+            <p><i className="fa fa-calendar" title="Posted at"></i>📅 {product.updatedAt.slice(0, 10)}</p>
           </div>
-          <p>{product.description}</p>
+          <p> {product.description}</p>
           <button
             className="cta-btn"
             onClick={handleContact}

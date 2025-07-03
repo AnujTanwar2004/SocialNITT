@@ -389,14 +389,14 @@ label {
   z-index: 2;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
   gap: 3rem;
-  align-items: start;
+  align-items: stretch; /* Changed from 'start' to 'stretch' */
   margin-bottom: 2rem;
+  min-height: 500px; /* Add minimum height for consistency */
 }
 
-@media (max-width: 1024px) {
-   
-}
+ 
 
 /* Product Details Section */
 .cta-secondary .cta-container .cta-details {
@@ -471,7 +471,6 @@ label {
   text-align: justify;
 }
 
-/* Contact Button Enhancement */
 .cta-secondary .cta-container .cta-details .cta-btn {
   margin-top: 2rem;
   padding: 1rem 2rem;
@@ -491,8 +490,15 @@ label {
   box-shadow: 0 8px 25px rgba(133, 14, 53, 0.3);
   position: relative;
   overflow: hidden;
+  
+  /* Add these properties for centering and size control */
+  justify-content: center; /* Centers content horizontally */
+  text-align: center; /* Centers text */
+  min-width: 180px; /* Prevents button from getting too small */
+  width: auto; /* Allows button to grow if needed */
+  white-space: nowrap; /* Prevents text from wrapping to next line */
+  flex-shrink: 0; /* Prevents the button from shrinking */
 }
-
 .cta-secondary .cta-container .cta-details .cta-btn::before {
   content: '';
   position: absolute;
@@ -531,6 +537,16 @@ label {
   box-shadow: 0 15px 35px rgba(133, 14, 53, 0.15);
   transition: transform 0.3s ease;
   border: 2px solid rgba(133, 14, 53, 0.1);
+  height: 100%; /* Add this to fill the grid cell */
+  min-height: 400px; /* Add minimum height */
+}
+
+.cta-secondary .cta-container .cta-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
 }
 
 .cta-secondary .cta-container .cta-image:hover {
@@ -555,14 +571,7 @@ label {
   opacity: 1;
 }
 
-.cta-secondary .cta-container .cta-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
+ 
 .cta-secondary .cta-container .cta-image:hover img {
   transform: scale(1.05);
 }
@@ -1046,7 +1055,7 @@ label {
 }
 
 .cta-secondary .cta-container .cta-details .second {
-  border-left: 4px solid #EE6983;
+  border-left: 4px solid #850E35;
 }
 
 /* Focus States for Accessibility */
@@ -1333,3 +1342,104 @@ label {
 @media (max-width:768px) {
   
 }
+
+.cta-secondary .cta-container {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+  margin-bottom: 2rem;
+}
+
+
+.cta-secondary .cta-container .cta-details {
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(133, 14, 53, 0.08);
+  border: 1px solid rgba(133, 14, 53, 0.1);
+  height: 100%; /* Add this */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Distribute content evenly */
+}
+
+@media (max-width: 768px) {
+  .cta-secondary .cta-container {
+    grid-template-columns: 1fr; /* Single column on mobile */
+    grid-template-rows: auto auto;
+    gap: 1.5rem;
+    min-height: auto;
+  }
+  
+  .cta-secondary .cta-container .cta-image {
+    min-height: 300px; /* Smaller minimum on mobile */
+    order: 1; /* Put image FIRST on mobile */
+  }
+  
+  .cta-secondary .cta-container .cta-details {
+    order: 2; /* Put details SECOND (below image) on mobile */
+  }
+  
+  /* Rest of your existing mobile styles... */
+  .cta-secondary {
+    margin: 20px auto;
+    padding: 1.5rem;
+    background: #FFF5E4;
+  }
+  
+  .cta-secondary .cta-container .cta-details {
+    padding: 1.5rem;
+    background: #ffffff;
+  }
+  
+  .cta-secondary .cta-container .cta-details .first,
+  .cta-secondary .cta-container .cta-details .second {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+    background: #FFF5E4;
+  }
+  
+  .cta-secondary .cta-container .cta-details .first p:first-child {
+    font-size: 1.75rem;
+  }
+  
+  .cta-secondary .cta-container .cta-details > p {
+    background: #FFF5E4;
+  }
+  
+  .map-section {
+    padding: 1.5rem;
+    background: #ffffff;
+  }
+  
+  .map-section h4 {
+    font-size: 1.5rem;
+  }
+  
+  .map-section > div:last-child {
+    background: #FFF5E4;
+  }
+  
+  .info-row {
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .cta-secondary .cta-container {
+    gap: 2rem;
+    min-height: 450px;
+  }
+  
+  .cta-secondary .cta-container .cta-image {
+    min-height: 350px;
+  }
+}
+
+
