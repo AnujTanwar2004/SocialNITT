@@ -28,6 +28,9 @@ import NotFound from "../utils/NotFound/NotFound";
 import Hero from "./hero/Hero";
 import ContactSection from "../contact/ContactUs"; // or wherever your file is
 
+import PrivacyPolicy from '../legal/PrivacyPolicy';
+import TermsOfService from '../legal/TermsOfService';
+
 import AboutUS from "../body/aboutus/AboutUs"
 function Body() {
   const auth = useSelector((state) => state.auth);
@@ -105,6 +108,9 @@ function Body() {
         />
         <Route path="/contact" element={<ContactSection />} />
         <Route path="/aboutus" element={<AboutUS />} />
+
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
       </Routes>
     </section>
   );

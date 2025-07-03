@@ -131,7 +131,8 @@ function AdminDashboard() {
   const [services, setServices] = useState([]);
   const [foods, setFoods] = useState([]);
   const [users, setUsers] = useState([]);
-  const [contacts, setContacts] = useState([]); // Add this
+  const [contacts, setContacts] = useState([]);
+  const [loading, setLoading] = useState(false); // ✅ Added missing loading state
   const navigate = useNavigate();
 
   // Search states
@@ -139,38 +140,44 @@ function AdminDashboard() {
   const [productSearch, setProductSearch] = useState("");
   const [serviceSearch, setServiceSearch] = useState("");
   const [foodSearch, setFoodSearch] = useState("");
-  const [contactSearch, setContactSearch] = useState(""); // Add this
+  const [contactSearch, setContactSearch] = useState("");
 
   // Pagination states
   const [userPage, setUserPage] = useState(1);
   const [productPage, setProductPage] = useState(1);
   const [servicePage, setServicePage] = useState(1);
   const [foodPage, setFoodPage] = useState(1);
-  const [contactPage, setContactPage] = useState(1); // Add this
+  const [contactPage, setContactPage] = useState(1);
 
   // Reply modal state
   const [replyModal, setReplyModal] = useState({ open: false, contact: null });
   const [replyText, setReplyText] = useState("");
 
+  // ✅ Fixed itemsPerPage - moved to top and set to 5
+  const itemsPerPage = 5;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const [productsRes, servicesRes, foodsRes, usersRes, contactsRes] =
           await Promise.all([
             axiosClient.get("/api/products/admin/all"),
             axiosClient.get("/api/services"),
-            axiosClient.get("/api/foods"),
+            axiosClient.get("/api/foods/admin/all"), // ✅ Fixed to use admin endpoint
             axiosClient.get("/user/admin/all"),
-            axiosClient.get("/api/contact/admin/all"), // Add this
+            axiosClient.get("/api/contact/admin/all"),
           ]);
 
         setProducts(productsRes.data);
         setServices(servicesRes.data);
         setFoods(foodsRes.data);
         setUsers(usersRes.data);
-        setContacts(contactsRes.data); // Add this
+        setContacts(contactsRes.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setLoading(false);
       }
     };
 
@@ -221,97 +228,213 @@ function AdminDashboard() {
     );
   }, [foods, foodSearch]);
 
-  // Add filtered contacts
   const filteredContacts = useMemo(() => {
     if (!contactSearch.trim()) return contacts;
+    const searchLower = contactSearch.toLowerCase().trim();
     return contacts.filter(
       (contact) =>
-        contact.name.toLowerCase().includes(contactSearch.toLowerCase()) ||
-        contact.email.toLowerCase().includes(contactSearch.toLowerCase()) ||
-        contact.message.toLowerCase().includes(contactSearch.toLowerCase())
+        (contact.name && contact.name.toLowerCase().includes(searchLower)) ||
+        (contact.email && contact.email.toLowerCase().includes(searchLower)) ||
+        (contact.message && contact.message.toLowerCase().includes(searchLower))
     );
   }, [contacts, contactSearch]);
 
-  // Pagination helper function
-  const getPaginatedData = (data, currentPage) => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return data.slice(startIndex, endIndex);
-  };
+  // ✅ Fixed pagination helper function
+  const getPaginatedData = useCallback(
+    (data, currentPage) => {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const result = data.slice(startIndex, endIndex);
+
+      // Debug pagination
+      console.log(`Pagination Debug:`, {
+        totalItems: data.length,
+        currentPage,
+        itemsPerPage,
+        startIndex,
+        endIndex,
+        resultLength: result.length,
+      });
+
+      return result;
+    },
+    [itemsPerPage]
+  );
 
   // Search handlers to prevent state issues - STABLE REFERENCES
   const handleUserSearch = useCallback((value) => {
     setUserSearch(value);
+    setUserPage(1); // ✅ Reset page when searching
   }, []);
 
   const handleProductSearch = useCallback((value) => {
     setProductSearch(value);
+    setProductPage(1); // ✅ Reset page when searching
   }, []);
 
   const handleServiceSearch = useCallback((value) => {
     setServiceSearch(value);
+    setServicePage(1); // ✅ Reset page when searching
   }, []);
 
   const handleFoodSearch = useCallback((value) => {
     setFoodSearch(value);
+    setFoodPage(1); // ✅ Reset page when searching
   }, []);
 
-  // Add contact search handler
   const handleContactSearch = useCallback((value) => {
     setContactSearch(value);
+    setContactPage(1); // ✅ Reset page when searching
   }, []);
 
+  // ✅ Fixed Archive function - use admin endpoints
+  const handleArchive = useCallback(
+    async (itemId, currentArchiveStatus, type) => {
+      try {
+        setLoading(true);
+
+        const newArchiveStatus = currentArchiveStatus === 1 ? 0 : 1;
+
+        // ✅ Use admin endpoints for admin operations
+        let endpoint;
+        if (type === "product") {
+          endpoint = `/api/products/${itemId}`; // Products can use regular endpoint
+        } else {
+          endpoint = `/api/${type}s/admin/${itemId}`; // Services and Foods need admin endpoint
+        }
+
+        await axiosClient.patch(endpoint, {
+          isArchived: newArchiveStatus,
+        });
+
+        // Update the local state based on type using functional updates
+        if (type === "product") {
+          setProducts((prevProducts) =>
+            prevProducts.map((product) =>
+              product._id === itemId
+                ? { ...product, isArchived: newArchiveStatus }
+                : product
+            )
+          );
+        } else if (type === "service") {
+          setServices((prevServices) =>
+            prevServices.map((service) =>
+              service._id === itemId
+                ? { ...service, isArchived: newArchiveStatus }
+                : service
+            )
+          );
+        } else if (type === "food") {
+          setFoods((prevFoods) =>
+            prevFoods.map((food) =>
+              food._id === itemId
+                ? { ...food, isArchived: newArchiveStatus }
+                : food
+            )
+          );
+        }
+
+        setLoading(false);
+
+        alert(
+          newArchiveStatus === 1
+            ? `${type} archived successfully!`
+            : `${type} unarchived successfully!`
+        );
+      } catch (err) {
+        setLoading(false);
+        console.error("Archive error:", err);
+        alert(err.response?.data?.msg || "Archive update failed");
+      }
+    },
+    []
+  );
+
   // Delete handlers
-  const handleDeleteProduct = (id) => {
+  const handleDeleteProduct = useCallback((id) => {
     if (window.confirm("Delete this product?")) {
-      axiosClient.delete(`/api/products/admin/${id}`).then(() => {
-        setProducts(products.filter((p) => p._id !== id));
-      });
+      setLoading(true);
+      axiosClient
+        .delete(`/api/products/admin/${id}`)
+        .then(() => {
+          setProducts((prev) => prev.filter((p) => p._id !== id));
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Delete error:", err);
+          setLoading(false);
+        });
     }
-  };
+  }, []);
 
-  const handleDeleteService = (id) => {
+  const handleDeleteService = useCallback((id) => {
     if (window.confirm("Delete this service?")) {
-      axiosClient.delete(`api/services/admin/${id}`).then(() => {
-        setServices(services.filter((s) => s._id !== id));
-      });
+      setLoading(true);
+      axiosClient
+        .delete(`/api/services/admin/${id}`) // ✅ Fixed missing slash
+        .then(() => {
+          setServices((prev) => prev.filter((s) => s._id !== id));
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Delete error:", err);
+          setLoading(false);
+        });
     }
-  };
+  }, []);
 
-  const handleDeleteFood = (id) => {
+  const handleDeleteFood = useCallback((id) => {
     if (window.confirm("Delete this food?")) {
-      axiosClient.delete(`/api/foods/admin/${id}`).then(() => {
-        setFoods(foods.filter((f) => f._id !== id));
-      });
+      setLoading(true);
+      axiosClient
+        .delete(`/api/foods/admin/${id}`)
+        .then(() => {
+          setFoods((prev) => prev.filter((f) => f._id !== id));
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Delete error:", err);
+          setLoading(false);
+        });
     }
-  };
+  }, []);
 
-  const handleDeleteUser = (id) => {
+  const handleDeleteUser = useCallback((id) => {
     if (window.confirm("Delete this user? This action cannot be undone.")) {
-      axiosClient.delete(`/user/admin/${id}`).then(() => {
-        setUsers(users.filter((u) => u._id !== id));
-      });
+      setLoading(true);
+      axiosClient
+        .delete(`/user/admin/${id}`)
+        .then(() => {
+          setUsers((prev) => prev.filter((u) => u._id !== id));
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Delete error:", err);
+          setLoading(false);
+        });
     }
-  };
+  }, []);
 
-  // Add delete contact handler
-  const handleDeleteContact = (id) => {
+  const handleDeleteContact = useCallback((id) => {
     if (window.confirm("Are you sure you want to delete this contact?")) {
+      setLoading(true);
       axiosClient
         .delete(`/api/contact/admin/${id}`)
         .then(() => {
           setContacts((prev) => prev.filter((contact) => contact._id !== id));
+          setLoading(false);
           alert("Contact deleted successfully!");
         })
         .catch((error) => {
           console.error("Error deleting contact:", error);
+          setLoading(false);
           alert("Failed to delete contact");
         });
     }
-  };
+  }, []);
 
   // Mark as read handler
-  const handleMarkAsRead = (id) => {
+  const handleMarkAsRead = useCallback((id) => {
     axiosClient
       .patch(`/api/contact/admin/${id}/read`)
       .then(() => {
@@ -322,15 +445,15 @@ function AdminDashboard() {
         );
       })
       .catch((error) => console.error("Error marking as read:", error));
-  };
+  }, []);
 
   // Reply handler
-  const handleReply = (contact) => {
+  const handleReply = useCallback((contact) => {
     setReplyModal({ open: true, contact });
     setReplyText("");
-  };
+  }, []);
 
-  const sendReply = () => {
+  const sendReply = useCallback(() => {
     if (!replyText.trim()) {
       alert("Please enter a reply message");
       return;
@@ -356,9 +479,9 @@ function AdminDashboard() {
         console.error("Error sending reply:", error);
         alert("Failed to send reply");
       });
-  };
+  }, [replyText, replyModal.contact]);
 
-  const getUrgencyColor = (urgency) => {
+  const getUrgencyColor = useCallback((urgency) => {
     switch (urgency) {
       case "Urgent":
         return "#FF4444";
@@ -371,9 +494,9 @@ function AdminDashboard() {
       default:
         return "#666";
     }
-  };
+  }, []);
 
-  const getStatusColor = (status) => {
+  const getStatusColor = useCallback((status) => {
     switch (status) {
       case "Active":
         return "#4CAF50";
@@ -386,30 +509,32 @@ function AdminDashboard() {
       default:
         return "#666";
     }
-  };
-
-  const itemsPerPage = 8;
-
-  // Reset page when search changes
-  useEffect(() => {
-    setUserPage(1);
-  }, [userSearch]);
-  useEffect(() => {
-    setProductPage(1);
-  }, [productSearch]);
-  useEffect(() => {
-    setServicePage(1);
-  }, [serviceSearch]);
-  useEffect(() => {
-    setFoodPage(1);
-  }, [foodSearch]);
-  useEffect(() => {
-    setContactPage(1);
-  }, [contactSearch]); // Add this line
+  }, []);
 
   return (
     <div className="admin-dashboard">
       <h1 className="admin-title">🛡️ Admin Dashboard</h1>
+
+      {/* ✅ Add loading indicator */}
+      {loading && (
+        <div
+          className="loading-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+          }}
+        >
+          <div style={{ color: "white", fontSize: "18px" }}>Processing...</div>
+        </div>
+      )}
 
       {/* Users Section */}
       <section className="admin-section">
@@ -511,15 +636,10 @@ function AdminDashboard() {
                     item={item}
                     isProfileView={true}
                     handleDelete={() => handleDeleteProduct(item._id)}
-                    handleArchive={() => {}}
-                  >
-                    <Link
-                      to={`/edit_product/${item._id}`}
-                      className="edit-link"
-                    >
-                      Edit
-                    </Link>
-                  </ProductCard>
+                    handleArchive={(itemId, currentStatus) =>
+                      handleArchive(itemId, currentStatus, "product")
+                    }
+                  />
                 ))}
               </div>
 
@@ -561,7 +681,9 @@ function AdminDashboard() {
                     item={item}
                     isProfileView={true}
                     handleDelete={() => handleDeleteService(item._id)}
-                    handleArchive={() => {}}
+                    handleArchive={(itemId, currentStatus) =>
+                      handleArchive(itemId, currentStatus, "service")
+                    }
                     getUrgencyColor={getUrgencyColor}
                     getStatusColor={getStatusColor}
                   />
@@ -601,12 +723,14 @@ function AdminDashboard() {
             <>
               <div className="card-container">
                 {getPaginatedData(filteredFoods, foodPage).map((item) => (
-                  <ServiceCard
+                  <FoodCard
                     key={item._id}
                     item={item}
                     isProfileView={true}
-                    handleDelete={() => handleDeleteService(item._id)}
-                    handleArchive={() => {}}
+                    handleDelete={() => handleDeleteFood(item._id)}
+                    handleArchive={(itemId, currentStatus) =>
+                      handleArchive(itemId, currentStatus, "food")
+                    }
                     getUrgencyColor={getUrgencyColor}
                     getStatusColor={getStatusColor}
                   />
@@ -625,8 +749,8 @@ function AdminDashboard() {
       </section>
 
       {/* Contact Messages Section */}
-      <div className="admin-section">
-        <h2 className="adminHead">📧 Contact Messages</h2>
+      <section className="admin-section">
+        <h3 className="adminHead">📧 Contact Messages ({contacts.length})</h3>
 
         <SearchBar
           searchTerm={contactSearch}
@@ -636,84 +760,92 @@ function AdminDashboard() {
         />
 
         <div className="users-table-container">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Message</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {getPaginatedData(filteredContacts, contactPage).map(
-                (contact) => (
-                  <tr key={contact._id}>
-                    <td>{contact.name}</td>
-                    <td>{contact.email}</td>
-                    <td style={{ maxWidth: "300px", wordWrap: "break-word" }}>
-                      {contact.message.length > 100
-                        ? `${contact.message.substring(0, 100)}...`
-                        : contact.message}
-                    </td>
-                    <td>
-                      <span className={`role-badge ${contact.status}`}>
-                        {contact.status}
-                      </span>
-                    </td>
-                    <td>{new Date(contact.createdAt).toLocaleDateString()}</td>
-                    <td>
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "5px",
-                          flexWrap: "wrap",
-                        }}
-                      >
-                        {contact.status === "unread" && (
-                          <button
-                            className="edit-btn"
-                            onClick={() => handleMarkAsRead(contact._id)}
-                          >
-                            Mark Read
-                          </button>
-                        )}
-                        <button
-                          className="edit-btn"
-                          onClick={() => handleReply(contact)}
-                        >
-                          Reply
-                        </button>
-                        <button
-                          className="delete-btn"
-                          onClick={() => handleDeleteContact(contact._id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
+          {filteredContacts.length === 0 ? (
+            <p className="no-results">
+              {contactSearch
+                ? `No contacts found matching "${contactSearch}"`
+                : "No contact messages found."}
+            </p>
+          ) : (
+            <>
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
                   </tr>
-                )
-              )}
-            </tbody>
-          </table>
+                </thead>
+                <tbody>
+                  {getPaginatedData(filteredContacts, contactPage).map(
+                    (contact) => (
+                      <tr key={contact._id}>
+                        <td>{contact.name}</td>
+                        <td>{contact.email}</td>
+                        <td
+                          style={{ maxWidth: "300px", wordWrap: "break-word" }}
+                        >
+                          {contact.message.length > 100
+                            ? `${contact.message.substring(0, 100)}...`
+                            : contact.message}
+                        </td>
+                        <td>
+                          <span className={`role-badge ${contact.status}`}>
+                            {contact.status}
+                          </span>
+                        </td>
+                        <td>
+                          {new Date(contact.createdAt).toLocaleDateString()}
+                        </td>
+                        <td>
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "5px",
+                              flexWrap: "wrap",
+                            }}
+                          >
+                            {contact.status === "unread" && (
+                              <button
+                                className="edit-btn"
+                                onClick={() => handleMarkAsRead(contact._id)}
+                              >
+                                Mark Read
+                              </button>
+                            )}
+                            <button
+                              className="edit-btn"
+                              onClick={() => handleReply(contact)}
+                            >
+                              Reply
+                            </button>
+                            <button
+                              className="delete-btn"
+                              onClick={() => handleDeleteContact(contact._id)}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
 
-          {filteredContacts.length === 0 && (
-            <div className="no-results">
-              <p>No contact messages found.</p>
-            </div>
+              <Pagination
+                totalItems={filteredContacts.length}
+                currentPage={contactPage}
+                setCurrentPage={setContactPage}
+                itemsPerPage={itemsPerPage}
+              />
+            </>
           )}
-
-          <Pagination
-            totalItems={filteredContacts.length}
-            currentPage={contactPage}
-            setCurrentPage={setContactPage}
-            itemsPerPage={itemsPerPage}
-          />
         </div>
-      </div>
+      </section>
 
       {/* Reply Modal */}
       {replyModal.open && (

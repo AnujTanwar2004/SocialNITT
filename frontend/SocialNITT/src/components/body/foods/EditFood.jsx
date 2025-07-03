@@ -1,94 +1,132 @@
-
- 
-import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import axios from 'axios'
-import { showSuccessMsg, showErrMsg } from '../../utils/notification/Notification'
-import { isEmpty, priceValidate, validatePhone } from '../../utils/validation/Validation'
-import { fetchFoods } from '../../../redux/slices/foodSlice'
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import {
+  showSuccessMsg,
+  showErrMsg,
+} from "../../utils/notification/Notification";
+import {
+  isEmpty,
+  priceValidate,
+  validatePhone,
+} from "../../utils/validation/Validation";
+import { fetchFoods } from "../../../redux/slices/foodSlice";
 
 const initialState = {
-  title: '',
-  description: '',
+  title: "",
+  description: "",
   budget: 0,
-  location: '',
-  category: '',
-  urgency: 'Medium',
-  phone: '',
-  status: 'Active',
+  location: "",
+  category: "",
+  urgency: "Medium",
+  phone: "",
+  status: "Active",
   isArchived: 0,
-  err: '',
-  success: ''
-}
+  err: "",
+  success: "",
+};
 
 function EditFood() {
-  const { id } = useParams()
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const foods = useSelector(state => state.foods.items)
-  const auth = useSelector(state => state.auth)
-  const { token } = auth
+  const foods = useSelector((state) => state.foods.items);
+  const auth = useSelector((state) => state.auth);
+  const { token } = auth;
 
-  const [EditFood, setFood] = useState(initialState)
-  const { title, description, budget, location, category,   urgency, phone, status, isArchived, err, success } = editService
+  // ✅ Fix variable naming
+  const [editFood, setFood] = useState(initialState);
+  const {
+    title,
+    description,
+    budget,
+    location,
+    category,
+    urgency,
+    phone,
+    status,
+    isArchived,
+    err,
+    success,
+  } = editFood; // ✅ Fixed variable name
 
-  const [oldFood, setOldFood] = useState(initialState)
-  const [loading, setLoading] = useState(false)
+  const [oldFood, setOldFood] = useState(initialState);
+  const [loading, setLoading] = useState(false);
 
   const categories = [
-    'Construction & Renovation',
-    'Plumbing & Water',
-    'Electrical',
-    'Cleaning & Maintenance',
-    'Transportation & Logistics',
-    'IT & Technical',
-    'Professional Services',
-    'Others'
-  ]
+    "North Indian",
+    "South Indian",
+    "Chinese",
+    "Italian",
+    "Fast Food",
+    "Beverages",
+    "Desserts",
+    "Others",
+  ];
 
-  const foodTypes = ['One-time', 'Recurring', 'Project-based']
-  const urgencyLevels = ['Low', 'Medium', 'High', 'Urgent']
-  const statusOptions = ['Active', 'In Progress', 'Completed', 'Cancelled']
+  const urgencyLevels = ["Low", "Medium", "High", "Urgent"];
+  const statusOptions = ["Active", "In Progress", "Completed", "Cancelled"];
 
   // Fetch services if not already loaded
   useEffect(() => {
     if (!foods || foods.length === 0) {
-      dispatch(fetchServices())
+      dispatch(fetchFoods());
     }
-  }, [dispatch, foods])
+  }, [dispatch, foods]);
 
   useEffect(() => {
     if (foods && foods.length !== 0) {
-      const foundfood = foods.find(food => food._id === id)
-      if (foundfood) {
-        setOldFood(foundFood)
-        setFood(foundFood)
+      const foundFood = foods.find((food) => food._id === id);
+      if (foundFood) {
+        setOldFood(foundFood);
+        setFood(foundFood);
       } else {
-        console.log('Food not found, redirecting to foods page')
-        navigate('/services')
+        console.log("Food not found, redirecting to foods page");
+        navigate("/foods");
       }
     }
-  }, [foods, id, navigate])
+  }, [foods, id, navigate]);
 
-  const handleChangeInput = e => {
-    const { name, value } = e.target
-    setFood({ ...EditFood, [name]: value, err: '', success: '' })
-  }
+  const handleChangeInput = (e) => {
+    const { name, value } = e.target;
+    setFood({ ...editFood, [name]: value, err: "", success: "" }); // ✅ Fixed variable name
+  };
 
   const handleUpdate = async () => {
-    if (isEmpty(title) || isEmpty(description) || isEmpty(location) || isEmpty(category)   || isEmpty(phone))
-      return setService({ ...editService, err: "Please fill in all fields", success: '' })
+    if (
+      isEmpty(title) ||
+      isEmpty(description) ||
+      isEmpty(location) ||
+      isEmpty(category) ||
+      isEmpty(phone)
+    )
+      return setFood({
+        // ✅ Fixed variable name
+        ...editFood,
+        err: "Please fill in all fields",
+        success: "",
+      });
 
     if (priceValidate(budget))
-      return setService({ ...editService, err: "Budget must be greater than or equal to 0", success: '' })
+      return setFood({
+        // ✅ Fixed variable name
+        ...editFood,
+        err: "Budget must be greater than or equal to 0",
+        success: "",
+      });
 
     if (!validatePhone(phone))
-      return setService({ ...editService, err: "Enter a valid phone number", success: '' })
+      return setFood({
+        // ✅ Fixed variable name
+        ...editFood,
+        err: "Enter a valid phone number",
+        success: "",
+      });
 
     try {
-      setLoading(true)
+      setLoading(true);
 
       const updateData = {
         title: title || oldFood.title,
@@ -96,38 +134,41 @@ function EditFood() {
         budget: budget || oldFood.budget,
         location: location || oldFood.location,
         category: category || oldFood.category,
-         urgency: urgency || oldFood.urgency,
+        urgency: urgency || oldFood.urgency,
         phone: phone || oldFood.phone,
         status,
-        isArchived
-      }
+        isArchived,
+      };
 
-      await axios.patch(`/api/services/${id}`, updateData, {
+      await axios.patch(`/api/foods/${id}`, updateData, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
 
-      setLoading(false)
-      setFood({ ...editService, err: '', success: 'Service updated successfully!' })
-      
-      // Refresh services list
-      dispatch(fetchFoods())
-      
-      // Navigate back to services after a delay
-      setTimeout(() => {
-        navigate('/foods')
-      }, 2000)
-
-    } catch (err) {
-      setLoading(false)
+      setLoading(false);
       setFood({
-        ...EditFood,
+        // ✅ Fixed variable name
+        ...editFood,
+        err: "",
+        success: "Food updated successfully!",
+      });
+
+      dispatch(fetchFoods());
+
+      setTimeout(() => {
+        navigate("/foods");
+      }, 2000);
+    } catch (err) {
+      setLoading(false);
+      setFood({
+        // ✅ Fixed variable name
+        ...editFood,
         err: err.response?.data?.msg || "Update failed",
-        success: ''
-      })
+        success: "",
+      });
     }
-  }
+  };
 
   return (
     <div className="profile_page">
@@ -163,13 +204,13 @@ function EditFood() {
               onChange={handleChangeInput}
               rows="4"
               style={{
-                width: '100%',
-                margin: '5px 0',
-                padding: '5px',
-                background: '#ffffff',
-                border: '2px solid #777',
-                outline: 'none',
-                resize: 'vertical'
+                width: "100%",
+                margin: "5px 0",
+                padding: "5px",
+                background: "#ffffff",
+                border: "2px solid #777",
+                outline: "none",
+                resize: "vertical",
               }}
             />
           </div>
@@ -195,23 +236,23 @@ function EditFood() {
               name="category"
               onChange={handleChangeInput}
               style={{
-                width: '100%',
-                height: '40px',
-                maArgin: '5px 0',
-                background: '#ffffff',
-                padding: '0 5px',
-                border: '2px solid #777',
-                outline: 'none'
+                width: "100%",
+                height: "40px",
+                maArgin: "5px 0",
+                background: "#ffffff",
+                padding: "0 5px",
+                border: "2px solid #777",
+                outline: "none",
               }}
             >
               <option value="">Select Category</option>
-              {categories.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
               ))}
             </select>
           </div>
-
-          
 
           <div>
             <label htmlFor="urgency">Urgency Level</label>
@@ -221,17 +262,19 @@ function EditFood() {
               name="urgency"
               onChange={handleChangeInput}
               style={{
-                width: '100%',
-                height: '40px',
-                margin: '5px 0',
-                background: '#ffffff',
-                padding: '0 5px',
-                border: '2px solid #777',
-                outline: 'none'
+                width: "100%",
+                height: "40px",
+                margin: "5px 0",
+                background: "#ffffff",
+                padding: "0 5px",
+                border: "2px solid #777",
+                outline: "none",
               }}
             >
-              {urgencyLevels.map(level => (
-                <option key={level} value={level}>{level}</option>
+              {urgencyLevels.map((level) => (
+                <option key={level} value={level}>
+                  {level}
+                </option>
               ))}
             </select>
           </div>
@@ -244,17 +287,19 @@ function EditFood() {
               name="status"
               onChange={handleChangeInput}
               style={{
-                width: '100%',
-                height: '40px',
-                margin: '5px 0',
-                background: '#ffffff',
-                padding: '0 5px',
-                border: '2px solid #777',
-                outline: 'none'
+                width: "100%",
+                height: "40px",
+                margin: "5px 0",
+                background: "#ffffff",
+                padding: "0 5px",
+                border: "2px solid #777",
+                outline: "none",
               }}
             >
-              {statusOptions.map(stat => (
-                <option key={stat} value={stat}>{stat}</option>
+              {statusOptions.map((stat) => (
+                <option key={stat} value={stat}>
+                  {stat}
+                </option>
               ))}
             </select>
           </div>
@@ -291,13 +336,13 @@ function EditFood() {
               name="isArchived"
               onChange={handleChangeInput}
               style={{
-                width: '100%',
-                height: '40px',
-                margin: '5px 0',
-                background: '#ffffff',
-                padding: '0 5px',
-                border: '2px solid #777',
-                outline: 'none'
+                width: "100%",
+                height: "40px",
+                margin: "5px 0",
+                background: "#ffffff",
+                padding: "0 5px",
+                border: "2px solid #777",
+                outline: "none",
               }}
             >
               <option value={0}>Active</option>
@@ -305,17 +350,13 @@ function EditFood() {
             </select>
           </div>
 
-          <button 
-            type="button" 
-            onClick={handleUpdate} 
-            disabled={loading}
-          >
-            {loading ? 'Updating...' : 'Update Service'}
+          <button type="button" onClick={handleUpdate} disabled={loading}>
+            {loading ? "Updating..." : "Update Food"}
           </button>
         </form>
       </div>
     </div>
-  )
+  );
 }
 
-export default EditFood
+export default EditFood;

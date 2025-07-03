@@ -159,16 +159,31 @@ const productCtrl = {
     try {
       const { isArchived } = req.body;
 
+      // ✅ First, find the product to check ownership
+      const product = await Products.findById(req.params.id);
+
+      if (!product) return res.status(404).json({ msg: "Product not found." });
+
+      // ✅ Check if the user owns this product
+      if (product.user.toString() !== req.user.id)
+        return res
+          .status(403)
+          .json({ msg: "Unauthorized: Cannot modify others' product." });
+
+      // ✅ Now update the product
       const updatedProduct = await Products.findByIdAndUpdate(
         req.params.id,
         { isArchived },
         { new: true }
       );
 
-      if (!updatedProduct)
-        return res.status(404).json({ msg: "Product not found." });
-
-      res.json({ msg: "Update Success!" });
+      res.json({
+        msg:
+          isArchived === 1
+            ? "Product archived successfully!"
+            : "Product unarchived successfully!",
+        product: updatedProduct,
+      });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }

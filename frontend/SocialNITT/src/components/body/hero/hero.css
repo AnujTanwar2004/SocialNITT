@@ -1,21 +1,416 @@
-.see-more{
-  background-color: black; 
+/* Original styles preserved */
+.see-more {
+  background-color: black;
   font-weight: bold;
-    border-radius: 5px;
-    height: 30px;
+  border-radius: 5px;
+  height: 30px;
 }
-.hero-section-header{
+
+.hero-section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
- 
- .see{
-   color:  #850E35;
- }
- @media (max-width:768px) {
-   .hero-section h2{
-     font-size: 1.1rem;
-   }
-   
- }
+
+.see {
+  color: #850E35;
+}
+
+/* New Modern Styles */
+.modern-hero {
+  padding: 3rem 2rem;
+  /* Maintaining current background - no gradient overlay */
+  min-height: 100vh;
+}
+
+/* Modern Hero Header */
+.hero-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  position: relative;
+}
+
+.main-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  color: #000; /* Using standard black text color */
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.brand-highlight {
+  color: #850E35; /* Using your brand color */
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: #666; /* Using standard gray text */
+  font-weight: 400;
+  margin: 0;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Modern Section Headers */
+.modern-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+}
+
+.section-title-wrapper {
+  position: relative;
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #000; /* Using standard black text */
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.title-underline {
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60%;
+  height: 3px;
+  background: linear-gradient(90deg, #850E35, transparent);
+  border-radius: 2px;
+}
+
+/* Modern See More Button */
+.modern-see-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #850E35 0%, #a91d47 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(133, 14, 53, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.modern-see-more::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.modern-see-more:hover::before {
+  left: 100%;
+}
+
+.modern-see-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(133, 14, 53, 0.3);
+}
+
+.modern-see-more svg {
+  transition: transform 0.3s ease;
+}
+
+.modern-see-more:hover svg {
+  transform: translateX(4px);
+}
+
+/* Modern Dividers */
+.modern-divider {
+  height: 1px;
+  background: #e0e0e0; /* Simple gray divider */
+  margin: 3rem 0;
+  border: none;
+}
+
+/* Modern Leaderboard Styles */
+.leaderboard-section {
+  background: #fff; /* Clean white background */
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e0e0e0;
+}
+
+.leaderboard-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.leaderboard-title {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 800;
+  color: #000; /* Using standard black text */
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  letter-spacing: -0.01em;
+}
+
+.trophy-icon, .fire-icon {
+  font-size: 1.5em;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.period-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.period-badge.all-time {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #92400e;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.period-badge.weekly {
+  background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+  color: #e65100;
+  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
+/* Modern Leaderboard Cards */
+.modern-leaderboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.leaderboard-card {
+  background: #fff; /* Clean white background */
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
+  overflow: hidden;
+}
+
+.leaderboard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 20px;
+  padding: 2px;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: exclude;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+.leaderboard-card.weekly::before {
+  background: linear-gradient(135deg, #ff9800, #ffb74d);
+}
+
+.leaderboard-card.rank-1 {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(255, 215, 0, 0.2);
+}
+
+.leaderboard-card.weekly.rank-1 {
+  box-shadow: 0 8px 30px rgba(255, 152, 0, 0.2);
+}
+
+.leaderboard-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-card.rank-1:hover {
+  transform: translateY(-8px) scale(1.07);
+}
+
+.rank-badge {
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.user-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.user-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.leaderboard-card:hover .user-avatar {
+  transform: scale(1.1);
+}
+
+.avatar-ring {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  z-index: 1;
+  animation: rotate 3s linear infinite;
+}
+
+.avatar-ring.weekly {
+  background: linear-gradient(135deg, #ff9800, #ffb74d);
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.user-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #000; /* Using standard black text */
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.01em;
+}
+
+.points-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.points-number {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #850E35;
+  line-height: 1;
+}
+
+.points-display.weekly .points-number {
+  color: #ff9800;
+}
+
+.points-label {
+  font-size: 0.875rem;
+  color: #666; /* Using standard gray text */
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modern-hero {
+    padding: 2rem 1rem;
+  }
+  
+  .hero-section h2,
+  .section-title {
+    font-size: 1.25rem;
+  }
+  
+  .modern-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .modern-see-more {
+    align-self: flex-end;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .leaderboard-section {
+    padding: 1.5rem;
+  }
+  
+  .modern-leaderboard {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .leaderboard-card {
+    padding: 1.5rem 1rem;
+  }
+  
+  .leaderboard-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .user-avatar {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .avatar-ring {
+    width: 68px;
+    height: 68px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .modern-section-header {
+    align-items: stretch;
+  }
+  
+  .modern-see-more {
+    align-self: stretch;
+    justify-content: center;
+  }
+}

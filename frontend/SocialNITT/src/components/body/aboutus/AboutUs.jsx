@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './AboutUs.css';
+import { Link } from 'react-router-dom';
+
 
 const AboutUs = () => {
   const [isVisible, setIsVisible] = useState({});
@@ -35,18 +37,18 @@ const AboutUs = () => {
     {
       id: 1,
       name: "Anuj Tanwar",
-      role: "Full Stack Developer & Project BAckend Lead",
+      role: "Full Stack Developer & Project Backend Lead",
       image: "/api/placeholder/300/300",
       bio: "Passionate about creating seamless user experiences and building robust backend systems that scale.",
       skills: ["React", "Node.js", "MongoDB", "Express", "AWS"],
-      github: "https://github.com/anujtanwar",
-      linkedin: "https://linkedin.com/in/anujtanwar",
+      github: "https://github.com/AnujTanwar2004",
+      linkedin: "https://www.linkedin.com/in/anuj-tanwar-336660249/",
       twitter: "https://twitter.com/anujtanwar"
     },
     {
       id: 2,
       name: "Sachin Panwar",
-      role: "Frontend Developer  ",
+      role: "Frontend Developer",
       image: "/api/placeholder/300/300",
       bio: "Crafting beautiful and intuitive interfaces that users love to interact with every single day.",
       skills: ["React", "CSS3", "Figma", "JavaScript", "MongoDB"],
@@ -71,11 +73,26 @@ const AboutUs = () => {
       role: "Backend Developer & Database Architect",
       image: "/api/placeholder/300/300",
       bio: "Specializing in scalable backend architecture and efficient database design for modern applications.",
-      skills: ["Node.js", "MongoDB", "Express", "API Design", "Docker"],
+      skills: ["Node.js", "MongoDB"],
       github: " ",
       linkedin: " ",
       twitter: " "
     }
+  ];
+
+  const mentors = [
+    {
+      id: 1,
+      name: "Dr. B Janet",
+      role: "",
+      image: "/api/placeholder/300/300",
+      bio: "Guiding the team with expertise in software architecture and industry best practices.",
+      skills: ["Software Architecture", "System Design", "Best Practices", "Mentoring"],
+      github: " ",
+      linkedin: " ",
+      twitter: " "
+    },
+    
   ];
 
   const features = [
@@ -156,6 +173,122 @@ const AboutUs = () => {
 
   return (
     <div className="about-container">
+      {/* Team Section with 3D Cards - Moved to Top */}
+      <section className="team-section-about" id="team">
+        <div className="section-header-about">
+          <h2 className="section-title-about">Meet the Creators</h2>
+          <p className="section-subtitle-about">
+            The passionate team behind CommuNITT's success
+          </p>
+        </div>
+        
+        <div className={`team-grid-about ${isVisible.team ? 'zoom-in-about' : ''}`}>
+          {teamMembers.map((member, index) => (
+            <div 
+              key={member.id} 
+              className="team-card-about"
+              style={{ animationDelay: `${index * 0.2}s` }}
+            >
+              <div className="card-3d-about">
+                <div className="card-front-about">
+                  <div className="member-avatar-about">
+                    <div className="avatar-ring-about"></div>
+                    <div className="avatar-image-about">
+                      {member.name.split(' ').map(n => n[0]).join('')}
+                    </div>
+                  </div>
+                  <h3 className="member-name-about">{member.name}</h3>
+                  <p className="member-role-about">{member.role}</p>
+                  <div className="skills-preview-about">
+                    {member.skills.slice(0, 3).map((skill, i) => (
+                      <span key={i} className="skill-tag-about">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="card-back-about">
+                  <p className="member-bio-about">{member.bio}</p>
+                  <div className="member-skills-about">
+                    {member.skills.map((skill, i) => (
+                      <span key={i} className="skill-pill-about">{skill}</span>
+                    ))}
+                  </div>
+                  <div className="social-links-about">
+                    <a href={member.github} className="social-link-about github-about">
+                      <span>📱</span>
+                    </a>
+                    <a href={member.linkedin} className="social-link-about linkedin-about">
+                      <span>💼</span>
+                    </a>
+                    <a href={member.twitter} className="social-link-about twitter-about">
+                      <span>🐦</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Mentored By Section - New Addition */}
+      <section className="mentors-section-about" id="mentors">
+        <div className="section-header-about">
+          <h2 className="section-title-about">🎓 Mentored By</h2>
+          <p className="section-subtitle-about">
+            Experienced professionals guiding our journey
+          </p>
+        </div>
+        
+        <div className={`team-grid-about ${isVisible.mentors ? 'zoom-in-about' : ''}`}>
+          {mentors.map((mentor, index) => (
+            <div 
+              key={mentor.id} 
+              className="team-card-about mentor-card-about"
+              style={{ animationDelay: `${index * 0.2}s` }}
+            >
+              <div className="card-3d-about">
+                <div className="card-front-about">
+                  <div className="member-avatar-about">
+                    <div className="avatar-ring-about"></div>
+                    <div className="avatar-image-about mentor-avatar-about">
+                      {mentor.name.split(' ').map(n => n[0]).join('')}
+                    </div>
+                  </div>
+                  <h3 className="member-name-about">{mentor.name}</h3>
+                  <p className="member-role-about">{mentor.role}</p>
+                  <div className="skills-preview-about">
+                    {mentor.skills.slice(0, 2).map((skill, i) => (
+                      <span key={i} className="skill-tag-about mentor-skill-tag-about">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="card-back-about">
+                  <p className="member-bio-about">{mentor.bio}</p>
+                  <div className="member-skills-about">
+                    {mentor.skills.map((skill, i) => (
+                      <span key={i} className="skill-pill-about mentor-skill-pill-about">{skill}</span>
+                    ))}
+                  </div>
+                  <div className="social-links-about">
+                    <a href={mentor.github} className="social-link-about github-about">
+                      <span>📱</span>
+                    </a>
+                    <a href={mentor.linkedin} className="social-link-about linkedin-about">
+                      <span>💼</span>
+                    </a>
+                    <a href={mentor.twitter} className="social-link-about twitter-about">
+                      <span>🐦</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Hero Section with Animated Background */}
       <section className="hero-section-about" id="hero">
         <div className="hero-background-about">
@@ -173,12 +306,14 @@ const AboutUs = () => {
             <span className="gradient-text-about"> Campus Life</span>
           </h1>
           <p className="hero-subtitleabout-about">
+            
             Where innovation meets community. CommuNITT is the next-generation platform 
             connecting NIT Trichy students through smart technology and meaningful interactions.
+             
           </p>
           <div className="hero-buttons-about">
             <button className="btn-primary-about pulse-about">
-              Explore Platform
+              <Link to="/products">Explore Platform</Link>
               <span className="btn-icon-about">🚀</span>
             </button>
             <button className="btn-secondary-about">
@@ -268,69 +403,11 @@ const AboutUs = () => {
         </div>
       </section>
 
-      {/* Team Section with 3D Cards */}
-      <section className="team-section-about" id="team">
-        <div className="section-header-about">
-          <h2 className="section-title-about">Meet the Creators</h2>
-          <p className="section-subtitle-about">
-            The passionate team behind SocialNITT's success
-          </p>
-        </div>
-        
-        <div className={`team-grid-about ${isVisible.team ? 'zoom-in-about' : ''}`}>
-          {teamMembers.map((member, index) => (
-            <div 
-              key={member.id} 
-              className="team-card-about"
-              style={{ animationDelay: `${index * 0.2}s` }}
-            >
-              <div className="card-3d-about">
-                <div className="card-front-about">
-                  <div className="member-avatar-about">
-                    <div className="avatar-ring-about"></div>
-                    <div className="avatar-image-about">
-                      {member.name.split(' ').map(n => n[0]).join('')}
-                    </div>
-                  </div>
-                  <h3 className="member-name-about">{member.name}</h3>
-                  <p className="member-role-about">{member.role}</p>
-                  <div className="skills-preview-about">
-                    {member.skills.slice(0, 3).map((skill, i) => (
-                      <span key={i} className="skill-tag-about">{skill}</span>
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="card-back-about">
-                  <p className="member-bio-about">{member.bio}</p>
-                  <div className="member-skills-about">
-                    {member.skills.map((skill, i) => (
-                      <span key={i} className="skill-pill-about">{skill}</span>
-                    ))}
-                  </div>
-                  <div className="social-links-about">
-                    <a href={member.github} className="social-link-about github-about">
-                      <span>📱</span>
-                    </a>
-                    <a href={member.linkedin} className="social-link-about linkedin-about">
-                      <span>💼</span>
-                    </a>
-                    <a href={member.twitter} className="social-link-about twitter-about">
-                      <span>🐦</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Timeline Section */}
       <section className="timeline-section-about" id="timeline">
         <div className="section-header-about">
           <h2 className="section-title-about">Our Journey</h2>
-          <p className="section-subtitle-about">Key milestones in CommNITT's evolution</p>
+          <p className="section-subtitle-about">Key milestones in CommuNITT's evolution</p>
         </div>
         
         <div className={`timeline-about ${isVisible.timeline ? 'animate-timeline-about' : ''}`}>
@@ -399,7 +476,6 @@ const AboutUs = () => {
           </p>
           <div className="cta-buttons-about">
             <button className="btn-primary glow-about">
-             
               <a href="/login" className="btn-primary"> Start Your Journey</a>
               <span className="btn-sparkle-about">✨</span>
             </button>
