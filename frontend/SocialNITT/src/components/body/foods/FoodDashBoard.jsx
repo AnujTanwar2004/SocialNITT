@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchFoods } from "../../../redux/slices/foodSlice";
 import ServiceCard from "../../cards/ServiceCard";
 import { getImageUrl } from "../../utils/axiosClient";
-
+import FoodCard from "../../cards/FoodCard";
 function FoodsDashboard() {
   const dispatch = useDispatch();
 
@@ -118,7 +118,7 @@ function FoodsDashboard() {
               )
               .map((item) =>
                 !item.isArchived ? (
-                  <ServiceCard
+                  <FoodCard
                     key={item._id}
                     item={item}
                     type="food"

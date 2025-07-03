@@ -19,21 +19,10 @@ function Footer() {
                         <p>A student-powered network connecting the NITT community. Buy, sell, exchange services, and build lasting connections.</p>
                         
                         <div className="social-links">
-                            <a href="https://github.com/yourusername/SocialNITT" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                            <a href="https://github.com/AnujTanwar2004/SocialNITT" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                                 <i className="fab fa-github"></i>
                             </a>
-                            <a href="#" aria-label="Instagram">
-                                <i className="fab fa-instagram"></i>
-                            </a>
-                            <a href="#" aria-label="Twitter">
-                                <i className="fab fa-twitter"></i>
-                            </a>
-                            <a href="#" aria-label="LinkedIn">
-                                <i className="fab fa-linkedin-in"></i>
-                            </a>
-                            <a href="#" aria-label="WhatsApp">
-                                <i className="fab fa-whatsapp"></i>
-                            </a>
+                            
                         </div>
                     </div>
 
@@ -92,11 +81,11 @@ function Footer() {
                 {/* Bottom Footer */}
                 <div className="footer-bottom">
                     <div className="footer-bottom-content">
-                        <p>&copy; 2025 CommuNITT. Created by mentees of Janet Ma'am | All rights reserved.</p>
+                        <p>&copy; 2025 CommuNITT. Licensed property of OSOC | All rights reserved.</p>
                         <div className="footer-bottom-links">
                             <Link to="/privacy">Privacy Policy</Link>
                             <Link to="/terms">Terms of Service</Link>
-                            <Link to="/help">Help Center</Link>
+                        
                         </div>
                     </div>
                 </div>

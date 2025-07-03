@@ -5,9 +5,16 @@ import { Link } from "react-router-dom";
 import { getImageUrl } from "../utils/axiosClient";
 import "./ProductCard.css";
 
-function ProductCard({ item, isProfileView = false, handleDelete, handleArchive }) {
-  // Move useSelector inside the component body
+function ProductCard({
+  item,
+  isProfileView = false,
+  handleDelete,
+  handleArchive,
+}) {
   const { user } = useSelector((state) => state.auth);
+
+  // ✅ Define userId properly
+  const userId = typeof item.user === "string" ? item.user : item.user?._id;
 
   return (
     <article className="custom-card">
@@ -40,45 +47,50 @@ function ProductCard({ item, isProfileView = false, handleDelete, handleArchive 
       {/* ACTIONS: Edit / Delete / Archive for Profile */}
       {isProfileView ? (
         <>
-               <div className="card-archive">
+          <div className="card-archive">
             <p>
-              {item.isArchived === 1 ? <i className="fas fa-check"></i> : <i className="fas fa-times"></i>}
+              {item.isArchived === 1 ? (
+                <i className="fas fa-check"></i>
+              ) : (
+                <i className="fas fa-times"></i>
+              )}
             </p>
           </div>
           <div className="card-actions">
-  {/* Archive button पहले */}
-  <button
-    className="card-button"
-    onClick={() => handleArchive(item._id, item.isArchived)}
-  >
-    {item.isArchived === 1 ? "Unarchive" : "Archive"}
-  </button>
-  
-  {/* Edit/Delete अगली line में */}
-  <div className="action-row">
-    <Link to={`/edit_service/${item._id}`} className="cta-btn">
-      Edit
-    </Link>
-    <button
-      className="card-button"
-      onClick={() => handleDelete(item._id, userId, "service")}
-    >
-      Delete
-    </button>
-  </div>
+            {/* Archive button पहले */}
+            <button
+              className="card-button"
+              onClick={() =>
+                handleArchive && handleArchive(item._id, item.isArchived)
+              }
+            >
+              {item.isArchived === 1 ? "Unarchive" : "Archive"}
+            </button>
+
+            {/* Edit/Delete अगली line में */}
+            <div className="action-row">
+              {/* ✅ Fixed: Link to edit_product instead of edit_service */}
+              <Link to={`/edit_product/${item._id}`} className="cta-btn">
+                Edit
+              </Link>
+              {/* ✅ Fixed: Pass "product" instead of "service" */}
+              <button
+                className="card-button"
+                onClick={() =>
+                  handleDelete && handleDelete(item._id, userId, "product")
+                }
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </>
       ) : (
-        
- <div className="service-card-user see-more-wrapper">
-  <Link to={`/view_product/${item._id}`} className="see-more-button">
-    See More
-  </Link>
-</div>
-
-
- 
-
+        <div className="service-card-user see-more-wrapper">
+          <Link to={`/view_product/${item._id}`} className="see-more-button">
+            See More
+          </Link>
+        </div>
       )}
     </article>
   );

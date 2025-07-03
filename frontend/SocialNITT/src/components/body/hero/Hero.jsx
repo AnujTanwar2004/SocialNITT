@@ -5,6 +5,8 @@ import ProductCard from "../../cards/ProductCard";
 import ServiceCard from "../../cards/ServiceCard";
 import axiosClient from "../../utils/axiosClient"; // adjust path if needed
 
+import FoodCard from "../../cards/FoodCard";
+
 import "./hero.css";
 
 function Hero() {
@@ -61,173 +63,186 @@ function Hero() {
 
   const renderProducts = (items) => (
     <div className="  card-slider-container">
-    <div className="  card-slider">
-      {items.map((item) =>
-        !item.isArchived ? <ProductCard key={item._id} item={item} /> : null
-      )}
-    </div>
+      <div className="  card-slider">
+        {items.map((item) =>
+          !item.isArchived ? <ProductCard key={item._id} item={item} /> : null
+        )}
+      </div>
     </div>
   );
 
   const renderServices = (items, type) => (
     <div className="  card-slider-container">
-    <div className="  card-slider">
-      {items.map((item) =>
-        !item.isArchived ? (
-          <ServiceCard
-            key={item._id}
-            item={item}
-            type={type}
-            isProfileView={false}
-            getUrgencyColor={getUrgencyColor}
-            getStatusColor={getStatusColor}
-          />
-        ) : null
-      )}
-    </div>
+      <div className="  card-slider">
+        {items.map((item) =>
+          !item.isArchived ? (
+            <ServiceCard
+              key={item._id}
+              item={item}
+              type={type}
+              isProfileView={false}
+              getUrgencyColor={getUrgencyColor}
+              getStatusColor={getStatusColor}
+            />
+          ) : null
+        )}
+      </div>
     </div>
   );
 
   const renderFoods = (items, type) => (
-    <div className="  card-slider-container">
-    <div className="  card-slider">
-      {items.map((item) =>
-        !item.isArchived ? (
-          <ServiceCard
-            key={item._id}
-            item={item}
-            type={type}
-            isProfileView={false}
-            getUrgencyColor={getUrgencyColor}
-            getStatusColor={getStatusColor}
-          />
-        ) : null
-      )}
-    </div>
+    <div className="card-slider-container">
+      <div className="card-slider">
+        {items.map((item) =>
+          !item.isArchived ? (
+            <FoodCard
+              key={item._id}
+              item={item}
+              type={type}
+              isProfileView={false}
+              getUrgencyColor={getUrgencyColor}
+              getStatusColor={getStatusColor}
+            />
+          ) : null
+        )}
+      </div>
     </div>
   );
 
-
   return (
-    <section className="hero" style={{ padding: "2rem" }}>
-      <h1 style={{ textAlign: "center" }}>Welcome to CommuNITT</h1>
+    <section className="hero modern-hero">
+      {/* Modern Hero Header */}
+      <div className="hero-header">
+        <h1 className="main-title">
+          Welcome to <span className="brand-highlight">CommuNITT</span>
+        </h1>
+        <p className="hero-subtitle">Discover amazing products, services, and connect with our community</p>
+      </div>
 
       {/* Products Section */}
       <div className="hero-section">
-        <div className="hero-section-header">
-          <h2>Products</h2>
-          <Link to="/products" className="see">
-            See More Products
+        <div className="modern-section-header">
+          <div className="section-title-wrapper">
+            <h2 className="section-title">🛍️ Products</h2>
+            <div className="title-underline"></div>
+          </div>
+          <Link to="/products" className="modern-see-more">
+            <span>Explore All</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </Link>
         </div>
         {renderProducts(products)}
       </div>
 
-      <hr style={{ margin: "2rem 0" }} />
+      <div className="modern-divider"></div>
 
       {/* Services Section */}
       <div className="hero-section">
-        <div className="hero-section-header">
-          <h2>Services</h2>
-          <Link to="/services" className="see">
-            See More Services
+        <div className="modern-section-header">
+          <div className="section-title-wrapper">
+            <h2 className="section-title">⚡ Services</h2>
+            <div className="title-underline"></div>
+          </div>
+          <Link to="/services" className="modern-see-more">
+            <span>Explore All</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </Link>
         </div>
         {renderServices(services, "service")}
       </div>
 
-      <hr style={{ margin: "2rem 0" }} />
+      <div className="modern-divider"></div>
 
       {/* Foods Section */}
       <div className="hero-section">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <h2>Foods</h2>
-          <Link to="/foods" className="see">
-            See More Foods
+        <div className="modern-section-header">
+          <div className="section-title-wrapper">
+            <h2 className="section-title">🍕 Foods</h2>
+            <div className="title-underline"></div>
+          </div>
+          <Link to="/foods" className="modern-see-more">
+            <span>Explore All</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </Link>
         </div>
         {renderFoods(foods, "food")}
       </div>
 
-      {/* Top Users Leaderboard (All Time) */}
-      <hr style={{ margin: "2rem 0" }} />
-      <div className="hero-section  ">
-        <h2>🏆 Top Contributors (All Time)</h2>
-        <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
+      {/* Modern Top Users Leaderboard (All Time) */}
+      <div className="modern-divider"></div>
+      <div className="hero-section leaderboard-section">
+        <div className="leaderboard-header">
+          <h2 className="leaderboard-title">
+            <span className="trophy-icon">🏆</span>
+            Top Contributors
+            <span className="period-badge all-time">All Time</span>
+          </h2>
+        </div>
+        <div className="modern-leaderboard">
           {topUsers.map((user, idx) => (
             <div
               key={user._id}
-              style={{
-                border: "2px solid gold",
-                borderRadius: "12px",
-                padding: "1rem",
-                minWidth: "180px",
-                background: "#fffbe6",
-                textAlign: "center",
-              }}
+              className={`leaderboard-card ${idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : 'rank-3'}`}
             >
-              <img
-                src={user.avatar}
-                alt={user.name}
-                style={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: "50%",
-                  marginBottom: 8,
-                }}
-              />
-              <h3 style={{ margin: 0 }}>{user.name}</h3>
-              <p style={{ margin: 0, color: "#850E35", fontWeight: "bold" }}>
-                {user.points} points
-              </p>
-              <p style={{ margin: 0, color: "#888" }}>
+              <div className="rank-badge">
                 {idx === 0 ? "🥇" : idx === 1 ? "🥈" : "🥉"}
-              </p>
+              </div>
+              <div className="user-avatar-wrapper">
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="user-avatar"
+                />
+                <div className="avatar-ring"></div>
+              </div>
+              <h3 className="user-name">{user.name}</h3>
+              <div className="points-display">
+                <span className="points-number">{user.points}</span>
+                <span className="points-label">points</span>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Top Users Leaderboard (This Week) */}
-      <hr style={{ margin: "2rem 0" }} />
-      <div className="hero-section ">
-        <h2>🔥 Top Contributors (This Week)</h2>
-        <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
+      {/* Modern Top Users Leaderboard (This Week) */}
+      <div className="modern-divider"></div>
+      <div className="hero-section leaderboard-section">
+        <div className="leaderboard-header">
+          <h2 className="leaderboard-title">
+            <span className="fire-icon">🔥</span>
+            Top Contributors
+            <span className="period-badge weekly">This Week</span>
+          </h2>
+        </div>
+        <div className="modern-leaderboard weekly">
           {topUsersWeek.map((user, idx) => (
             <div
               key={user._id}
-              style={{
-                border: "2px solid #ff9800",
-                borderRadius: "12px",
-                padding: "1rem",
-                minWidth: "180px",
-                background: "#fffbe6",
-                textAlign: "center",
-              }}
+              className={`leaderboard-card weekly ${idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : 'rank-3'}`}
             >
-              <img
-                src={user.avatar}
-                alt={user.name}
-                style={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: "50%",
-                  marginBottom: 8,
-                }}
-              />
-              <h3 style={{ margin: 0 }}>{user.name}</h3>
-              <p style={{ margin: 0, color: "#ff9800", fontWeight: "bold" }}>
-                {user.weeklyPoints} points
-              </p>
-              <p style={{ margin: 0, color: "#888" }}>
+              <div className="rank-badge">
                 {idx === 0 ? "🥇" : idx === 1 ? "🥈" : "🥉"}
-              </p>
+              </div>
+              <div className="user-avatar-wrapper">
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="user-avatar"
+                />
+                <div className="avatar-ring weekly"></div>
+              </div>
+              <h3 className="user-name">{user.name}</h3>
+              <div className="points-display weekly">
+                <span className="points-number">{user.weeklyPoints}</span>
+                <span className="points-label">points</span>
+              </div>
             </div>
           ))}
         </div>

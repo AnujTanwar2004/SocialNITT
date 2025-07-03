@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function Login() {
   const { isLogged } = useSelector((state) => state.auth);
@@ -16,9 +17,9 @@ function Login() {
   }, [isLogged, navigate]);
 
   const handleDAuthLogin = () => {
-    console.log("🔄 Redirecting to DAuth login...");
-    window.location.href = 'http://localhost:5000/user/dauth/login';
-  }
+  const authUrl = `${import.meta.env.VITE_API_URL}/user/dauth/login`;
+  window.location.href = authUrl;
+   };
 
   // Don't render login form if user is already logged in
   if (isLogged) {

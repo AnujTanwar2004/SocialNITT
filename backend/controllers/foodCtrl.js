@@ -174,6 +174,16 @@ const foodCtrl = {
       return res.status(500).json({ msg: err.message });
     }
   },
+
+  // New function to get all foods (admin use)
+  getAllFoods: async (req, res) => {
+    try {
+      const foods = await Food.find().populate('user', 'name avatar');
+      res.json(foods);
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
 }
 
 module.exports = foodCtrl

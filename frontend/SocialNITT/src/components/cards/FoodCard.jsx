@@ -51,24 +51,16 @@ function FoodCard({
             <div className="food-card-category">🍱 {item.category}</div>
             <div className="food-card-location">📍 {item.location}</div>
           </div>
-           {user && (
-              <div style={{
-                marginTop: "1rem",
-                padding: "0.75rem",
-                background: "#f8f9fa",
-                borderRadius: "8px",
-                borderLeft: "3px solid #850E35"
-              }}>
-                <div style={{ fontSize: "12px", color: "#6c757d" }}>
-                  Posted by: <strong>{user.name}</strong>
-                </div>
-              </div>
-            )}
-          {!isProfileView && (
-            <div className="food-card-user">
-              👤 {item.user?.name || "Anonymous"}
-            </div>
-          )}
+           
+           {/* User Info */}
+        {!isProfileView && (
+         <div className="service-card-user see-more-wrapper">
+         <Link to={`/view_product/${item._id}`} className="see-more-button">
+           See More
+         </Link>
+       </div>
+       
+        )}
         </div>
       </Link>
 
@@ -76,7 +68,6 @@ function FoodCard({
         <>
           <div className="card-archive">
             <p>
-               
               {item.isArchived === 1 ? <i className="fas fa-check"></i> : <i className="fas fa-times"></i>}
             </p>
           </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./ContactUs.css";
-import axios from "axios";
+import axiosClient from "../utils/axiosClient"; // ✅ Import axiosClient instead of axios
 
 function ContactUs() {
   const [formData, setFormData] = useState({
@@ -32,14 +32,15 @@ function ContactUs() {
     setSuccess("");
 
     try {
-      const response = await axios.post("/api/contact", formData);
+      // ✅ Use axiosClient instead of axios
+      const response = await axiosClient.post("/api/contact", formData);
       setSuccess("Message sent successfully! We'll get back to you soon.");
       setFormData({ name: "", email: "", message: "" });
       setCharCount(0);
     } catch (err) {
-      setError(
+      /* setError(
         err.response?.data?.msg || "Failed to send message. Please try again."
-      );
+      ); */
     } finally {
       setLoading(false);
     }

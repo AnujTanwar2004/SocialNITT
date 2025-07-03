@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import './ServiceCard.css';
+import "./ServiceCard.css";
 
 function ServiceCard({
   item,
@@ -22,7 +22,9 @@ function ServiceCard({
         <div className="service-title-badges">
           <div className="service-card-header">
             <h3 className="service-card-title">{item.title}</h3>
-            <span className="service-card-date">{new Date(item.updatedAt).toLocaleDateString()}</span>
+            <span className="service-card-date">
+              {new Date(item.updatedAt).toLocaleDateString()}
+            </span>
           </div>
 
           {/* Badges */}
@@ -56,48 +58,54 @@ function ServiceCard({
             <div className="service-card-location">📍 {item.location}</div>
           </div>
         </div>
-        </Link>
-        {/* User Info */}
-        {!isProfileView && (
-         <div className="service-card-user see-more-wrapper">
-         <Link to={`/view_product/${item._id}`} className="see-more-button">
-           See More
-         </Link>
-       </div>
-       
-        )}
-      
+      </Link>
+      {/* User Info - Fixed the link */}
+      {!isProfileView && (
+        <div className="service-card-user see-more-wrapper">
+          <Link to={`/view_service/${item._id}`} className="see-more-button">
+            See More
+          </Link>
+        </div>
+      )}
 
       {/* Profile View Actions */}
       {isProfileView && (
         <>
           <div className="card-archive">
             <p>
-              {item.isArchived === 1 ? <i className="fas fa-check"></i> : <i className="fas fa-times"></i>}
+              {item.isArchived === 1 ? (
+                <i className="fas fa-check"></i>
+              ) : (
+                <i className="fas fa-times"></i>
+              )}
             </p>
           </div>
           <div className="card-actions">
-  {/* Archive button पहले */}
-  <button
-    className="card-button"
-    onClick={() => handleArchive(item._id, item.isArchived)}
-  >
-    {item.isArchived === 1 ? "Unarchive" : "Archive"}
-  </button>
-  
-  {/* Edit/Delete अगली line में */}
-  <div className="action-row">
-    <Link to={`/edit_service/${item._id}`} className="cta-btn">
-      Edit
-    </Link>
-    <button
-      className="card-button"
-      onClick={() => handleDelete(item._id, userId, "service")}
-    >
-      Delete
-    </button>
-  </div>
-</div>
+            {/* Archive button */}
+            <button
+              className="archive-card-button"
+              onClick={() =>
+                handleArchive && handleArchive(item._id, item.isArchived)
+              }
+            >
+              {item.isArchived === 1 ? "Unarchive" : "Archive"}
+            </button>
+
+            {/* Edit/Delete buttons */}
+            <div className="action-row">
+              <Link to={`/edit_service/${item._id}`} className="cta-btn">
+                Edit
+              </Link>
+              <button
+                className="card-button"
+                onClick={() =>
+                  handleDelete && handleDelete(item._id, userId, "service")
+                }
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </>
       )}
     </article>

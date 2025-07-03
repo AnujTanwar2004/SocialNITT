@@ -133,6 +133,7 @@
 }
 
 .hero-buttons-about {
+  margin-top: 30px;
   display: flex;
   gap: 1.5rem;
   justify-content: center;
