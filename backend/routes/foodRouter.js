@@ -18,4 +18,6 @@ router.get("/admin/all", auth, admin, foodCtrl.getAllFoods); // ✅ Need to add 
 router.patch("/admin/:id", auth, admin, foodCtrl.adminUpdateFood); // ✅ Use admin function
 router.delete("/admin/:id", auth, admin, foodCtrl.adminDeleteFood);
 
+router.patch('/admin/:id/approve', auth, admin, foodCtrl.adminApproveFood);
+
 module.exports = router;

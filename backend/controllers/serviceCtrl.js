@@ -1,5 +1,6 @@
 const Services = require("../models/serviceModel");
 const Users = require("../models/userModel");
+const Notification = require("../models/notificationModel");
 
 const serviceCtrl = {
   createService: async (req, res) => {
@@ -55,6 +56,8 @@ const serviceCtrl = {
         urgency,
         phone,
         user: userId,
+        isApproved: false, // ✅ Add this - requires admin approval
+        isArchived: 0 // ✅ Default to unarchived
       });
 
       await newService.save();
@@ -63,21 +66,28 @@ const serviceCtrl = {
         $push: {
           pointsHistory: {
             points: 2,
-            reason: "upload_product",
+            reason: "upload_service",
             date: new Date(),
           },
         },
       });
-      res.json({ msg: "Service request created successfully!" });
+      
+      // ✅ Updated success message
+      res.json({ msg: "Service request submitted! It will be visible after admin approval." });
     } catch (err) {
       console.error("Service creation error:", err);
       return res.status(500).json({ msg: err.message });
     }
   },
 
+  // ✅ Update getServices to only show approved items
   getServices: async (req, res) => {
     try {
-      const services = await Services.find().populate("user", "name avatar");
+      // Only show approved services to regular users
+      const services = await Services.find({ 
+        isApproved: true,
+        isArchived: { $ne: 1 } // Don't show archived items
+      }).populate("user", "name avatar");
       res.json(services);
     } catch (err) {
       return res.status(500).json({ msg: err.message });
@@ -118,11 +128,13 @@ const serviceCtrl = {
 
       if (!service) return res.status(404).json({ msg: "Service not found." });
 
-      // Check ownership
-      if (service.user.toString() !== req.user.id)
-        return res
-          .status(403)
-          .json({ msg: "Unauthorized: Cannot update others' service." });
+      // ✅ Check ownership - allow if user owns it OR if user is admin
+      const isOwner = service.user.toString() === req.user.id;
+      const isAdmin = req.user.role === 1;
+      
+      if (!isOwner && !isAdmin) {
+        return res.status(403).json({ msg: "Unauthorized: Cannot update others' service." });
+      }
 
       const updatedService = await Services.findByIdAndUpdate(
         req.params.id,
@@ -165,7 +177,7 @@ const serviceCtrl = {
         $push: {
           pointsHistory: {
             points: 1,
-            reason: "delete_product",
+            reason: "delete_service",
             date: new Date(),
           },
         },
@@ -177,24 +189,53 @@ const serviceCtrl = {
   },
 
   contactOwner: async (req, res) => {
-    const service = await Services.findById(req.params.id);
-    if (!service) return res.status(404).json({ msg: "Service not found." });
-    if (service.user.toString() === req.user.id) {
-      return res.status(400).json({ msg: "You cannot contact yourself." });
+    try {
+      const service = await Services.findById(req.params.id);
+      if (!service) return res.status(404).json({ msg: "Service not found." });
+      if (service.user.toString() === req.user.id) {
+        return res.status(400).json({ msg: "You cannot contact yourself." });
+      }
+      await Notification.create({
+        user: service.user, // ✅ Fixed: was using 'product.user'
+        itemType: "Service",
+        itemId: service._id,
+        message: `Someone has contacted your service "${service.title}".`,
+      });
+      await Users.findByIdAndUpdate(service.user, { // ✅ Fixed: was using 'product.user'
+        $inc: { points: 1 },
+        $push: {
+          pointsHistory: { points: 1, reason: "contacted", date: new Date() },
+        },
+      });
+      res.json({ msg: "Service owner notified." });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
     }
-    await Notification.create({
-      user: service.user,
-      itemType: "Service",
-      itemId: service._id,
-      message: `Someone has contacted your service "${service.title}".`,
-    });
-    await Users.findByIdAndUpdate(product.user, {
-      $inc: { points: 1 },
-      $push: {
-        pointsHistory: { points: 1, reason: "contacted", date: new Date() },
-      },
-    });
-    res.json({ msg: "Service owner notified." });
+  },
+
+  // ✅ Add admin approval function
+  adminApproveService: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { isApproved } = req.body;
+
+      const updatedService = await Services.findByIdAndUpdate(
+        id,
+        { isApproved },
+        { new: true }
+      );
+
+      if (!updatedService) {
+        return res.status(404).json({ msg: "Service not found." });
+      }
+
+      res.json({ 
+        msg: isApproved ? "Service approved successfully!" : "Service approval revoked.",
+        service: updatedService 
+      });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
   },
 
   // ADMIN: Delete any service (no ownership check)
@@ -253,10 +294,9 @@ const serviceCtrl = {
     }
   },
 
-  // New function to get all services (public)
-  getAllServices: async (req, res) => {
+   getAllServices: async (req, res) => {
     try {
-      const services = await Services.find().populate("user", "name avatar");
+       const services = await Services.find().populate("user", "name avatar");
       res.json(services);
     } catch (err) {
       return res.status(500).json({ msg: err.message });

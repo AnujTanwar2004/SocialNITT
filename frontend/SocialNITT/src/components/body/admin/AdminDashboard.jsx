@@ -511,6 +511,60 @@ function AdminDashboard() {
     }
   }, []);
 
+  // Add approval handler
+  const handleApproval = useCallback(
+    async (itemId, currentApprovalStatus, type) => {
+      try {
+        setLoading(true);
+
+        const newApprovalStatus = !currentApprovalStatus;
+
+        await axiosClient.patch(`/api/${type}s/admin/${itemId}/approve`, {
+          isApproved: newApprovalStatus,
+        });
+
+        // Update local state
+        if (type === "product") {
+          setProducts((prevProducts) =>
+            prevProducts.map((product) =>
+              product._id === itemId
+                ? { ...product, isApproved: newApprovalStatus }
+                : product
+            )
+          );
+        } else if (type === "service") {
+          setServices((prevServices) =>
+            prevServices.map((service) =>
+              service._id === itemId
+                ? { ...service, isApproved: newApprovalStatus }
+                : service
+            )
+          );
+        } else if (type === "food") {
+          setFoods((prevFoods) =>
+            prevFoods.map((food) =>
+              food._id === itemId
+                ? { ...food, isApproved: newApprovalStatus }
+                : food
+            )
+          );
+        }
+
+        setLoading(false);
+        alert(
+          newApprovalStatus
+            ? `${type} approved successfully!`
+            : `${type} approval revoked!`
+        );
+      } catch (err) {
+        setLoading(false);
+        console.error("Approval error:", err);
+        alert(err.response?.data?.msg || "Approval update failed");
+      }
+    },
+    []
+  );
+
   return (
     <div className="admin-dashboard">
       <h1 className="admin-title">🛡️ Admin Dashboard</h1>
@@ -639,6 +693,9 @@ function AdminDashboard() {
                     handleArchive={(itemId, currentStatus) =>
                       handleArchive(itemId, currentStatus, "product")
                     }
+                    handleApproval={(itemId, currentStatus) =>
+                      handleApproval(itemId, currentStatus, "product")
+                    } // ✅ Add this
                   />
                 ))}
               </div>
@@ -731,6 +788,10 @@ function AdminDashboard() {
                     handleArchive={(itemId, currentStatus) =>
                       handleArchive(itemId, currentStatus, "food")
                     }
+                    handleApproval={(
+                      itemId,
+                      currentStatus // ✅ Add this
+                    ) => handleApproval(itemId, currentStatus, "food")}
                     getUrgencyColor={getUrgencyColor}
                     getStatusColor={getStatusColor}
                   />

@@ -10,6 +10,7 @@ function ProductCard({
   isProfileView = false,
   handleDelete,
   handleArchive,
+  handleApproval, // ✅ Add this prop for admin approval
 }) {
   const { user } = useSelector((state) => state.auth);
 
@@ -18,6 +19,27 @@ function ProductCard({
 
   return (
     <article className="custom-card">
+      {/* ✅ Add approval status indicator for admin */}
+      {isProfileView && (
+        <div
+          className="approval-status"
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            background: item.isApproved ? "#28a745" : "#ffc107",
+            color: "white",
+            padding: "4px 8px",
+            borderRadius: "12px",
+            fontSize: "12px",
+            fontWeight: "600",
+            zIndex: 3,
+          }}
+        >
+          {item.isApproved ? "✅ Approved" : "⏳ Pending"}
+        </div>
+      )}
+
       <Link to={`/view_product/${item._id}`} className="card-link">
         <div className="card-image-wrapper">
           <img
@@ -57,7 +79,32 @@ function ProductCard({
             </p>
           </div>
           <div className="card-actions">
-            {/* Archive button पहले */}
+            {/* ✅ Add approval button for admin */}
+            {handleApproval && (
+              <button
+                className="approval-button"
+                style={{
+                  background: item.isApproved ? "#dc3545" : "#28a745",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "25px",
+                  padding: "10px 16px",
+                  fontWeight: "700",
+                  fontSize: "0.8rem",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                  width: "100%",
+                  marginBottom: "0.5rem",
+                }}
+                onClick={() => handleApproval(item._id, item.isApproved)}
+              >
+                {item.isApproved ? "Revoke Approval" : "Approve"}
+              </button>
+            )}
+
+            {/* Archive button */}
             <button
               className="card-button"
               onClick={() =>
@@ -67,13 +114,11 @@ function ProductCard({
               {item.isArchived === 1 ? "Unarchive" : "Archive"}
             </button>
 
-            {/* Edit/Delete अगली line में */}
+            {/* Edit/Delete buttons */}
             <div className="action-row">
-              {/* ✅ Fixed: Link to edit_product instead of edit_service */}
               <Link to={`/edit_product/${item._id}`} className="cta-btn">
                 Edit
               </Link>
-              {/* ✅ Fixed: Pass "product" instead of "service" */}
               <button
                 className="card-button"
                 onClick={() =>

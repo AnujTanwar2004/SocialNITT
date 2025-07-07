@@ -43,6 +43,10 @@ const productSchema = new mongoose.Schema({
         default: "",
         required: true
     },
+     isApproved: {
+      type: Boolean,
+      default: false,
+    },
     isArchived: {
         type: Number,
         default: 0 // 0 = not archieved, 1 = archived

@@ -22,4 +22,5 @@ router.post("/contact/:id", auth, serviceCtrl.contactOwner);
 router.delete("/admin/:id", auth, admin, serviceCtrl.adminDeleteService);
 router.patch("/admin/:id", auth, admin, serviceCtrl.adminUpdateService);
 
+router.patch('/admin/:id/approve', auth, admin, serviceCtrl.adminApproveService);
 module.exports = router;

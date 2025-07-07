@@ -8,7 +8,6 @@ const productCtrl = {
     try {
       const { title, description, price, location, category, phone, image } =
         req.body;
-
       const userId = req.user.id;
 
       // Validations
@@ -49,6 +48,8 @@ const productCtrl = {
         phone,
         image,
         user: userId,
+        isApproved: false, // ✅ Add this - requires admin approval
+        isArchived: 0, // ✅ Default to unarchived
       });
 
       await newProduct.save();
@@ -62,16 +63,25 @@ const productCtrl = {
           },
         },
       });
-      res.json({ msg: "Product has been created!" });
+
+      // ✅ Updated success message
+      res.json({
+        msg: "Product submitted! It will be visible after admin approval.",
+      });
     } catch (err) {
       console.error("Product creation error:", err);
       return res.status(500).json({ msg: err.message });
     }
   },
 
+  // ✅ Update getProducts to only show approved items
   getProducts: async (req, res) => {
     try {
-      const products = await Products.find();
+      // Only show approved products to regular users
+      const products = await Products.find({
+        isApproved: true,
+        isArchived: { $ne: 1 }, // Don't show archived items
+      });
       res.json(products);
     } catch (err) {
       return res.status(500).json({ msg: err.message });
@@ -216,9 +226,37 @@ const productCtrl = {
     }
   },
 
+  // ADMIN: Approve or revoke product approval
+  adminApproveProduct: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { isApproved } = req.body;
+
+      const updatedProduct = await Products.findByIdAndUpdate(
+        id,
+        { isApproved },
+        { new: true }
+      );
+
+      if (!updatedProduct) {
+        return res.status(404).json({ msg: "Product not found." });
+      }
+
+      res.json({
+        msg: isApproved
+          ? "Product approved successfully!"
+          : "Product approval revoked.",
+        product: updatedProduct,
+      });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
   // ADMIN: Get all products (no user filter)
   getAllProducts: async (req, res) => {
     try {
+      // Admins can see all products regardless of approval status
       const products = await Products.find();
       res.json(products);
     } catch (err) {

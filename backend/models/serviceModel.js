@@ -63,6 +63,10 @@ const serviceSchema = new mongoose.Schema({
         enum: ['Active', 'In Progress', 'Completed', 'Cancelled'],
         default: 'Active'
     },
+     isApproved: {
+      type: Boolean,
+      default: false,
+    },
     isArchived: {
         type: Number,
         default: 0

@@ -84,10 +84,10 @@ const AboutUs = () => {
     {
       id: 1,
       name: "Dr. B Janet",
-      role: "",
+      role: "Mentor and Guide for the project",
       image: "/api/placeholder/300/300",
       bio: "Guiding the team with expertise in software architecture and industry best practices.",
-      skills: ["Software Architecture", "System Design", "Best Practices", "Mentoring"],
+      skills: [" ", " ", " ", "Mentoring"],
       github: " ",
       linkedin: " ",
       twitter: " "
@@ -173,64 +173,6 @@ const AboutUs = () => {
 
   return (
     <div className="about-container">
-      {/* Team Section with 3D Cards - Moved to Top */}
-      <section className="team-section-about" id="team">
-        <div className="section-header-about">
-          <h2 className="section-title-about">Meet the Creators</h2>
-          <p className="section-subtitle-about">
-            The passionate team behind CommuNITT's success
-          </p>
-        </div>
-        
-        <div className={`team-grid-about ${isVisible.team ? 'zoom-in-about' : ''}`}>
-          {teamMembers.map((member, index) => (
-            <div 
-              key={member.id} 
-              className="team-card-about"
-              style={{ animationDelay: `${index * 0.2}s` }}
-            >
-              <div className="card-3d-about">
-                <div className="card-front-about">
-                  <div className="member-avatar-about">
-                    <div className="avatar-ring-about"></div>
-                    <div className="avatar-image-about">
-                      {member.name.split(' ').map(n => n[0]).join('')}
-                    </div>
-                  </div>
-                  <h3 className="member-name-about">{member.name}</h3>
-                  <p className="member-role-about">{member.role}</p>
-                  <div className="skills-preview-about">
-                    {member.skills.slice(0, 3).map((skill, i) => (
-                      <span key={i} className="skill-tag-about">{skill}</span>
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="card-back-about">
-                  <p className="member-bio-about">{member.bio}</p>
-                  <div className="member-skills-about">
-                    {member.skills.map((skill, i) => (
-                      <span key={i} className="skill-pill-about">{skill}</span>
-                    ))}
-                  </div>
-                  <div className="social-links-about">
-                    <a href={member.github} className="social-link-about github-about">
-                      <span>📱</span>
-                    </a>
-                    <a href={member.linkedin} className="social-link-about linkedin-about">
-                      <span>💼</span>
-                    </a>
-                    <a href={member.twitter} className="social-link-about twitter-about">
-                      <span>🐦</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Mentored By Section - New Addition */}
       <section className="mentors-section-about" id="mentors">
         <div className="section-header-about">
@@ -288,7 +230,63 @@ const AboutUs = () => {
           ))}
         </div>
       </section>
-
+      {/* Team Section with 3D Cards - Moved to Top */}
+      <section className="team-section-about" id="team">
+        <div className="section-header-about">
+          <h2 className="section-title-about">Meet the Creators</h2>
+          <p className="section-subtitle-about">
+            The passionate team behind CommuNITT's success
+          </p>
+        </div>
+        
+        <div className={`team-grid-about ${isVisible.team ? 'zoom-in-about' : ''}`}>
+          {teamMembers.map((member, index) => (
+            <div 
+              key={member.id} 
+              className="team-card-about"
+              style={{ animationDelay: `${index * 0.2}s` }}
+            >
+              <div className="card-3d-about">
+                <div className="card-front-about">
+                  <div className="member-avatar-about">
+                    <div className="avatar-ring-about"></div>
+                    <div className="avatar-image-about">
+                      {member.name.split(' ').map(n => n[0]).join('')}
+                    </div>
+                  </div>
+                  <h3 className="member-name-about">{member.name}</h3>
+                  <p className="member-role-about">{member.role}</p>
+                  <div className="skills-preview-about">
+                    {member.skills.slice(0, 3).map((skill, i) => (
+                      <span key={i} className="skill-tag-about">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="card-back-about">
+                  <p className="member-bio-about">{member.bio}</p>
+                  <div className="member-skills-about">
+                    {member.skills.map((skill, i) => (
+                      <span key={i} className="skill-pill-about">{skill}</span>
+                    ))}
+                  </div>
+                  <div className="social-links-about">
+                    <a href={member.github} className="social-link-about github-about">
+                      <span>📱</span>
+                    </a>
+                    <a href={member.linkedin} className="social-link-about linkedin-about">
+                      <span>💼</span>
+                    </a>
+                    <a href={member.twitter} className="social-link-about twitter-about">
+                      <span>🐦</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
       {/* Hero Section with Animated Background */}
       <section className="hero-section-about" id="hero">
         <div className="hero-background-about">
@@ -316,10 +314,7 @@ const AboutUs = () => {
               <Link to="/products">Explore Platform</Link>
               <span className="btn-icon-about">🚀</span>
             </button>
-            <button className="btn-secondary-about">
-              Watch Demo
-              <span className="btn-icon-about">▶️</span>
-            </button>
+             
           </div>
         </div>
       </section>

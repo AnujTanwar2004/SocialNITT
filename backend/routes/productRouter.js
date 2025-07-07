@@ -31,4 +31,5 @@ router.patch("/admin/:id", auth, admin, productCtrl.updateProduct);
 // Admin: Delete product
 router.delete("/admin/:id", auth, admin, productCtrl.adminDeleteProduct);
 
+router.patch('/admin/:id/approve', auth, admin, productCtrl.adminApproveProduct);
 module.exports = router;

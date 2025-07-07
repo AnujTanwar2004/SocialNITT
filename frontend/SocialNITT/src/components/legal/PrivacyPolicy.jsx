@@ -1,5 +1,5 @@
 import React from 'react';
-//import './legal.css';
+import './legal.css';
 
 function PrivacyPolicy() {
     return (
@@ -7,7 +7,7 @@ function PrivacyPolicy() {
             <div className="legal-container">
                 <div className="legal-header">
                     <h1>Privacy Policy</h1>
-                    <p className="last-updated">Last updated: January 2025</p>
+                    <p className="last-updated">Last updated: JULY 2025</p>
                 </div>
 
                 <div className="legal-content">
