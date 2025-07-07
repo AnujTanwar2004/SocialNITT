@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchFoods } from "../../../redux/slices/foodSlice";
 import { getImageUrl } from '../../utils/axiosClient';
@@ -8,6 +8,7 @@ import axiosClient from '../../utils/axiosClient';
 function ViewFood() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState(false);
   const [coordinates, setCoordinates] = useState(null);

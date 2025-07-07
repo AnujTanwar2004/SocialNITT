@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams ,useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchProducts } from '../../../redux/slices/productSlice'
 import { getImageUrl } from '../../utils/axiosClient'
@@ -11,12 +11,12 @@ function ViewProduct() {
   const [mapLoaded, setMapLoaded] = useState(false)
   const [mapError, setMapError] = useState(false)
   const [coordinates, setCoordinates] = useState(null)
+  const navigate = useNavigate()
 
   const products = useSelector(state => state.products.items)
   const status = useSelector(state => state.products.status)
 
-  // ✅ Fetch products on component mount if not already fetched
-  useEffect(() => {
+   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchProducts())
     }
@@ -83,13 +83,13 @@ function ViewProduct() {
       const nitTrichyCenter = { lat: 10.7672, lng: 78.8172 }
       const searchRadius = 0.02 // About 2km radius
       
-      // First try: Search with NIT Trichy + location name
+      // First : Search with NIT Trichy + location name
       let response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationName + ' NIT Trichy Tiruchirappalli Tamil Nadu India')}&limit=1&countrycodes=in`
       )
       let data = await response.json()
       
-      // Second try: Search with broader Trichy area if first search fails
+      // Second : Search with broader Trichy area if first search fails
       if (!data || data.length === 0) {
         response = await fetch(
           `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationName + ' Tiruchirappalli Tamil Nadu India')}&limit=5&countrycodes=in`
@@ -97,7 +97,7 @@ function ViewProduct() {
         data = await response.json()
       }
       
-      // Third try: Search with just the location name but bounded to Tamil Nadu
+      // Third : Search with just the location name but bounded to Tamil Nadu
       if (!data || data.length === 0) {
         response = await fetch(
           `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationName + ' Tamil Nadu India')}&limit=5&countrycodes=in`
@@ -273,10 +273,24 @@ function ViewProduct() {
       await axiosClient.post(`/api/products/contact/${product._id}`);
     } catch (err) {
       // Optionally show an error or ignore
-      console.error("Notification error:", err);
+     // console.error("Notification error:", err);
     }
     window.open(`https://wa.me/${product.phone}`, '_blank');
   };
+  const handleFeeback = async ()=>{
+    try{
+       navigate('/contact', { 
+        state: { 
+          productId: product._id,
+          productTitle: product.title,
+          feedbackType: 'product',
+          prefilledMessage: `I would like to provide feedback about the product: ${product.title}`
+        }
+      });
+    }catch(err) {
+
+    }
+  }
 
   if (!product) return <h2 style={{ textAlign: 'center', margin: '50px 0' }}>Product not found.</h2>
 
@@ -302,6 +316,16 @@ function ViewProduct() {
           >
             Contact
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </button>
+          <button
+            className="cta-btn"
+            onClick={handleFeeback}
+            type="button"
+          >
+            Feedback
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </button>
