@@ -319,14 +319,50 @@ function ViewService() {
       setMapError(true);
     }
   };
-   const handleContact = async () => {
-    try {
-      await axiosClient.post(`/api/services/contact/${service._id}`);  
-    } catch (err) {
-      console.error("Notification error:", err);
-    }
-    window.open(`https://wa.me/${service.phone}`, "_blank"); 
-  };
+   // --- Notification Trigger for Contact ---
+  const getWhatsappNumber = (phone) => {
+  if (!phone) return '';
+  
+  // Remove all non-digit characters
+  let cleanNumber = phone.replace(/[^0-9]/g, '');
+  
+  // Handle different Indian phone number formats
+  if (cleanNumber.length === 10) {
+    // 10-digit number - add India country code
+    return `91${cleanNumber}`;
+  } else if (cleanNumber.length === 11 && cleanNumber.startsWith('0')) {
+    // 11-digit number starting with 0 - remove 0 and add 91
+    return `91${cleanNumber.substring(1)}`;
+  } else if (cleanNumber.length === 12 && cleanNumber.startsWith('91')) {
+    // Already has India country code
+    return cleanNumber;
+  } else if (cleanNumber.length === 13 && cleanNumber.startsWith('091')) {
+    // Remove leading 0 from country code
+    return cleanNumber.substring(1);
+  }
+  
+  // Default: add India country code
+  return `91${cleanNumber}`;
+};
+
+const handleContact = async () => {
+  try {
+    await axiosClient.post(`/api/service/contact/${food._id}`);
+  } catch (err) {
+    console.error("Notification error:", err);
+  }
+  
+  const whatsappNumber = getWhatsappNumber(food.phone);
+  
+  // Ensure we have a valid Indian number (minimum 12 digits: 91 + 10 digits)
+  if (whatsappNumber && whatsappNumber.length >= 12) {
+    window.open(`https://wa.me/+91 ${whatsappNumber}`, '_blank');
+  } else {
+    alert('Invalid phone number format. Please contact the seller directly.');
+    console.warn('Invalid phone number:', food.phone, '→', whatsappNumber);
+  }
+};
+
 
    const handleFeedback = () => {
      try {
@@ -334,7 +370,7 @@ function ViewService() {
         state: {
           serviceId: service._id, 
           serviceTitle: service.title,  
-          feedbackType: "service",  
+          feedbackType: "food",  
           prefilledMessage: `I would like to provide feedback about the service: ${service.title}`, // ✅ Fixed
         },
       });
