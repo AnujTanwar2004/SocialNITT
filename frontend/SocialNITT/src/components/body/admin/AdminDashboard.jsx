@@ -132,7 +132,7 @@ function AdminDashboard() {
   const [foods, setFoods] = useState([]);
   const [users, setUsers] = useState([]);
   const [contacts, setContacts] = useState([]);
-  const [loading, setLoading] = useState(false); // ✅ Added missing loading state
+  const [loading, setLoading] = useState(false); //  Added missing loading state
   const navigate = useNavigate();
 
   // Search states
@@ -153,7 +153,7 @@ function AdminDashboard() {
   const [replyModal, setReplyModal] = useState({ open: false, contact: null });
   const [replyText, setReplyText] = useState("");
 
-  // ✅ Fixed itemsPerPage - moved to top and set to 5
+  //  Fixed itemsPerPage - moved to top and set to 5
   const itemsPerPage = 5;
 
   useEffect(() => {
@@ -163,8 +163,8 @@ function AdminDashboard() {
         const [productsRes, servicesRes, foodsRes, usersRes, contactsRes] =
           await Promise.all([
             axiosClient.get("/api/products/admin/all"),
-            axiosClient.get("/api/services"),
-            axiosClient.get("/api/foods/admin/all"), // ✅ Fixed to use admin endpoint
+            axiosClient.get("/api/services/admin/all"), 
+            axiosClient.get("/api/foods/admin/all"), //  Fixed to use admin endpoint
             axiosClient.get("/user/admin/all"),
             axiosClient.get("/api/contact/admin/all"),
           ]);
@@ -239,7 +239,7 @@ function AdminDashboard() {
     );
   }, [contacts, contactSearch]);
 
-  // ✅ Fixed pagination helper function
+  //   Fixed pagination helper function
   const getPaginatedData = useCallback(
     (data, currentPage) => {
       const startIndex = (currentPage - 1) * itemsPerPage;
@@ -264,30 +264,30 @@ function AdminDashboard() {
   // Search handlers to prevent state issues - STABLE REFERENCES
   const handleUserSearch = useCallback((value) => {
     setUserSearch(value);
-    setUserPage(1); // ✅ Reset page when searching
+    setUserPage(1); //  Reset page when searching
   }, []);
 
   const handleProductSearch = useCallback((value) => {
     setProductSearch(value);
-    setProductPage(1); // ✅ Reset page when searching
+    setProductPage(1); //  Reset page when searching
   }, []);
 
   const handleServiceSearch = useCallback((value) => {
     setServiceSearch(value);
-    setServicePage(1); // ✅ Reset page when searching
+    setServicePage(1); //  Reset page when searching
   }, []);
 
   const handleFoodSearch = useCallback((value) => {
     setFoodSearch(value);
-    setFoodPage(1); // ✅ Reset page when searching
+    setFoodPage(1); //  Reset page when searching
   }, []);
 
   const handleContactSearch = useCallback((value) => {
     setContactSearch(value);
-    setContactPage(1); // ✅ Reset page when searching
+    setContactPage(1); // Reset page when searching
   }, []);
 
-  // ✅ Fixed Archive function - use admin endpoints
+  //  Fixed Archive function - use admin endpoints
   const handleArchive = useCallback(
     async (itemId, currentArchiveStatus, type) => {
       try {
@@ -295,7 +295,7 @@ function AdminDashboard() {
 
         const newArchiveStatus = currentArchiveStatus === 1 ? 0 : 1;
 
-        // ✅ Use admin endpoints for admin operations
+        // Use admin endpoints for admin operations
         let endpoint;
         if (type === "product") {
           endpoint = `/api/products/${itemId}`; // Products can use regular endpoint
@@ -371,7 +371,7 @@ function AdminDashboard() {
     if (window.confirm("Delete this service?")) {
       setLoading(true);
       axiosClient
-        .delete(`/api/services/admin/${id}`) // ✅ Fixed missing slash
+        .delete(`/api/services/admin/${id}`) // Fixed missing slash
         .then(() => {
           setServices((prev) => prev.filter((s) => s._id !== id));
           setLoading(false);
@@ -433,7 +433,7 @@ function AdminDashboard() {
     }
   }, []);
 
-  // Mark as read handler
+   
   const handleMarkAsRead = useCallback((id) => {
     axiosClient
       .patch(`/api/contact/admin/${id}/read`)
@@ -511,7 +511,7 @@ function AdminDashboard() {
     }
   }, []);
 
-  // Add approval handler
+  //  approval handler
   const handleApproval = useCallback(
     async (itemId, currentApprovalStatus, type) => {
       try {
@@ -569,7 +569,7 @@ function AdminDashboard() {
     <div className="admin-dashboard">
       <h1 className="admin-title">🛡️ Admin Dashboard</h1>
 
-      {/* ✅ Add loading indicator */}
+      {/*  loading indicator */}
       {loading && (
         <div
           className="loading-overlay"
@@ -695,7 +695,7 @@ function AdminDashboard() {
                     }
                     handleApproval={(itemId, currentStatus) =>
                       handleApproval(itemId, currentStatus, "product")
-                    } // ✅ Add this
+                    } //   Add this
                   />
                 ))}
               </div>
@@ -740,6 +740,9 @@ function AdminDashboard() {
                     handleDelete={() => handleDeleteService(item._id)}
                     handleArchive={(itemId, currentStatus) =>
                       handleArchive(itemId, currentStatus, "service")
+                    }
+                    handleApproval={(itemId, currentStatus) =>  
+                    handleApproval(itemId, currentStatus, "service")
                     }
                     getUrgencyColor={getUrgencyColor}
                     getStatusColor={getStatusColor}
@@ -790,7 +793,7 @@ function AdminDashboard() {
                     }
                     handleApproval={(
                       itemId,
-                      currentStatus // ✅ Add this
+                      currentStatus //   Add this
                     ) => handleApproval(itemId, currentStatus, "food")}
                     getUrgencyColor={getUrgencyColor}
                     getStatusColor={getStatusColor}

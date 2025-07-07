@@ -294,14 +294,14 @@ const serviceCtrl = {
     }
   },
 
-   getAllServices: async (req, res) => {
-    try {
-       const services = await Services.find().populate("user", "name avatar");
-      res.json(services);
-    } catch (err) {
-      return res.status(500).json({ msg: err.message });
-    }
-  },
+ getAllServices: async (req, res) => {
+  try {
+     const services = await Services.find().populate("user", "name avatar");
+    res.json(services);
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+},
 };
 
 module.exports = serviceCtrl;

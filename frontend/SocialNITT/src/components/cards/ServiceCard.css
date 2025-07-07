@@ -16,20 +16,7 @@
      
     
   }
-  .approval-button{
-                  color: white;
-                  border: none;
-                  border-radius: 25px;
-                  padding: 10px 16px;
-                  font-weight: 700;
-                  font-size: 0.8rem;
-                  cursor: pointer;
-                  transition: all 0.3s ease;
-                  text-transform: uppercase; 
-                  letter-spacing: 0.5px;
-                  width: 100%;
-                  margin-bottom: 0.5rem;
-  }
+ 
   .service-card-date {
     font-size: 13px;
     color:  white;  /* Date text in white */

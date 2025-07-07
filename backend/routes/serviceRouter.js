@@ -4,23 +4,28 @@ const serviceCtrl = require("../controllers/serviceCtrl");
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 
-// Services collection routes
+// Regular routes
 router
   .route("/")
   .post(auth, serviceCtrl.createService)
-  .get(auth, serviceCtrl.getServices);
-
-// Single service routes
+  .get(serviceCtrl.getServices);
 router
   .route("/:id")
-  .get(auth, serviceCtrl.getService)
+  .get(serviceCtrl.getService)
   .patch(auth, serviceCtrl.updateService)
   .delete(auth, serviceCtrl.deleteService);
 
-router.post("/contact/:id", auth, serviceCtrl.contactOwner);
+router.post("/:id/contact", auth, serviceCtrl.contactOwner);
 
-router.delete("/admin/:id", auth, admin, serviceCtrl.adminDeleteService);
+//   Admin route 
+router.get("/admin/all", auth, admin, serviceCtrl.getAllServices);
 router.patch("/admin/:id", auth, admin, serviceCtrl.adminUpdateService);
+router.patch(
+  "/admin/:id/approve",
+  auth,
+  admin,
+  serviceCtrl.adminApproveService
+);  
+router.delete("/admin/:id", auth, admin, serviceCtrl.adminDeleteService);
 
-router.patch('/admin/:id/approve', auth, admin, serviceCtrl.adminApproveService);
 module.exports = router;

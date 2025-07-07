@@ -11,14 +11,14 @@ function ServiceCard({
   isProfileView = false,
   handleDelete,
   handleArchive,
-  handleApproval, // ✅ Add this prop for admin approval
+  handleApproval, //   Add this prop for admin approval
 }) {
   const { user } = useSelector((state) => state.auth);
   const userId = typeof item.user === "string" ? item.user : item.user?._id;
 
   return (
     <article className="service-card">
-      {/* ✅ Add approval status indicator for admin */}
+      {/*   Add approval status indicator for admin */}
       {isProfileView && (
         <div
           className="approval-status"
@@ -35,7 +35,7 @@ function ServiceCard({
             zIndex: 3,
           }}
         >
-          {item.isApproved ? "✅ Approved" : "⏳ Pending"}
+          {item.isApproved ? "  Approved" : "⏳ Pending"}
         </div>
       )}
 
@@ -104,13 +104,13 @@ function ServiceCard({
             </p>
           </div>
           <div className="card-actions">
-            {/* ✅ Add approval button for admin */}
+            {/*   Add approval button for admin */}
             {handleApproval && (
               <button
                 className="approval-button"
                 style={{
                   background: item.isApproved ? "#dc3545" : "#28a745",
-                  color: "white",
+                  color: "white", 
                   border: "none",
                   borderRadius: "25px",
                   padding: "10px 16px",

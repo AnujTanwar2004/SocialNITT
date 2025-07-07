@@ -10,13 +10,13 @@ function FoodCard({
   isProfileView = false,
   handleDelete,
   handleArchive,
-  handleApproval, // ✅ Add this prop
+  handleApproval, //   Add this prop
 }) {
   const userId = typeof item.user === "string" ? item.user : item.user?._id;
 
   return (
     <article className="food-card">
-      {/* ✅ Add approval status indicator */}
+      {/*   Add approval status indicator */}
       {isProfileView && (
         <div
           className="approval-status"
@@ -32,7 +32,7 @@ function FoodCard({
             fontWeight: "600",
           }}
         >
-          {item.isApproved ? "✅ Approved" : "⏳ Pending"}
+          {item.isApproved ? "  Approved" : "⏳ Pending"}
         </div>
       )}
 
@@ -116,7 +116,7 @@ function FoodCard({
               </button>
             </div>
 
-            {/* ✅ Add approval button for admin */}
+            {/*   Add approval button for admin */}
             {handleApproval && (
               <button
                 className="card-button"
