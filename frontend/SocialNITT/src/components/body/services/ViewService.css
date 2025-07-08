@@ -1,0 +1,276 @@
+/* ViewService Mobile Layout Fix - Add to dashboard.css */
+
+/* Desktop Layout - Service Details and Image side by side */
+.cta-secondary .cta-container {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Equal columns */
+    gap: 3rem;
+    align-items: start;
+    margin-bottom: 2rem;
+    min-height: 400px;
+  }
+  
+  .cta-secondary .cta-container .cta-details {
+    order: 1; /* Details first */
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(133, 14, 53, 0.08);
+    border: 1px solid rgba(133, 14, 53, 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  /* 🔥 ViewService Mobile Layout - Below 768px */
+  @media (max-width: 768px) {
+    /* Main container structure */
+    .cta-secondary {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 2rem;
+    }
+    
+    /* Service details container - First */
+    .cta-secondary .cta-container {
+      order: 1 !important; /* Details container first */
+      grid-template-columns: 1fr !important; /* Single column */
+      grid-template-rows: auto !important;
+      gap: 1.5rem !important;
+      min-height: auto !important;
+      margin-bottom: 0 !important;
+    }
+    
+    .cta-secondary .cta-container .cta-details {
+      order: 2 !important; /* Details second after image */
+      padding: 1.5rem !important;
+      min-height: auto !important;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(133, 14, 53, 0.08);
+      border: 1px solid rgba(133, 14, 53, 0.1);
+    }
+    
+    /* Show image at top on mobile for ViewService */
+    .cta-secondary .cta-container .cta-image {
+      order: 1 !important; /* Image sabse upar */
+      display: block !important;
+      min-height: 250px !important;
+      max-height: 300px !important;
+      border-radius: 16px;
+      margin-bottom: 1rem;
+    }
+    
+    .cta-secondary .cta-container .cta-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+    
+    /* Map section - Third */
+    .cta-secondary .map-section {
+      order: 3 !important; /* Map section third (last) */
+      margin: 0 !important;
+      padding: 0 1rem !important;
+    }
+    
+    /* Service specific styling */
+    .service-view-info {
+      margin: 1rem 0;
+    }
+    
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      padding: 0.5rem;
+      background: #FFF5E4;
+      border-radius: 8px;
+      border: 1px solid rgba(133, 14, 53, 0.1);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .service-description {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #FFF5E4;
+      border-radius: 12px;
+      border: 1px solid rgba(133, 14, 53, 0.1);
+    }
+    
+    .service-description h4 {
+      color: #850E35;
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    
+    /* Buttons styling for mobile */
+    .cta-buttons-container {
+      flex-direction: column !important;
+      gap: 0.75rem !important;
+      margin-top: 1.5rem !important;
+    }
+    
+    .cta-buttons-container .cta-btn {
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 12px 20px !important;
+      font-size: 0.9rem !important;
+    }
+    
+    /* Map styling for mobile */
+    #leaflet-map-service {
+      height: 300px !important;
+    }
+    
+    .map-section h4 {
+      font-size: 1.5rem !important;
+      margin-bottom: 1rem !important;
+      text-align: center;
+    }
+  }
+  
+  /* 🔥 Very Small Screens - Below 480px */
+  @media (max-width: 480px) {
+    .cta-secondary .cta-container {
+      gap: 1rem !important;
+    }
+    
+    .cta-secondary .cta-container .cta-details {
+      padding: 1rem !important;
+    }
+    
+    .info-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+      padding: 0.75rem;
+    }
+    
+    .service-description {
+      padding: 0.75rem;
+    }
+    
+    .service-description h4 {
+      font-size: 1rem;
+    }
+    
+    .cta-buttons-container {
+      gap: 0.5rem !important;
+      margin-top: 1rem !important;
+    }
+    
+    .cta-buttons-container .cta-btn {
+      padding: 10px 16px !important;
+      font-size: 0.85rem !important;
+    }
+    
+    .map-section {
+      padding: 0 0.5rem !important;
+    }
+    
+    #leaflet-map-service {
+      height: 250px !important;
+    }
+    
+    .map-section h4 {
+      font-size: 1.25rem !important;
+    }
+  }
+  
+  /* 🔥 Flexbox Alternative for ViewService */
+  @media (max-width: 768px) {
+    .cta-secondary.flex-layout {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    
+    .cta-secondary.flex-layout .cta-container {
+      order: 1;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    
+    .cta-secondary.flex-layout .map-section {
+      order: 2;
+    }
+  }
+  
+  /* 🔥 Service Info Grid for Mobile */
+  @media (max-width: 768px) {
+    .service-view-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .info-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    
+    .info-row > span {
+      font-size: 0.9rem;
+      padding: 0.25rem;
+      text-align: center;
+      background: rgba(133, 14, 53, 0.05);
+      border-radius: 6px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .info-row {
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+    
+    .info-row > span {
+      text-align: left;
+      padding: 0.5rem;
+    }
+  }
+  
+  /* 🔥 Map Section Mobile Specific */
+  @media (max-width: 768px) {
+    .map-section {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(133, 14, 53, 0.08);
+      border: 1px solid rgba(133, 14, 53, 0.1);
+      padding: 1.5rem !important;
+      margin: 1rem !important;
+    }
+    
+    .map-section h4 {
+      color: #850E35;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+  }
+  
+  /* 🔥 Loading and Error States for Mobile */
+  @media (max-width: 768px) {
+    .map-section > div[style*="height: 400px"] {
+      height: 300px !important;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .map-section > div[style*="height: 300px"],
+    .map-section > div[style*="height: 400px"] {
+      height: 250px !important;
+    }
+  }

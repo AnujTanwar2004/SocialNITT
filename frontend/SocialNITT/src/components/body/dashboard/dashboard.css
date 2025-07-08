@@ -3,7 +3,8 @@
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-items: flex-start;
+  justify-content: stretch;
   gap: 1rem; /* Space between cards */
   padding: 0 1rem; /* Equal margin at left and right */
 }
@@ -247,25 +248,25 @@
  
 @media (max-width: 768px) {
   .card-container{
-    display: grid;
-grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    justify-items: flex-start;
+ 
     
   }
 }
-@media (max-width: 640px){
+ 
+@media (max-width: 600px){
 .card-container{
-    display: grid;
-grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    justify-content: space-around;
+    
     
   }
+  
 }
 
-@media (max-width: 480px) {
- .card-container{
-   display: grid;
-   grid-template-columns: repeat(1,1fr);
- } 
-}
+ 
+
 
 /* Create Product/Service Form */
 .create_product {
@@ -1443,3 +1444,54 @@ label {
 }
 
 
+@media (max-width: 768px) {
+  .cta-secondary .cta-container .cta-image {
+    min-height: 250px !important; /* 🔥 400px se 250px */
+    max-height: 300px !important; /* 🔥 Maximum height set */
+    border-radius: 16px; /* 🔥 Smaller border radius */
+    box-shadow: 0 8px 20px rgba(133, 14, 53, 0.12); /* 🔥 Lighter shadow */
+  }
+  
+  .cta-secondary .cta-container .cta-image img {
+    object-fit: cover;
+    height: 100%;
+    max-height: 300px; /* 🔥 Image max height */
+  }
+  
+  /* 🔥 Container grid adjustment for mobile */
+  .cta-secondary .cta-container {
+    grid-template-columns: 1fr; /* Single column on mobile */
+    grid-template-rows: auto auto;
+    gap: 1.5rem;
+    min-height: auto;
+  }
+  
+  .cta-secondary .cta-container .cta-image {
+    order: 1; /* Image first on mobile */
+  }
+  
+  .cta-secondary .cta-container .cta-details {
+    order: 2; /* Details second on mobile */
+  }
+}
+
+/* 🔥 Extra Small Screens - Below 480px */
+@media (max-width: 480px) {
+  .cta-secondary .cta-container .cta-image {
+    min-height: 200px !important; /* 🔥 Aur bhi choti */
+    max-height: 250px !important;
+    border-radius: 12px;
+    margin: 0 auto; /* Center karna */
+  }
+  
+  .cta-secondary .cta-container .cta-image img {
+    max-height: 250px;
+    border-radius: 12px;
+  }
+  
+  /* 🔥 Container padding adjust */
+  .cta-secondary {
+    padding: 1rem;
+    margin: 10px auto;
+  }
+}

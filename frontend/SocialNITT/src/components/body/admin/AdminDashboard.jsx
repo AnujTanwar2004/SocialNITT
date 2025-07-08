@@ -154,7 +154,7 @@ function AdminDashboard() {
   const [replyText, setReplyText] = useState("");
 
   //  Fixed itemsPerPage - moved to top and set to 5
-  const itemsPerPage = 5;
+  const itemsPerPage = 8;
 
   useEffect(() => {
     const fetchData = async () => {

@@ -344,73 +344,226 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
-  .modern-hero {
-    padding: 2rem 1rem;
-  }
-  
-  .hero-section h2,
-  .section-title {
-    font-size: 1.25rem;
-  }
-  
+/* Hero Section Header Fix - Add to hero.css */
+
+/* Desktop Layout - Title and Explore More in same line */
+.modern-section-header {
+  display: flex;
+  justify-content: space-between; /* 🔥 Space between title and button */
+  align-items: center; /* 🔥 Vertically center */
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+  width: 100%; /* Full width */
+  flex-wrap: nowrap; /* Don't wrap on desktop */
+}
+
+.section-title-wrapper {
+  position: relative;
+  flex: 1; /* Take available space */
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.title-underline {
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60%;
+  height: 3px;
+  background: linear-gradient(90deg, #850E35, transparent);
+  border-radius: 2px;
+}
+
+/* Modern See More Button - Keep on same line */
+.modern-see-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #850E35 0%, #a91d47 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(133, 14, 53, 0.2);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0; /* 🔥 Don't shrink button */
+  white-space: nowrap; /* 🔥 Don't wrap text */
+}
+
+.modern-see-more::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.modern-see-more:hover::before {
+  left: 100%;
+}
+
+.modern-see-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(133, 14, 53, 0.3);
+}
+
+.modern-see-more svg {
+  transition: transform 0.3s ease;
+}
+
+.modern-see-more:hover svg {
+  transform: translateX(4px);
+}
+
+/* 🔥 Tablet Layout - Still keep same line */
+@media (max-width: 1024px) {
   .modern-section-header {
-    flex-direction: column;
-    align-items: flex-start;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row; /* Keep row layout */
     gap: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
   }
   
   .modern-see-more {
-    align-self: flex-end;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.2rem;
     font-size: 0.8rem;
-  }
-  
-  .leaderboard-section {
-    padding: 1.5rem;
-  }
-  
-  .modern-leaderboard {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .leaderboard-card {
-    padding: 1.5rem 1rem;
-  }
-  
-  .leaderboard-title {
-    font-size: 1.5rem;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .user-avatar {
-    width: 60px;
-    height: 60px;
-  }
-  
-  .avatar-ring {
-    width: 68px;
-    height: 68px;
   }
 }
 
-@media (max-width: 480px) {
-  .main-title {
-    font-size: 2rem;
-  }
-  
-  .hero-subtitle {
-    font-size: 1rem;
-  }
-  
+/* 🔥 Mobile Layout - Still keep same line but adjust sizes */
+@media (max-width: 768px) {
   .modern-section-header {
-    align-items: stretch;
+    display: flex !important;
+    flex-direction: row !important; /* 🔥 Force row layout */
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    flex-wrap: nowrap !important;
+    margin-bottom: 1.5rem;
+  }
+  
+  .section-title-wrapper {
+    flex: 1;
+    min-width: 0; /* Allow shrinking */
+  }
+  
+  .section-title {
+    font-size: 1.25rem !important;
+    gap: 0.5rem;
   }
   
   .modern-see-more {
-    align-self: stretch;
-    justify-content: center;
+    flex-shrink: 0 !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.75rem !important;
+    min-width: auto !important;
+  }
+  
+  .modern-see-more span {
+    display: block; /* Show full text */
+  }
+  
+  .modern-see-more svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* 🔥 Small Mobile - Compact but still same line */
+@media (max-width: 480px) {
+  .modern-section-header {
+    gap: 0.5rem !important;
+    padding: 0 !important;
+  }
+  
+  .section-title {
+    font-size: 1.1rem !important;
+    gap: 0.4rem;
+  }
+  
+  .modern-see-more {
+    padding: 0.4rem 0.8rem !important;
+    font-size: 0.7rem !important;
+  }
+  
+  .modern-see-more span {
+    font-size: 0.7rem;
+  }
+}
+
+/* 🔥 Very Small Screens - Abbreviate button text */
+@media (max-width: 360px) {
+  .modern-see-more span {
+    display: none; /* Hide "Explore All" text */
+  }
+  
+  .modern-see-more::after {
+    content: "More"; /* Show "More" instead */
+    font-size: 0.7rem;
+  }
+  
+  .modern-see-more {
+    padding: 0.4rem 0.6rem !important;
+    min-width: 50px;
+  }
+}
+
+/* 🔥 Alternative - Responsive Button Text */
+.modern-see-more .full-text {
+  display: inline;
+}
+
+.modern-see-more .short-text {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .modern-see-more .full-text {
+    display: none;
+  }
+  
+  .modern-see-more .short-text {
+    display: inline;
+  }
+}
+
+/* 🔥 Force no wrapping on all screen sizes */
+.modern-section-header {
+  min-height: 60px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 320px) {
+  .modern-section-header {
+    min-height: 50px;
+  }
+  
+  .section-title {
+    font-size: 1rem !important;
+  }
+  
+  .modern-see-more {
+    padding: 0.3rem 0.5rem !important;
+    font-size: 0.65rem !important;
   }
 }

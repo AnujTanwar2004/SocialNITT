@@ -39,7 +39,7 @@ function ServiceCard({
         </div>
       )}
 
-      <Link to={`/view_service/${item._id}`} className="card-link">
+      <Link to={`/view_${type}/${item._id}`} className="card-link">
         {/* Header */}
         <div className="service-title-badges">
           <div className="service-card-header">
@@ -85,7 +85,7 @@ function ServiceCard({
       {/* User Info */}
       {!isProfileView && (
         <div className="service-card-user see-more-wrapper">
-          <Link to={`/view_service/${item._id}`} className="see-more-button">
+          <Link to={`/view_${type}/${item._id}`} className="see-more-button">
             See More
           </Link>
         </div>

@@ -42,7 +42,7 @@ header .logo img {
 
 header a {
   color: white;
-  text-transform: uppercase;
+  
   letter-spacing: 1.5px;
   text-decoration: none;
 }
@@ -55,9 +55,9 @@ header ul {
 
 header ul li {
   display: inline-block;
-  padding: 10px 20px;
+  padding: 10px 10px;
   opacity: 0.9;
-  font-size: 1rem;
+  font-size: .8rem;
 }
 
 header ul li:hover {
@@ -363,13 +363,13 @@ header ul li a {
 
 @media (max-width: 1140px) {
   header ul li {
-    padding: 10px 10px;
+    padding: 10px 8px;
   }
 }
 
-@media (max-width: 1024px) and (min-width: 769px) {
+ @media (max-width: 1024px) and (min-width: 769px) {
   header {
-    min-height: 65px;
+    min-height: 60px;
     padding: 0 20px;
   }
 
@@ -395,10 +395,10 @@ header ul li a {
 
   header ul li a {
     font-size: 0.8rem;
-  }
-}
+  } 
+} 
 
-@media (max-width: 886px) {
+@media (max-width: 900px) {
   header {
     min-height: 50px;
     padding: 0 15px;
@@ -423,3 +423,4 @@ header ul li a {
     font-size: 10px;
   }
 }
+

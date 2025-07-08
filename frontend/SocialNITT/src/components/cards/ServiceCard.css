@@ -98,7 +98,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     letter-spacing: 1.2;
-    min-height: calc(1.4em * 3); 
+    min-height: calc(1.4em * 2); 
 }
 
 .service-card-info {
@@ -524,4 +524,10 @@
 .action-row .card-button {
   margin: 0 !important;
   vertical-align: middle !important;
+}
+
+@media (max-width:600px) {
+  .service-card{
+    width:270px;
+  }
 }

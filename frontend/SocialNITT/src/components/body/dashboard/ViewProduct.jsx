@@ -309,26 +309,37 @@ function ViewProduct() {
             <p><i className="fa fa-calendar" title="Posted at"></i>📅 {product.updatedAt.slice(0, 10)}</p>
           </div>
           <p> {product.description}</p>
-          <button
-            className="cta-btn"
-            onClick={handleContact}
-            type="button"
-          >
-            Contact
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </button>
-          <button
-            className="cta-btn"
-            onClick={handleFeeback}
-            type="button"
-          >
-            Feedback
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </button>
+          
+          {/* 🔥 Buttons in one line with flex container */}
+          <div style={{ 
+            display: 'flex', 
+            gap: '1rem', 
+            marginTop: '2rem',
+            flexWrap: 'wrap' // Mobile ke liye wrap ho jayenge
+          }}>
+            <button
+              className="cta-btn"
+              onClick={handleContact}
+              type="button"
+              style={{ flex: '1', minWidth: '150px' }} // Equal width and minimum size
+            >
+              Contact
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
+            <button
+              className="cta-btn"
+              onClick={handleFeeback}
+              type="button"
+              style={{ flex: '1', minWidth: '150px' }} // Equal width and minimum size
+            >
+              Feedback
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
+          </div>
         </div>
         <div className="cta-image">
           <img 
