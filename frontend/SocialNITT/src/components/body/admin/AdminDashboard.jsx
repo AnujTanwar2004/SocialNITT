@@ -880,12 +880,12 @@ function AdminDashboard() {
                                 Mark Read
                               </button>
                             )}
-                            <button
+                           {/*  <button
                               className="edit-btn"
                               onClick={() => handleReply(contact)}
                             >
                               Reply
-                            </button>
+                            </button> */}
                             <button
                               className="delete-btn"
                               onClick={() => handleDeleteContact(contact._id)}
@@ -912,7 +912,7 @@ function AdminDashboard() {
       </section>
 
       {/* Reply Modal */}
-      {replyModal.open && (
+      {/* {replyModal.open && (
         <div
           className="modal-overlay"
           onClick={() => setReplyModal({ open: false, contact: null })}
@@ -963,8 +963,8 @@ function AdminDashboard() {
               </button>
             </div>
           </div>
-        </div>
-      )}
+        </div> )}*/}
+      
     </div>
   );
 }
